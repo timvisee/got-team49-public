@@ -79,12 +79,12 @@ public class WereldLaderImpl implements WereldLader {
         final Kaart map = new Kaart(mapWidth, mapHeight);
 
         // Loop through the map line by line
-        for(int x = 0; x < mapHeight; x++) {
+        for(int x = 0; x < mapWidth; x++) {
             // Read the current line
             final String mapLine = scanner.nextLine();
 
             // Loop through the characters
-            for(int y = 0; y < mapWidth; y++)
+            for(int y = 0; y < mapHeight; y++)
                 new Terrein(map, Coordinaat.op(x, y), TerreinType.fromLetter(mapLine.charAt(y)));
         }
 
