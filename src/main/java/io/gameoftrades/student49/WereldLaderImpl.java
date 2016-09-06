@@ -6,6 +6,7 @@ import io.gameoftrades.model.lader.WereldLader;
 import io.gameoftrades.model.markt.Markt;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -89,8 +90,31 @@ public class WereldLaderImpl implements WereldLader {
      * @return List of towns.
      */
     private List<Stad> loadTowns(Scanner scanner) {
-        // TODO: Load a list of towns here, return the list
-        return null;
+
+        // get the city count
+        final int cityCount = Integer.parseInt(scanner.nextLine());
+
+        // create an arraylist for citys
+        final ArrayList<Stad> citys = new ArrayList<>();
+
+        if(cityCount > 0){
+            for (int i = 0; i < cityCount; i++) {
+
+                // read the city coordinates and name
+                String line = scanner.nextLine();
+
+                // split the data
+                String[] cityData = line.split(",");
+
+                // create a new city object
+                Stad city = new Stad(Coordinaat.op(Integer.parseInt(cityData[0]), Integer.parseInt(cityData[1])), cityData[2]);
+
+                // add the city object to the list
+                citys.add(city);
+            }
+        }
+        // return the list with city's
+        return citys;
     }
 
     /**
