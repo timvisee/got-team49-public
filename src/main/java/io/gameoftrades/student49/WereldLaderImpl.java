@@ -34,14 +34,14 @@ public class WereldLaderImpl implements WereldLader {
         // Load the map
         final Kaart map = loadMap(scanner);
 
-        // Load the towns
-        final List<Stad> towns = loadTowns(scanner);
+        // Load the cities
+        final List<Stad> cities = loadCities(scanner);
 
         // Load market
-        final Markt market = loadMarket(scanner, towns);
+        final Markt market = loadMarket(scanner, cities);
 
         // Return the world instance
-        return new Wereld(map, towns, market);
+        return new Wereld(map, cities, market);
     }
 
     /**
@@ -84,37 +84,36 @@ public class WereldLaderImpl implements WereldLader {
     }
 
     /**
-     * Load the list of towns from the given scanner.
+     * Load the list of cities from the given scanner.
      *
      * @param scanner Scanner.
-     * @return List of towns.
+     * @return List of cities.
      */
-    private List<Stad> loadTowns(Scanner scanner) {
-
-        // get the city count
+    private List<Stad> loadCities(Scanner scanner) {
+        // Get the city count
         final int cityCount = Integer.parseInt(scanner.nextLine());
 
-        // create an arraylist for citys
-        final ArrayList<Stad> citys = new ArrayList<>();
+        // Create a list of cities
+        final ArrayList<Stad> cities = new ArrayList<>();
 
         if(cityCount > 0){
             for (int i = 0; i < cityCount; i++) {
-
-                // read the city coordinates and name
+                // Read the city coordinates and name
                 String line = scanner.nextLine();
 
-                // split the data
+                // Split the data
                 String[] cityData = line.split(",");
 
-                // create a new city object
+                // Create a new city object
                 Stad city = new Stad(Coordinaat.op(Integer.parseInt(cityData[0]), Integer.parseInt(cityData[1])), cityData[2]);
 
-                // add the city object to the list
-                citys.add(city);
+                // Add the city object to the list
+                cities.add(city);
             }
         }
-        // return the list with city's
-        return citys;
+
+        // Return the list with cities
+        return cities;
     }
 
     /**
