@@ -19,6 +19,11 @@ public class WereldLaderImpl implements WereldLader {
      */
     private static final String REGEX_MAP_SIZE = "^([0-9]+),([0-9]+)$";
 
+    /**
+     * List of cached cities.
+     */
+    private List<Stad> cityCache = new ArrayList<>();
+
     @Override
     public Wereld laad(String resource) {
         // Get the input stream for the given resource
@@ -35,7 +40,7 @@ public class WereldLaderImpl implements WereldLader {
         final Kaart map = loadMap(scanner);
 
         // Load the cities
-        final List<Stad> cities = loadCities(scanner);
+        loadCities(scanner);
 
         // Load market
         final Markt market = loadMarket(scanner, cities);
@@ -87,14 +92,13 @@ public class WereldLaderImpl implements WereldLader {
      * Load the list of cities from the given scanner.
      *
      * @param scanner Scanner.
-     * @return List of cities.
      */
-    private List<Stad> loadCities(Scanner scanner) {
+    private void loadCities(Scanner scanner) {
         // Get the city count
         final int cityCount = Integer.parseInt(scanner.nextLine());
 
         // Create a list of cities
-        final ArrayList<Stad> cities = new ArrayList<>();
+        cityCache.clear();
 
         if(cityCount > 0){
             for (int i = 0; i < cityCount; i++) {
@@ -108,23 +112,35 @@ public class WereldLaderImpl implements WereldLader {
                 Stad city = new Stad(Coordinaat.op(Integer.parseInt(cityData[0]), Integer.parseInt(cityData[1])), cityData[2]);
 
                 // Add the city object to the list
-                cities.add(city);
+                cityCache.add(city);
             }
         }
-
-        // Return the list with cities
-        return cities;
     }
 
     /**
      * Load the market from the given scanner.
      *
      * @param scanner Scanner.
-     * @param cities List of cities.
      * @return Market.
      */
-    private Markt loadMarket(Scanner scanner, List<Stad> cities) {
+    private Markt loadMarket(Scanner scanner) {
         // TODO: Load the market and return it
+        return null;
+    }
+
+    /**
+     * Helper method to find a city with the given name.
+     *
+     * @param name City name.
+     * @return City instance, or null if no city was found.
+     */
+    private Stad findCity(String name) {
+        // Loop through the list of cities
+        for(Stad city : this.cityCache)
+            if(city.getNaam().equals(name))
+                return city;
+
+        // No city found, return null
         return null;
     }
 }
