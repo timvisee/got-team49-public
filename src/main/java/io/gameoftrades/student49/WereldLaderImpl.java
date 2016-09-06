@@ -23,6 +23,11 @@ public class WereldLaderImpl implements WereldLader {
     private static final String REGEX_MAP_SIZE = "^([0-9]+),([0-9]+)$";
     private static final String REGEX_MARKET = "^([a-zA-Z]+),([A-Z]+),([a-zA-Z]+),([0-9]+)$";
 
+    /**
+     * List of cities.
+     */
+    private List<Stad> cities = new ArrayList<>();
+
     @Override
     public Wereld laad(String resource) {
         // Get the input stream for the given resource
@@ -38,14 +43,14 @@ public class WereldLaderImpl implements WereldLader {
         // Load the map
         final Kaart map = loadMap(scanner);
 
-        // Load the towns
-        final List<Stad> towns = loadTowns(scanner);
+        // Load the cities
+        loadCities(scanner);
 
         // Load market
         final Markt market = loadMarket(scanner);
 
         // Return the world instance
-        return new Wereld(map, towns, market);
+        return new Wereld(map, cities, market);
     }
 
     /**
@@ -88,37 +93,32 @@ public class WereldLaderImpl implements WereldLader {
     }
 
     /**
-     * Load the list of towns from the given scanner.
+     * Load the list of cities from the given scanner.
      *
      * @param scanner Scanner.
-     * @return List of towns.
      */
-    private List<Stad> loadTowns(Scanner scanner) {
-
-        // get the city count
+    private void loadCities(Scanner scanner) {
+        // Get the city count
         final int cityCount = Integer.parseInt(scanner.nextLine());
 
-        // create an arraylist for citys
-        final ArrayList<Stad> citys = new ArrayList<>();
+        // Create a list of cities
+        cities.clear();
 
         if(cityCount > 0){
             for (int i = 0; i < cityCount; i++) {
-
-                // read the city coordinates and name
+                // Read the city coordinates and name
                 String line = scanner.nextLine();
 
-                // split the data
+                // Split the data
                 String[] cityData = line.split(",");
 
-                // create a new city object
+                // Create a new city object
                 Stad city = new Stad(Coordinaat.op(Integer.parseInt(cityData[0]), Integer.parseInt(cityData[1])), cityData[2]);
 
-                // add the city object to the list
-                citys.add(city);
+                // Add the city object to the list
+                cities.add(city);
             }
         }
-        // return the list with city's
-        return citys;
     }
 
     /**
@@ -161,5 +161,21 @@ public class WereldLaderImpl implements WereldLader {
     	}
     	
         return new Markt(trades);
+    }
+
+    /**
+     * Helper method to find a city with the given name.
+     *
+     * @param name City name.
+     * @return City instance, or null if no city was found.
+     */
+    private Stad findCity(String name) {
+        // Loop through the list of cities
+        for(Stad city : this.cities)
+            if(city.getNaam().equals(name))
+                return city;
+
+        // No city found, return null
+        return null;
     }
 }
