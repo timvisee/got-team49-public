@@ -62,8 +62,8 @@ public class WereldLaderImpl implements WereldLader {
             throw new RuntimeException("The world being loaded has a malformed map size");
 
         // Get the map width and height
-        final int mapWidth = Integer.parseInt(mapSizeMatcher.group(0));
-        final int mapHeight = Integer.parseInt(mapSizeMatcher.group(1));
+        final int mapWidth = Integer.parseInt(mapSizeMatcher.group(1));
+        final int mapHeight = Integer.parseInt(mapSizeMatcher.group(2));
 
         // Instantiate a map
         final Kaart map = new Kaart(mapWidth, mapHeight);
