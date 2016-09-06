@@ -120,10 +120,10 @@ public class WereldLaderImpl implements WereldLader {
      * Load the market from the given scanner.
      *
      * @param scanner Scanner.
-     * @param towns List of towns.
+     * @param cities List of cities.
      * @return Market.
      */
-    private Markt loadMarket(Scanner scanner, List<Stad> towns) {
+    private Markt loadMarket(Scanner scanner, List<Stad> cities) {
         // TODO: Load the market and return it
         return null;
     }
