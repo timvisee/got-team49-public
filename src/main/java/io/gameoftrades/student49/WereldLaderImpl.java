@@ -1,10 +1,12 @@
 package io.gameoftrades.student49;
 
 import io.gameoftrades.model.Wereld;
-import io.gameoftrades.model.kaart.Kaart;
+import io.gameoftrades.model.kaart.*;
 import io.gameoftrades.model.lader.WereldLader;
+import io.gameoftrades.model.markt.Markt;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,14 +26,16 @@ public class WereldLaderImpl implements WereldLader {
         final Scanner scanner = new Scanner(in);
 
         // Load a map
-        Kaart map = loadMap(scanner);
+        final Kaart map = loadMap(scanner);
 
-        // TODO: Load towns
+        // Load the towns
+        final List<Stad> towns = loadTowns(scanner);
 
         // TODO: Load market
+        final Markt market = loadMarket(scanner);
 
         // Return the world instance
-        return new Wereld();
+        return new Wereld(map, towns, market);
     }
 
     /**
@@ -63,5 +67,27 @@ public class WereldLaderImpl implements WereldLader {
 
         // Return the loaded map
         return map;
+    }
+
+    /**
+     * Load the list of towns from the given scanner.
+     *
+     * @param scanner Scanner.
+     * @return List of towns.
+     */
+    private List<Stad> loadTowns(Scanner scanner) {
+        // TODO: Load a list of towns here, return the list
+        return null;
+    }
+
+    /**
+     * Load the market from the given scanner.
+     *
+     * @param scanner Scanner.
+     * @return Market.
+     */
+    private Markt loadMarket(Scanner scanner) {
+        // TODO: Load the market and return it
+        return null;
     }
 }
