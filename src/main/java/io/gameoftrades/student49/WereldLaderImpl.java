@@ -20,9 +20,9 @@ public class WereldLaderImpl implements WereldLader {
     private static final String REGEX_MAP_SIZE = "^([0-9]+),([0-9]+)$";
 
     /**
-     * List of cached cities.
+     * List of cities.
      */
-    private List<Stad> cityCache = new ArrayList<>();
+    private List<Stad> cities = new ArrayList<>();
 
     @Override
     public Wereld laad(String resource) {
@@ -43,7 +43,7 @@ public class WereldLaderImpl implements WereldLader {
         loadCities(scanner);
 
         // Load market
-        final Markt market = loadMarket(scanner, cities);
+        final Markt market = loadMarket(scanner);
 
         // Return the world instance
         return new Wereld(map, cities, market);
@@ -98,7 +98,7 @@ public class WereldLaderImpl implements WereldLader {
         final int cityCount = Integer.parseInt(scanner.nextLine());
 
         // Create a list of cities
-        cityCache.clear();
+        cities.clear();
 
         if(cityCount > 0){
             for (int i = 0; i < cityCount; i++) {
@@ -112,7 +112,7 @@ public class WereldLaderImpl implements WereldLader {
                 Stad city = new Stad(Coordinaat.op(Integer.parseInt(cityData[0]), Integer.parseInt(cityData[1])), cityData[2]);
 
                 // Add the city object to the list
-                cityCache.add(city);
+                cities.add(city);
             }
         }
     }
@@ -136,7 +136,7 @@ public class WereldLaderImpl implements WereldLader {
      */
     private Stad findCity(String name) {
         // Loop through the list of cities
-        for(Stad city : this.cityCache)
+        for(Stad city : this.cities)
             if(city.getNaam().equals(name))
                 return city;
 
