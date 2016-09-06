@@ -46,7 +46,7 @@ public class WereldLaderImpl implements WereldLader {
         final Markt market = loadMarket(scanner);
 
         // Return the world instance
-        return new Wereld(map, cities, market);
+        return new Wereld(map, this.cities, market);
     }
 
     /**
@@ -97,7 +97,7 @@ public class WereldLaderImpl implements WereldLader {
         // Get the city count
         final int cityCount = Integer.parseInt(scanner.nextLine());
 
-        // Create a list of cities
+        // Clear the list of cities
         cities.clear();
 
         if(cityCount > 0){
