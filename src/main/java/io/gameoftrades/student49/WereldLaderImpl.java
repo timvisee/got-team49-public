@@ -38,7 +38,7 @@ public class WereldLaderImpl implements WereldLader {
         final List<Stad> towns = loadTowns(scanner);
 
         // Load market
-        final Markt market = loadMarket(scanner);
+        final Markt market = loadMarket(scanner, towns);
 
         // Return the world instance
         return new Wereld(map, towns, market);
@@ -121,9 +121,10 @@ public class WereldLaderImpl implements WereldLader {
      * Load the market from the given scanner.
      *
      * @param scanner Scanner.
+     * @param towns List of towns.
      * @return Market.
      */
-    private Markt loadMarket(Scanner scanner) {
+    private Markt loadMarket(Scanner scanner, List<Stad> towns) {
         // TODO: Load the market and return it
         return null;
     }
