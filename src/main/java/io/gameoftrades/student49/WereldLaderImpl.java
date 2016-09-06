@@ -21,8 +21,26 @@ public class WereldLaderImpl implements WereldLader {
             throw new RuntimeException("The given resource file does not exist, the program will be terminated");
 
         // Create a scanner for the loaded resource
-        final Scanner scan = new Scanner(in);
+        final Scanner scanner = new Scanner(in);
 
+        // Load a map
+        Kaart map = loadMap(scanner);
+
+        // TODO: Load towns
+
+        // TODO: Load market
+
+        // Return the world instance
+        return new Wereld();
+    }
+
+    /**
+     * Load a map from a scanner instance.
+     *
+     * @param scanner Scanner.
+     * @return Map instance.
+     */
+    private Kaart loadMap(Scanner scanner) {
         // Read the map size
         final String rawMapSize = scan.next();
 
@@ -43,11 +61,7 @@ public class WereldLaderImpl implements WereldLader {
 
         // TODO: Load the map tiles (terrain), and add them to the map object
 
-        // TODO: Load towns
-
-        // TODO: Load market
-
-        // Return the world instance
-        return new Wereld();
+        // Return the loaded map
+        return map;
     }
 }
