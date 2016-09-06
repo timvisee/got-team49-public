@@ -13,6 +13,11 @@ import java.util.regex.Pattern;
 
 public class WereldLaderImpl implements WereldLader {
 
+    /**
+     * Regex for the map size.
+     */
+    private static final String REGEX_MAP_SIZE = "^([0-9]+),([0-9]+)$";
+
     @Override
     public Wereld laad(String resource) {
         // Get the input stream for the given resource
@@ -22,16 +27,16 @@ public class WereldLaderImpl implements WereldLader {
         if(in == null)
             throw new RuntimeException("The given resource file does not exist, the program will be terminated");
 
-        // Create a scanner for the loaded resource
+        // Create a scanner to load the world from
         final Scanner scanner = new Scanner(in);
 
-        // Load a map
+        // Load the map
         final Kaart map = loadMap(scanner);
 
         // Load the towns
         final List<Stad> towns = loadTowns(scanner);
 
-        // TODO: Load market
+        // Load market
         final Markt market = loadMarket(scanner);
 
         // Return the world instance
@@ -49,7 +54,7 @@ public class WereldLaderImpl implements WereldLader {
         final String rawMapSize = scanner.nextLine();
 
         // Make sure the raw map size has a valid format
-        final Pattern mapSizePattern = Pattern.compile("^([0-9]+),([0-9]+)$");
+        final Pattern mapSizePattern = Pattern.compile(REGEX_MAP_SIZE);
         final Matcher mapSizeMatcher = mapSizePattern.matcher(rawMapSize);
 
         // Find the pattern and make sure it exists
@@ -60,7 +65,7 @@ public class WereldLaderImpl implements WereldLader {
         final int mapWidth = Integer.parseInt(mapSizeMatcher.group(0));
         final int mapHeight = Integer.parseInt(mapSizeMatcher.group(1));
 
-        // Create a map
+        // Instantiate a map
         final Kaart map = new Kaart(mapWidth, mapHeight);
 
         // Loop through the map line by line
