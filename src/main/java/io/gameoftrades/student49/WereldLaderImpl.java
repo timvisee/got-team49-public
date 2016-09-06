@@ -63,7 +63,15 @@ public class WereldLaderImpl implements WereldLader {
         // Create a map
         final Kaart map = new Kaart(mapWidth, mapHeight);
 
-        // TODO: Load the map tiles (terrain), and add them to the map object
+        // Loop through the map line by line
+        for(int x = 0; x < mapHeight; x++) {
+            // Read the current line
+            final String mapLine = scanner.nextLine();
+
+            // Loop through the characters
+            for(int y = 0; y < mapWidth; y++)
+                new Terrein(map, Coordinaat.op(x, y), TerreinType.fromLetter(mapLine.charAt(y)));
+        }
 
         // Return the loaded map
         return map;
