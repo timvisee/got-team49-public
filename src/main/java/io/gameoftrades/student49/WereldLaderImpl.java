@@ -21,7 +21,7 @@ public class WereldLaderImpl implements WereldLader {
      * Regex for the map size.
      */
     private static final String REGEX_MAP_SIZE = "^([0-9]+),([0-9]+)$";
-    private static final String REGEX_MARKET = "^([a-zA-Z]+),([A-Z]+),([a-zA-Z]+),([0-9]+)$";
+    private static final String REGEX_MARKET = "^([^,]+),([A-Z]+),([^,]+),([0-9]+)$";
 
     /**
      * List of cities.
@@ -146,9 +146,11 @@ public class WereldLaderImpl implements WereldLader {
             final Matcher marketMatcher = marketPattern.matcher(line);
 
             // Find the pattern and make sure it exists
-            if(!marketMatcher.find())
+            if(!marketMatcher.find()) {
+            	System.out.println(line);
                 throw new RuntimeException("The market being loaded has a invalid format");
-
+            }
+            
             // Create new trade and market properties
             Stad city = findCity(marketMatcher.group(1));
             HandelType type = HandelType.valueOf(marketMatcher.group(2));
