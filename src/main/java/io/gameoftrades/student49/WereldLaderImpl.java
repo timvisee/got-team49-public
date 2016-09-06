@@ -46,7 +46,7 @@ public class WereldLaderImpl implements WereldLader {
      */
     private Kaart loadMap(Scanner scanner) {
         // Read the map size
-        final String rawMapSize = scan.next();
+        final String rawMapSize = scanner.next();
 
         // Make sure the raw map size has a valid format
         final Pattern mapSizePattern = Pattern.compile("^([0-9]+),([0-9]+)$");
