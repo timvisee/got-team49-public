@@ -5,8 +5,11 @@
 target
 bin
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
 
 # Package Files #
 *.jar
