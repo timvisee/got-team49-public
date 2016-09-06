@@ -48,4 +48,5 @@ public class WereldLaderImpl implements WereldLader {
 
         // Return the world instance
         return new Wereld();
+    }
 }
