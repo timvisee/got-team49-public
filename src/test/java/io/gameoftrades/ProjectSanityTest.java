@@ -14,14 +14,14 @@ import java.util.stream.Collectors;
 import org.junit.Test;
 
 /**
- * Controleert of de studentNN package is hernoemd naar de variant met het groep nummer
+ * Controleert of de student49 package is hernoemd naar de variant met het groep nummer
  * en dat HandelaarImpl beschikbaar is in die package.
  */
 public class ProjectSanityTest {
 
     @Test()
     public void heeftStudentDefaultAangepast() {
-        String base = "io.gameoftrades.studentNN.HandelaarImpl";
+        String base = "io.gameoftrades.student49.HandelaarImpl";
         try {
             Class.forName(base);
             fail(base + " is not niet hernoemd.");

@@ -2,9 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.gameoftrades</groupId>
-    <!-- Change Me -->
-    <artifactId>gameoftrades-student-kit</artifactId> <!-- got-teamNN -->
-    <!-- --> 
+    <artifactId>got-team49</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Game of Trades Student Starter Kit</name>
@@ -18,11 +16,6 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-
-    <organization>
-        <name>42 BV</name>
-        <url>http://blog.42.nl/</url>
-    </organization>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
