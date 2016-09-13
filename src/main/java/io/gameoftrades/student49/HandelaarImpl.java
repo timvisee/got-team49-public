@@ -32,8 +32,8 @@ public class HandelaarImpl implements Handelaar {
      */
     @Override
     public SnelstePadAlgoritme nieuwSnelstePadAlgoritme() {
-        // TODO Auto-generated method stub
-        return null;
+    	// TODO Auto-generated method stub
+    	return null;
     }
 
     /**
