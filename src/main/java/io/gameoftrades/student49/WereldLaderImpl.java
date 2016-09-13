@@ -20,8 +20,8 @@ public class WereldLaderImpl implements WereldLader {
     /**
      * Regex for the map size.
      */
-    private static final String REGEX_MAP_SIZE = "^([0-9]+),([0-9]+)$";
-    private static final String REGEX_MARKET = "^([^,]+),([A-Z]+),([^,]+),([0-9]+)$";
+    private static final String REGEX_MAP_SIZE = "^([0-9]+),([0-9 ]+)$";
+    private static final String REGEX_MARKET = "^([^,]+),([A-Z]+),([^,]+),([0-9. ]+)";
 
     /**
      * List of cities.
@@ -44,7 +44,7 @@ public class WereldLaderImpl implements WereldLader {
         final Kaart map = loadMap(scanner);
 
         // Load the cities
-        loadCities(scanner);
+        loadCities(scanner, map);
 
         // Load market
         final Markt market = loadMarket(scanner);
@@ -73,7 +73,7 @@ public class WereldLaderImpl implements WereldLader {
 
         // Get the map width and height
         final int mapWidth = Integer.parseInt(mapSizeMatcher.group(1));
-        final int mapHeight = Integer.parseInt(mapSizeMatcher.group(2));
+        final int mapHeight = Integer.parseInt(mapSizeMatcher.group(2).replaceAll("\\s+", ""));
 
         // Instantiate a map
         final Kaart map = new Kaart(mapWidth, mapHeight);
@@ -81,7 +81,10 @@ public class WereldLaderImpl implements WereldLader {
         // Loop through the map line by line
         for(int y = 0; y < mapHeight; y++) {
             // Read the current line
-            final String mapLine = scanner.nextLine();
+            final String mapLine = scanner.nextLine().replaceAll("\\s+", "");
+            
+            if(mapLine.length() != mapWidth)
+            	throw new IllegalArgumentException("The amount of characters exceeds the mapWidth");
 
             // Loop through the characters
             for(int x = 0; x < mapWidth; x++)
@@ -97,9 +100,9 @@ public class WereldLaderImpl implements WereldLader {
      *
      * @param scanner Scanner.
      */
-    private void loadCities(Scanner scanner) {
+    private void loadCities(Scanner scanner, Kaart map) {
         // Get the city count
-        final int cityCount = Integer.parseInt(scanner.nextLine());
+        final int cityCount = Integer.parseInt(scanner.nextLine().replaceAll("\\s+", ""));
 
         // Clear the list of cities
         cities.clear();
@@ -112,8 +115,14 @@ public class WereldLaderImpl implements WereldLader {
                 // Split the data
                 String[] cityData = line.split(",");
 
+                int x = Integer.parseInt(cityData[0]);
+                int y = Integer.parseInt(cityData[1]);
+                
+                if((x < 1 || x > map.getBreedte()) || (y < 1 || y > map.getHoogte()))
+                	throw new IllegalArgumentException("City coordinates exceed the mapWidth or mapHeight");
+                
                 // Create a new city object
-                Stad city = new Stad(Coordinaat.op(Integer.parseInt(cityData[0]), Integer.parseInt(cityData[1])), cityData[2]);
+                Stad city = new Stad(Coordinaat.op(x, y), cityData[2]);
 
                 // Add the city object to the list
                 cities.add(city);
@@ -132,8 +141,8 @@ public class WereldLaderImpl implements WereldLader {
     	// Create a list of trades
     	ArrayList<Handel> trades = new ArrayList<>();
     	
-    	// Read markets
-    	final int marketCount = Integer.parseInt(scanner.nextLine());
+    	// Read market count
+    	final int marketCount = Integer.parseInt(scanner.nextLine().replaceAll("\\s+", ""));
     	
     	// Look for x amount of markets
     	for(int i = 0; i < marketCount; i++) {
@@ -155,7 +164,7 @@ public class WereldLaderImpl implements WereldLader {
             Stad city = findCity(marketMatcher.group(1));
             HandelType type = HandelType.valueOf(marketMatcher.group(2));
             Handelswaar goods = new Handelswaar(marketMatcher.group(3));
-            int price = Integer.parseInt(marketMatcher.group(4));
+            int price = Integer.parseInt(marketMatcher.group(4).replaceAll("\\s+", ""));
             
             // Create a new trade and market
             Handel trade = new Handel(city, type, goods, price);
