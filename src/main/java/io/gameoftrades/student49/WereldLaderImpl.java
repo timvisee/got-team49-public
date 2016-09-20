@@ -118,7 +118,7 @@ public class WereldLaderImpl implements WereldLader {
                 int x = Integer.parseInt(cityData[0]);
                 int y = Integer.parseInt(cityData[1]);
                 
-                if((x < 1 || x > map.getBreedte()) || (y < 1 || y > map.getHoogte()))
+                if((x < 0 || x >= map.getBreedte()) || (y < 0 || y >= map.getHoogte()))
                 	throw new IllegalArgumentException("City coordinates exceed the mapWidth or mapHeight");
                 
                 // Create a new city object
