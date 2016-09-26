@@ -93,51 +93,6 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme {
 		return null;
 	}
 	
-	private void loop() {
-		
-		System.out.println("-------------------- Loop "+count+" --------------------");
-		
-		Node current = open.get(0);
-		
-		for(int i = 1; i < open.size(); i++) {
-			if(open.get(i).fCost() <= current.fCost()) {
-				current = open.get(i);
-			}
-		}
-		 
-		closed.add(current);
-		open.remove(current);
-		
-		if(current.getTerrein().getCoordinaat().equals(eind) || count >= 1000) {
-			System.out.println("Path has been found.");
-			for(int i = 0; i < closed.size(); i++) {
-				System.out.println(i + ": " + closed.get(i).getTerrein().toString());
-			}
-			
-			return;
-		}
-		
-		System.out.println("Current Node: " + current.toString());
-		
-		Richting[] direction = current.getTerrein().getMogelijkeRichtingen();
-		for(int i = 0; i < direction.length; i++) {
-			
-			Node temp = new Node(kaart.kijk(current.getTerrein(), direction[i]), current, start, eind);
-			
-			if(!closedContains(temp)) {
-				if(!openContains(temp)) {
-					System.out.println("Temp Node: " + temp.toString());
-					open.add(temp);
-				}
-			}
-		}
-		
-		if(true) {
-			count++;
-			loop();
-		}
-	}
-	
 	private boolean openContains(Node node) {
 		for(int i = 0; i < open.size(); i++) {
 			if(open.get(i).equals(node))
@@ -152,18 +107,5 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme {
 				return true;
 		}
 		return false;
-	}
-	
-	private void loop2(Node last, Node start) {
-		System.out.println(count + " " + last.toString());
-		
-		Node parent = last.getParent();
-		if(parent.equals(start)) {
-			System.out.println((count + 1) + " " + parent.toString());
-			return;
-		}
-		
-		count++;
-		loop2(parent, start);
 	}
 }
