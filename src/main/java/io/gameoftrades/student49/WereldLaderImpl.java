@@ -82,9 +82,9 @@ public class WereldLaderImpl implements WereldLader {
         for(int y = 0; y < mapHeight; y++) {
             // Read the current line
             final String mapLine = scanner.nextLine().replaceAll("\\s+", "");
-            
+
             if(mapLine.length() != mapWidth)
-            	throw new IllegalArgumentException("The amount of characters exceeds the mapWidth");
+                throw new IllegalArgumentException("The amount of characters exceeds the mapWidth");
 
             // Loop through the characters
             for(int x = 0; x < mapWidth; x++)
@@ -107,26 +107,27 @@ public class WereldLaderImpl implements WereldLader {
         // Clear the list of cities
         cities.clear();
 
-        if(cityCount > 0){
-            for (int i = 0; i < cityCount; i++) {
-                // Read the city coordinates and name
-                String line = scanner.nextLine();
+        // Read the cities
+        for(int i = 0; i < cityCount; i++) {
+            // Read the city coordinates and name
+            String line = scanner.nextLine();
 
-                // Split the data
-                String[] cityData = line.split(",");
+            // Split the data
+            String[] cityData = line.split(",");
 
-                int x = Integer.parseInt(cityData[0]);
-                int y = Integer.parseInt(cityData[1]);
-                
-                if((x < 0 || x >= map.getBreedte()) || (y < 0 || y >= map.getHoogte()))
-                	throw new IllegalArgumentException("City coordinates exceed the mapWidth or mapHeight");
-                
-                // Create a new city object
-                Stad city = new Stad(Coordinaat.op(x, y), cityData[2]);
+            // Get the X and Y coordinate
+            int x = Integer.parseInt(cityData[0]);
+            int y = Integer.parseInt(cityData[1]);
 
-                // Add the city object to the list
-                cities.add(city);
-            }
+            // Make sure the coordinates are in bound
+            if((x < 0 || x >= map.getBreedte()) || (y < 0 || y >= map.getHoogte()))
+                throw new IllegalArgumentException("City coordinates exceed the mapWidth or mapHeight");
+
+            // Create a new city object
+            Stad city = new Stad(Coordinaat.op(x, y), cityData[2]);
+
+            // Add the city object to the list
+            cities.add(city);
         }
     }
 
@@ -137,40 +138,37 @@ public class WereldLaderImpl implements WereldLader {
      * @return Market.
      */
     private Markt loadMarket(Scanner scanner) {
-    	
-    	// Create a list of trades
-    	ArrayList<Handel> trades = new ArrayList<>();
-    	
-    	// Read market count
-    	final int marketCount = Integer.parseInt(scanner.nextLine().replaceAll("\\s+", ""));
-    	
-    	// Look for x amount of markets
-    	for(int i = 0; i < marketCount; i++) {
-    		
-    		// Read the current line
-    		String line = scanner.nextLine();
-    		
-    		// Make sure the market has a valid format
+        // Create a list of trades
+        ArrayList<Handel> trades = new ArrayList<>();
+
+        // Read market count
+        final int marketCount = Integer.parseInt(scanner.nextLine().replaceAll("\\s+", ""));
+
+        // Look for x amount of markets
+        for(int i = 0; i < marketCount; i++) {
+            // Read the current line
+            String line = scanner.nextLine();
+
+            // Make sure the market has a valid format
             final Pattern marketPattern = Pattern.compile(REGEX_MARKET);
             final Matcher marketMatcher = marketPattern.matcher(line);
 
             // Find the pattern and make sure it exists
             if(!marketMatcher.find()) {
-            	System.out.println(line);
+                System.out.println(line);
                 throw new RuntimeException("The market being loaded has a invalid format");
             }
-            
-            // Create new trade and market properties
-            Stad city = findCity(marketMatcher.group(1));
-            HandelType type = HandelType.valueOf(marketMatcher.group(2));
-            Handelswaar goods = new Handelswaar(marketMatcher.group(3));
-            int price = Integer.parseInt(marketMatcher.group(4).replaceAll("\\s+", ""));
-            
+
             // Create a new trade and market
-            Handel trade = new Handel(city, type, goods, price);
+            Handel trade = new Handel(
+                    findCity(marketMatcher.group(1)),
+                    HandelType.valueOf(marketMatcher.group(2)),
+                    new Handelswaar(marketMatcher.group(3)),
+                    Integer.parseInt(marketMatcher.group(4).replaceAll("\\s+", "")));
             trades.add(trade);
-    	}
-    	
+        }
+
+        // Return a new market instance
         return new Markt(trades);
     }
 
