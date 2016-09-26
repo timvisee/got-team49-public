@@ -21,7 +21,11 @@ public class WereldLaderImpl implements WereldLader {
      * Regex for the map size.
      */
     private static final String REGEX_MAP_SIZE = "^([0-9]+),([0-9 ]+)$";
-    private static final String REGEX_MARKET = "^([^,]+),([A-Z]+),([^,]+),([0-9. ]+)";
+
+    /**
+     * Regex for the market.
+     */
+    private static final String REGEX_MARKET = "^([^,]+),(BIEDT|VRAAGT),([^,]+),([0-9. ]+)";
 
     /**
      * List of cities.
