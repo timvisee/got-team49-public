@@ -1,60 +1,51 @@
 package io.gameoftrades.student49;
 
+import java.text.DecimalFormat;
+
 import io.gameoftrades.model.kaart.Coordinaat;
 import io.gameoftrades.model.kaart.Terrein;
 
 public class Node {
-
-	private Terrein terrein;
-	private Node 	parent;
-	private Node 	child;
-	private int 	gCost;
-	private double  hCost;
-	private double  fCost;
 	
-	public Node(Terrein terrein) {
+	public Terrein terrein;
+	public Node parent;
+	public double gCost;
+	public double hCost;
+	
+	public Node(Terrein terrein, Node parent) {
 		this.terrein = terrein;
-		this.gCost = 0;
-		this.hCost = 0.0;
-		this.fCost = 0.0;
-	}
-	
-	public Node(Terrein terrein, Coordinaat eind) {
-		this.terrein = terrein;
-		this.gCost = this.terrein.getTerreinType().getBewegingspunten();
-		this.hCost = this.terrein.getCoordinaat().afstandTot(eind);
-		this.fCost = this.gCost + this.hCost;
-	}
-	
-	public Terrein getTerrein() {
-		return this.terrein;
-	}
-	
-	public int getGCost() {
-		return this.gCost;
-	}
-	
-	public double getHCost() {
-		return this.hCost;
-	}
-	
-	public double getFCost() {
-		return this.fCost;
-	}
-	
-	public void setParent(Node parent) {
 		this.parent = parent;
+		this.gCost = 0; // value of distance to starting node
+		this.hCost = 0;
 	}
 	
-	public Node getParent() {
-		return this.parent;
+	public Node(Terrein terrein, Node parent, Coordinaat start, Coordinaat eind) {
+
+		this.terrein = terrein;
+		this.parent = parent;
+		this.gCost = 0; // value of distance to starting node
+		this.hCost = this.terrein.getCoordinaat().afstandTot(eind);
+
+		if(parent != null) {
+			this.gCost  = this.parent.gCost;
+			this.gCost += this.terrein.getCoordinaat().afstandTot(start);
+			this.gCost += this.terrein.getTerreinType().getBewegingspunten();
+		}
 	}
 	
-	public void setChild(Node child) {
-		this.child = child;
+	public Terrein getTerrein() { return this.terrein; }
+	public Node    getParent()  { return this.parent; }
+	public double  fCost() 		{ return this.gCost + this.hCost; }
+	
+	public boolean equals(Node node) {
+		return this.terrein.getCoordinaat() == node.getTerrein().getCoordinaat();
 	}
 	
-	public Node getChild() {
-		return this.child;
+	public String toString() {
+		DecimalFormat df = new DecimalFormat("#0.00");
+		return this.terrein.toString() +
+				" g: " + df.format(this.gCost) +
+				" h: " + df.format(this.hCost) +
+				" f: " + df.format(this.gCost + this.hCost);
 	}
 }
