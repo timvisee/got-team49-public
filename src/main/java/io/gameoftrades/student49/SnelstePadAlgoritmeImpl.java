@@ -81,12 +81,9 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme {
 			
 			Richting[] richting = currentNode.getTerrein().getMogelijkeRichtingen();
 			for(Richting r : richting) {
-				
 				Node tempNode = new Node(kaart.kijk(currentNode.getTerrein(), r), currentNode, start, eind);
-				
-				if(!closedContains(tempNode) && !openContains(tempNode)) {
+				if(!closedContains(tempNode) && !openContains(tempNode))
 					open.add(tempNode);
-				}
 			}
 		}
 		
