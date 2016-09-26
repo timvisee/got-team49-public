@@ -111,27 +111,26 @@ public class WereldLaderImpl implements WereldLader {
         // Clear the list of cities
         cities.clear();
 
-        // Read the cities
-        for(int i = 0; i < cityCount; i++) {
-            // Read the city coordinates and name
-            String line = scanner.nextLine();
+        if(cityCount > 0){
+            for (int i = 0; i < cityCount; i++) {
+                // Read the city coordinates and name
+                String line = scanner.nextLine();
 
-            // Split the data
-            String[] cityData = line.split(",");
+                // Split the data
+                String[] cityData = line.split(",");
 
-            // Get the X and Y coordinate
-            int x = Integer.parseInt(cityData[0]);
-            int y = Integer.parseInt(cityData[1]);
+                int x = Integer.parseInt(cityData[0]);
+                int y = Integer.parseInt(cityData[1]);
+                
+                if((x < 1 || x > map.getBreedte()) || (y < 1 || y > map.getHoogte()))
+                	throw new IllegalArgumentException("City coordinates exceed the mapWidth or mapHeight");
+                
+                // Create a new city object
+                Stad city = new Stad(Coordinaat.op(x - 1, y - 1), cityData[2]);
 
-            // Make sure the coordinates are in bound
-            if((x < 0 || x >= map.getBreedte()) || (y < 0 || y >= map.getHoogte()))
-                throw new IllegalArgumentException("City coordinates exceed the mapWidth or mapHeight");
-
-            // Create a new city object
-            Stad city = new Stad(Coordinaat.op(x, y), cityData[2]);
-
-            // Add the city object to the list
-            cities.add(city);
+                // Add the city object to the list
+                cities.add(city);
+            }
         }
     }
 
