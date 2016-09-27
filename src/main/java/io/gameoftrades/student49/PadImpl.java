@@ -6,28 +6,42 @@ import io.gameoftrades.model.kaart.Richting;
 
 public class PadImpl implements Pad {
 
+	private Richting[] directions;
+	private int routeCost;
+	
+	public PadImpl(Richting[] directions, int routeCost) {
+		this.directions = directions;
+		this.routeCost  = routeCost;
+	}
+	
 	@Override
 	public int getTotaleTijd() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.routeCost;
 	}
 
 	@Override
 	public Richting[] getBewegingen() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.directions;
 	}
 
 	@Override
 	public Pad omgekeerd() {
-		// TODO Auto-generated method stub
-		return null;
+		Richting[] reverse = new Richting[directions.length];
+		for(int i = 0; i < directions.length; i++) {
+			reverse[i] = directions[directions.length - (i + 1)].omgekeerd();
+		}
+		
+		return new PadImpl(reverse, this.routeCost);
 	}
 
 	@Override
 	public Coordinaat volg(Coordinaat start) {
-		//
-		return null;
+		Coordinaat c = start;
+		for(Richting direction : this.directions) {
+			c = c.naar(direction);
+		}
+		
+		return c;
 	}
 
 }
