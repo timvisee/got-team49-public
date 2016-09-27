@@ -2,30 +2,25 @@ package io.gameoftrades.student49;
 
 import java.util.ArrayList;
 
+import io.gameoftrades.debug.Debuggable;
+import io.gameoftrades.debug.Debugger;
 import io.gameoftrades.model.algoritme.SnelstePadAlgoritme;
 import io.gameoftrades.model.kaart.Coordinaat;
 import io.gameoftrades.model.kaart.Kaart;
 import io.gameoftrades.model.kaart.Pad;
 import io.gameoftrades.model.kaart.Richting;
 
-public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme {
+public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable {
 
+	private Debugger debugger;
+	
 	private ArrayList<Node> open;
 	private ArrayList<Node> closed;
-	
-	private Kaart kaart;
-	
-	private Coordinaat start;
-	private Coordinaat eind;
 	
 	private int count = 0;
 	
 	@Override
 	public Pad bereken(Kaart kaart, Coordinaat start, Coordinaat eind) {
-		
-		this.kaart = kaart;
-		this.start = start;
-		this.eind  = eind;
 		
 		open   = new ArrayList<>();
 		closed = new ArrayList<>();
@@ -51,20 +46,9 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme {
 			
 			if(currentNode.getTerrein().getCoordinaat().equals(eind)) {
 				
-				System.out.println("---------- Path found ----------");
-				
-				System.out.println("Open list:");
-				for(int i = 0; i < open.size(); i++) {
-					System.out.println(open.get(i));
-				}
-				
-				System.out.println("Closed list:");
-				for(int i = 0; i < closed.size(); i++) {
-					System.out.println(closed.get(i));
-				}
-				
 				Node tempNode = currentNode;
 				if(tempNode.getTerrein().getCoordinaat().equals(eind)) {
+					
 					System.out.println("---------- Possible path ----------");
 					count = 0;
 					while(!tempNode.getTerrein().getCoordinaat().equals(start)) {
@@ -102,5 +86,15 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme {
 				return true;
 		}
 		return false;
+	}
+	
+	public String toString() {
+		return "Snelste Pad Algoritme";
+	}
+
+	@Override
+	public void setDebugger(Debugger debugger) {
+		this.debugger = debugger;
+		
 	}
 }
