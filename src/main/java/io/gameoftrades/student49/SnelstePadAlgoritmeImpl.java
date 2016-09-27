@@ -63,17 +63,15 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme {
 					System.out.println(closed.get(i));
 				}
 				
-				for(int i = 0; i < closed.size(); i++) {
-					Node tempNode = closed.get(i);
-					if(tempNode.getTerrein().getCoordinaat().equals(eind)) {
-						System.out.println("---------- Possible path ----------");
-						count = 0;
-						while(!tempNode.getTerrein().getCoordinaat().equals(start)) {
-							System.out.println((count++) + ": " + tempNode);
-							tempNode = tempNode.getParent();
-						}
-						System.out.println(count + ": " + tempNode);
+				Node tempNode = currentNode;
+				if(tempNode.getTerrein().getCoordinaat().equals(eind)) {
+					System.out.println("---------- Possible path ----------");
+					count = 0;
+					while(!tempNode.getTerrein().getCoordinaat().equals(start)) {
+						System.out.println((count++) + ": " + tempNode);
+						tempNode = tempNode.getParent();
 					}
+					System.out.println(count + ": " + tempNode);
 				}
 				
 				return null;
