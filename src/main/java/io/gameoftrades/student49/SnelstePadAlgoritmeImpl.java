@@ -1,6 +1,7 @@
 package io.gameoftrades.student49;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import io.gameoftrades.debug.Debuggable;
 import io.gameoftrades.debug.Debugger;
@@ -14,16 +15,16 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
 
 	private Debugger debugger;
 	
-	private ArrayList<Node> open;
+    private ArrayList<Node> open;
 	private ArrayList<Node> closed;
-	
-	private int count = 0;
+    private ArrayList<Node> route;
 	
 	@Override
 	public Pad bereken(Kaart kaart, Coordinaat start, Coordinaat eind) {
 		
 		open   = new ArrayList<>();
 		closed = new ArrayList<>();
+        route  = new ArrayList<>();
 		
 		Node startNode = new Node(kaart.getTerreinOp(start));
 		
@@ -45,18 +46,23 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
 			if(currentNode.getTerrein().getCoordinaat().equals(eind)) {
 				
 				Node tempNode = currentNode;
-				if(tempNode.getTerrein().getCoordinaat().equals(eind)) {
-					
-					System.out.println("---------- Possible path ----------");
-					count = 0;
-					while(!tempNode.getTerrein().getCoordinaat().equals(start)) {
-						System.out.println((count++) + ": " + tempNode);
-						tempNode = tempNode.getParent();
-					}
-					System.out.println(count + ": " + tempNode);
+				int routeCost = (int) tempNode.fCost();
+
+				while(!tempNode.getTerrein().getCoordinaat().equals(start)) {
+					route.add(tempNode);
+					tempNode = tempNode.getParent();
 				}
+				route.add(tempNode);
+				Collections.reverse(route);
 				
-				return null;
+				Richting[] directions = new Richting[route.size() - 1];
+				for(int i = 0; i < route.size() - 1; i++) {
+					directions[i] = Richting.tussen(
+							route.get(i).getTerrein().getCoordinaat(),
+							route.get(i + 1).getTerrein().getCoordinaat());
+				}
+				debugger.debugPad(kaart, start, new PadImpl(directions, routeCost));
+				return new PadImpl(directions, routeCost);
 			}
 			
 			Richting[] richting = currentNode.getTerrein().getMogelijkeRichtingen();
