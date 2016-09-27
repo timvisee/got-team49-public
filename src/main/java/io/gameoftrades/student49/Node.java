@@ -28,7 +28,7 @@ public class Node {
 
 		if(parent != null) {
 			this.gCost  = this.parent.gCost;
-			this.gCost += this.terrein.getCoordinaat().afstandTot(start);
+			//this.gCost += this.terrein.getCoordinaat().afstandTot(start);
 			this.gCost += this.terrein.getTerreinType().getBewegingspunten();
 		}
 	}
