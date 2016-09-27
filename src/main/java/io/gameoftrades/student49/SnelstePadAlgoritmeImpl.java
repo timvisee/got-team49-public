@@ -25,13 +25,11 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
 		open   = new ArrayList<>();
 		closed = new ArrayList<>();
 		
-		Node startNode = new Node(kaart.getTerreinOp(start), null, start, eind);
+		Node startNode = new Node(kaart.getTerreinOp(start));
 		
 		open.add(startNode);
 		
 		while(open.size() > 0) {
-			
-			//System.out.println("Loop count: " + (count++));
 			
 			Node currentNode = open.get(0);
 			for(int i = 1; i < open.size(); i++) {
@@ -63,8 +61,8 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
 			
 			Richting[] richting = currentNode.getTerrein().getMogelijkeRichtingen();
 			for(Richting r : richting) {
-				Node tempNode = new Node(kaart.kijk(currentNode.getTerrein(), r), currentNode, start, eind);
-				if(!closedContains(tempNode) && !openContains(tempNode))
+				Node tempNode = new Node(kaart.kijk(currentNode.getTerrein(), r), currentNode, eind);
+				if(!contains(closed, tempNode) && !contains(open, tempNode))
 					open.add(tempNode);
 			}
 		}
@@ -72,19 +70,8 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
 		return null;
 	}
 	
-	private boolean openContains(Node node) {
-		for(int i = 0; i < open.size(); i++) {
-			if(open.get(i).equals(node))
-				return true;
-		}
-		return false;
-	}
-	
-	private boolean closedContains(Node node) {
-		for(int i = 0; i < closed.size(); i++) {
-			if(closed.get(i).equals(node))
-				return true;
-		}
+	private boolean contains(ArrayList<Node> list, Node node) {
+		for(Node n : list) if(n.equals(node)) return true;
 		return false;
 	}
 	

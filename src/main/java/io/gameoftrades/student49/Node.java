@@ -13,8 +13,14 @@ public class Node {
 	public double gCost;
 	public double hCost;
 	
-	public Node(Terrein terrein, Node parent, Coordinaat start, Coordinaat eind) {
-
+	public Node(Terrein terrein) {
+		this.terrein = terrein;
+		this.parent = null;
+		this.gCost = 0;
+		this.hCost = 0;
+	}
+	
+	public Node(Terrein terrein, Node parent, Coordinaat eind) {
 		this.terrein = terrein;
 		this.parent = parent;
 		this.gCost = 0;
