@@ -7,35 +7,34 @@ import io.gameoftrades.model.kaart.Terrein;
 
 public class Node {
 	
-	public Terrein terrein;
-	public Node parent;
+	private Terrein terrein;
+	private Node parent;
+	
 	public double gCost;
 	public double hCost;
-	
-	public Node(Terrein terrein, Node parent) {
-		this.terrein = terrein;
-		this.parent = parent;
-		this.gCost = 0; // value of distance to starting node
-		this.hCost = 0;
-	}
 	
 	public Node(Terrein terrein, Node parent, Coordinaat start, Coordinaat eind) {
 
 		this.terrein = terrein;
 		this.parent = parent;
-		this.gCost = 0; // value of distance to starting node
+		this.gCost = 0;
 		this.hCost = this.terrein.getCoordinaat().afstandTot(eind);
 
-		if(parent != null) {
-			this.gCost  = this.parent.gCost;
-			//this.gCost += this.terrein.getCoordinaat().afstandTot(start);
-			this.gCost += this.terrein.getTerreinType().getBewegingspunten();
-		}
+		if(parent != null)
+			this.gCost += this.parent.gCost + this.terrein.getTerreinType().getBewegingspunten();
 	}
 	
-	public Terrein getTerrein() { return this.terrein; }
-	public Node    getParent()  { return this.parent; }
-	public double  fCost() 		{ return this.gCost + this.hCost; }
+	public Terrein getTerrein() {
+		return this.terrein;
+	}
+	
+	public Node getParent() {
+		return this.parent;
+	}
+	
+	public double fCost() {
+		return this.gCost + this.hCost;
+	}
 	
 	public boolean equals(Node node) {
 		return this.terrein.getCoordinaat() == node.getTerrein().getCoordinaat();
