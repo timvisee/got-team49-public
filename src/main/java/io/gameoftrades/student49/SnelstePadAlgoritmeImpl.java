@@ -35,7 +35,9 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
 			Node currentNode = open.get(0);
 			for(int i = 1; i < open.size(); i++) {
 				Node tempNode = open.get(i);
-				if(tempNode.fCost() < currentNode.fCost() || (tempNode.fCost() == currentNode.fCost() && tempNode.gCost < currentNode.gCost)) {
+				if(tempNode.fCost() < currentNode.fCost() ||
+						(tempNode.fCost() == currentNode.fCost() &&
+						tempNode.gCost < currentNode.gCost)) {
 					currentNode = tempNode;
 				}
 			}
