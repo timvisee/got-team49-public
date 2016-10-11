@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable{
+public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable {
 
 	private ArrayList <Node> closedList;
 	private ArrayList <Node> openList;
