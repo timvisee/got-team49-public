@@ -24,7 +24,6 @@ public class PathChecker {
         this.paths = new ArrayList<>();
 
         FillPathsArrayList();
-        System.out.println("Pathsize" + paths.size());
     }
 
     private void FillPathsArrayList(){
@@ -72,6 +71,16 @@ public class PathChecker {
             }
         }
         return pathCost;
+    }
+
+    public Path getPath(Coordinaat c1, Coordinaat c2) {
+        for (int i = 0; i < paths.size(); i++) {
+            if ((c1.equals(paths.get(i).getStart()) && c2.equals(paths.get(i).getEnd())) ||
+                    (c1.equals(paths.get(i).getEnd()) && c2.equals(paths.get(i).getStart()))) {
+                return paths.get(i);
+            }
+        }
+        return null;
     }
 
 }
