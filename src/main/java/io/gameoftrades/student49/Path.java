@@ -4,12 +4,12 @@ import io.gameoftrades.model.kaart.Coordinaat;
 import io.gameoftrades.model.kaart.Pad;
 import io.gameoftrades.model.kaart.Richting;
 
-public class PadImpl implements Pad {
+public class Path implements Pad {
 
 	private Richting[] directions;
 	private int routeCost;
 	
-	public PadImpl(Richting[] directions, int routeCost) {
+	public Path(Richting[] directions, int routeCost) {
 		this.directions = directions;
 		this.routeCost  = routeCost;
 	}
@@ -31,7 +31,7 @@ public class PadImpl implements Pad {
 			reverse[i] = directions[directions.length - (i + 1)].omgekeerd();
 		}
 		
-		return new PadImpl(reverse, this.routeCost);
+		return new Path(reverse, this.routeCost);
 	}
 
 	@Override

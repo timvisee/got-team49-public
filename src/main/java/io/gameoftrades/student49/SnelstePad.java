@@ -11,7 +11,7 @@ import io.gameoftrades.model.kaart.Kaart;
 import io.gameoftrades.model.kaart.Pad;
 import io.gameoftrades.model.kaart.Richting;
 
-public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable {
+public class SnelstePad implements SnelstePadAlgoritme, Debuggable {
 
 	private Debugger debugger;
 	
@@ -63,8 +63,8 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
 							route.get(i).getTerrein().getCoordinaat(),
 							route.get(i + 1).getTerrein().getCoordinaat());
 				}
-				debugger.debugPad(kaart, start, new PadImpl(directions, routeCost));
-				return new PadImpl(directions, routeCost);
+				debugger.debugPad(kaart, start, new Path(directions, routeCost));
+				return new Path(directions, routeCost);
 			}
 			
 			Richting[] richting = currentNode.getTerrein().getMogelijkeRichtingen();
