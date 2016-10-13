@@ -4,7 +4,6 @@ import io.gameoftrades.debug.Debuggable;
 import io.gameoftrades.debug.Debugger;
 import io.gameoftrades.model.algoritme.SnelstePadAlgoritme;
 import io.gameoftrades.model.algoritme.StedenTourAlgoritme;
-import io.gameoftrades.model.kaart.Coordinaat;
 import io.gameoftrades.model.kaart.Kaart;
 import io.gameoftrades.model.kaart.Pad;
 import io.gameoftrades.model.kaart.Stad;
@@ -85,8 +84,8 @@ public class StedenTourAlgoritmeImpl implements StedenTourAlgoritme, Debuggable 
                     // get executed once, because the paths list is empty at the start
                     // calculates the path-length from a certain city to another one.
                     else {
-                        pathLength = calculateFastestPath(fastestRoute.get(fastestRoute.size() - 1).getCoordinaat(),
-                                cities.get(i).getCoordinaat());
+                        pathLength = calculateFastestPath(fastestRoute.get(fastestRoute.size() - 1),
+                                cities.get(i));
                     }
 
                     // if the path is faster than the current one, pick this city as the fastest option.
@@ -128,16 +127,16 @@ public class StedenTourAlgoritmeImpl implements StedenTourAlgoritme, Debuggable 
         }
         //if the path is not in the path list, calculate it and put in in the paths list.
         if(!success) {
-            pathLength = calculateFastestPath(fastestRoute.get(fastestRoute.size() - 1).getCoordinaat(),
-                    cities.get(i).getCoordinaat());
+            pathLength = calculateFastestPath(fastestRoute.get(fastestRoute.size() - 1),
+                    cities.get(i));
         }
         return pathLength;
     }
 
 
-    public int calculateFastestPath(Coordinaat c1, Coordinaat c2){
+    public int calculateFastestPath(Stad c1, Stad c2){
 
-        Pad pad = spa.bereken(map ,c1, c2);
+        Pad pad = spa.bereken(map ,c1.getCoordinaat(), c2.getCoordinaat());
         paths.add(new Path(c1, c2, pad.getTotaleTijd()));
         return pad.getTotaleTijd();
     }

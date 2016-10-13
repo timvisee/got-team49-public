@@ -1,6 +1,7 @@
 package io.gameoftrades.student49;
 
 import io.gameoftrades.model.kaart.Coordinaat;
+import io.gameoftrades.model.kaart.Stad;
 import io.gameoftrades.model.markt.Handelswaar;
 
 public class TradeRoute {
@@ -39,6 +40,14 @@ public class TradeRoute {
         return (int)sell;
     }
 
+    public Stad getOfferCity(){
+        return path.getStartCity();
+    }
+
+    public Stad getDemandCity(){
+        return path.getEndCity();
+    }
+
     /**
      *
      * @return efficiency for 1 product.
@@ -64,6 +73,7 @@ public class TradeRoute {
     }
 
     public int getPathCost(){
+        //return path.getLength();
         return PathChecker.checkPathCost(path.getStart(), currentPos) + path.getLength();
     }
 }

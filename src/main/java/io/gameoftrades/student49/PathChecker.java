@@ -31,17 +31,17 @@ public class PathChecker {
         for (int i = 0; i < cities.size(); i++) {
             for (int j = 0; j < cities.size(); j++) {
                 if(!cities.get(i).getCoordinaat().equals(cities.get(j).getCoordinaat()))
-                    calculatePaths(cities.get(i).getCoordinaat(), cities.get(j).getCoordinaat());
+                    calculatePaths(cities.get(i), cities.get(j));
             }
         }
     }
 
-    private void calculatePaths(Coordinaat c1, Coordinaat c2){
+    private void calculatePaths(Stad c1, Stad c2){
 
         boolean foundPath = false;
 
         if(paths.isEmpty()){
-            Pad pad = spa.bereken(map, c1, c2);
+            Pad pad = spa.bereken(map, c1.getCoordinaat(), c2.getCoordinaat());
             paths.add(new Path(c1, c2, pad.getTotaleTijd()));
             return;
         }
@@ -55,7 +55,7 @@ public class PathChecker {
             }
         }
         if(!foundPath && !paths.isEmpty()){
-            Pad pad = spa.bereken(map, c1, c2);
+            Pad pad = spa.bereken(map, c1.getCoordinaat(), c2.getCoordinaat());
             paths.add(new Path(c1, c2, pad.getTotaleTijd()));
         }
     }
@@ -73,10 +73,11 @@ public class PathChecker {
         return pathCost;
     }
 
+
+
     public Path getPath(Coordinaat c1, Coordinaat c2) {
         for (int i = 0; i < paths.size(); i++) {
-            if ((c1.equals(paths.get(i).getStart()) && c2.equals(paths.get(i).getEnd())) ||
-                    (c1.equals(paths.get(i).getEnd()) && c2.equals(paths.get(i).getStart()))) {
+            if ((c1.equals(paths.get(i).getStart()) && c2.equals(paths.get(i).getEnd()))) {
                 return paths.get(i);
             }
         }

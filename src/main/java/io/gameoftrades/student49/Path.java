@@ -1,26 +1,36 @@
 package io.gameoftrades.student49;
 
 import io.gameoftrades.model.kaart.Coordinaat;
+import io.gameoftrades.model.kaart.Stad;
 
 public class Path  {
 
-    private Coordinaat start;
-    private Coordinaat end;
+    private Stad start;
+    private Stad end;
     private int length;
 
-    public Path(Coordinaat start, Coordinaat end, int length){
+    public Path(Stad start, Stad end, int length){
         this.start = start;
         this.end = end;
         this.length = length;
     }
 
     public Coordinaat getStart(){
-        return start;
+        return start.getCoordinaat();
     }
 
     public Coordinaat getEnd(){
+        return end.getCoordinaat();
+    }
+
+    public Stad getStartCity(){
+        return start;
+    }
+
+    public Stad getEndCity(){
         return end;
     }
+
 
     public int getLength(){
         return length;

@@ -128,7 +128,7 @@ public class WereldLaderImpl implements WereldLader {
                 throw new IllegalArgumentException("City coordinates exceed the mapWidth or mapHeight");
 
             // Create a new city object
-            Stad city = new Stad(Coordinaat.op(x, y), cityData[2]);
+            Stad city = new Stad(Coordinaat.op(x -1, y -1), cityData[2]);
 
             // Add the city object to the list
             cities.add(city);
