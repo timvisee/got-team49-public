@@ -2,6 +2,8 @@ package io.gameoftrades.student49;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.gameoftrades.debug.Debuggable;
 import io.gameoftrades.debug.Debugger;
@@ -63,7 +65,20 @@ public class SnelstePad implements SnelstePadAlgoritme, Debuggable {
 							route.get(i).getTerrein().getCoordinaat(),
 							route.get(i + 1).getTerrein().getCoordinaat());
 				}
+				
+				Map<Coordinaat, Double> openMap   = new HashMap<>();
+				Map<Coordinaat, Double> closedMap = new HashMap<>();
+				
+				for(Node node : open) {
+					openMap.put(node.getTerrein().getCoordinaat(), node.fCost());
+				}
+				
+				for(Node node : closed) {
+					closedMap.put(node.getTerrein().getCoordinaat(), node.fCost());
+				}
+				
 				debugger.debugPad(kaart, start, new Path(directions, routeCost));
+				debugger.debugCoordinaten(kaart, openMap, closedMap);
 				return new Path(directions, routeCost);
 			}
 			
