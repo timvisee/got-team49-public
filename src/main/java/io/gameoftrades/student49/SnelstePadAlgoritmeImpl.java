@@ -30,11 +30,6 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
     private ArrayList <Node> route;
 
     /**
-     * List of directions.
-     */
-    private Richting[] directions;
-
-    /**
      * Current map that is used for A*.
      */
 	private Kaart map;
@@ -165,7 +160,7 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
         }
 
         // Create a new directions array with the proper size
-        directions = new Richting[route.size() - 1];
+        Richting[] directions = new Richting[route.size() - 1];
 
         // Reverse the route list
         Collections.reverse(route);
