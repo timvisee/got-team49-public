@@ -119,7 +119,7 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
 
 			// show the path in the GUI upon starting the algorithm
 			pad = new PadImpl(richting, totalCost);
-			//debugger.debugPad(map, start, pad);
+			debugger.debugPad(map, start, pad);
 		}
 	}
 
