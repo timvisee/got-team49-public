@@ -10,7 +10,6 @@ import io.gameoftrades.model.kaart.Richting;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable {
 

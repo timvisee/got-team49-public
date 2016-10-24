@@ -3,51 +3,106 @@ package io.gameoftrades.student49;
 import io.gameoftrades.model.kaart.Coordinaat;
 import io.gameoftrades.model.kaart.Terrein;
 
+@SuppressWarnings("WeakerAccess")
 public class Node {
 
+    /**
+     * Terrain tile.
+     */
     private Terrein terrain;
+
+    /**
+     * Parent node.
+     */
     private Node parent;
 
-    private double gCost;
+    /**
+     * G cost value.
+     */
+    private double gCost = 0;
+
+    /**
+     * H cost value.
+     */
     private double hCost;
 
+    /**
+     * Node coordinate.
+     */
     private Coordinaat coordinaat;
+
+    /**
+     * Node end.
+     */
+    // TODO: Remove? This is never used.
     private Coordinaat end;
 
-    public Node(Terrein t, Node parent, Coordinaat end){
-
-        this.terrain = t;
+    /**
+     * Constructor.
+     * @param terrain Terrain.
+     * @param parent Parent node.
+     * @param end End coordinate.
+     */
+    public Node(Terrein terrain, Node parent, Coordinaat end){
+        // Set the properties
+        this.terrain = terrain;
         this.parent = parent;
         this.end = end;
 
-        coordinaat = t.getCoordinaat();
+        // Get the coordinate
+        this.coordinaat = terrain.getCoordinaat();
 
+        // Calculate the g cost
         if(parent != null)
-        gCost = parent.getgCost() + t.getTerreinType().getBewegingspunten();
-        else
-            gCost = 0;
+            this.gCost = parent.getgCost() + terrain.getTerreinType().getBewegingspunten();
 
-        hCost = coordinaat.afstandTot(end);
+        // Calculate the h cost
+        this.hCost = coordinaat.afstandTot(end);
     }
 
+    /**
+     * Get the parent node if there is any.
+     *
+     * @return Parent node or null.
+     */
     public Node getParent(){
         return parent;
     }
 
+    /**
+     * Get the terrain type.
+     *
+     * @return Terrain.
+     */
     public Terrein getTerrain(){
         return terrain;
     }
 
+    /**
+     * Get the g cost.
+     *
+     * @return G cost value.
+     */
     public double getgCost(){
-        return gCost;
+        return this.gCost;
     }
 
+    /**
+     * Get the h cost.
+     *
+     * @return H cost value.
+     */
     public double gethCost(){
-        return hCost;
+        return this.hCost;
     }
 
+    /**
+     * Get the f cost.
+     *
+     * @return F cost value.
+     */
     public double getfCost(){
-        return hCost + gCost;
+        return gethCost() + getgCost();
     }
 
     @Override
