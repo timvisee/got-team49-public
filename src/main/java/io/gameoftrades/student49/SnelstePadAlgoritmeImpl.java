@@ -118,7 +118,7 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
             debug = false;
 
 		// Get the lowest cost node
-		Node current = getLowest();
+		Node current = getLowestOpen();
 
         // Remove the first entry from the open list, and add it to the closed list, since we're processing it
 		openList.remove(0);
@@ -183,11 +183,13 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
      * @return Lowest node, or null if there is none.
      */
     // TODO: Don't sort the list (just get the lowest) sorting is slow
-	public Node getLowest(){
+    private Node getLowestOpen(){
+        // Make sure there's anything in the open list
+        if(openList.isEmpty())
+            return null;
+
 	    // Sort the open list from lowest to highest
 		Collections.sort(openList, sorter);
-
-        // TODO: Return null if there's nothing in the open list
 
         // Return the first entry
 		return openList.get(0);
