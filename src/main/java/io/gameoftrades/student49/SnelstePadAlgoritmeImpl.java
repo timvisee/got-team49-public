@@ -57,7 +57,7 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
 
 		// run algorithm until it has found the end
 		while(openList.size() >= 1) {
-				runAlgorithm();
+            runAlgorithm(true);
 		}
 
         //clear all the lists and variables
@@ -69,7 +69,15 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
 		return pad;
 	}
 
-	public void runAlgorithm(){
+	/**
+	 * Run the A* algorithm.
+	 *
+	 * @param debug True to debug the path, false otherwise.
+	 */
+	public void runAlgorithm(boolean debug){
+	    // Do not debug if no debugger instance is found
+        if(debugger == null)
+            debug = false;
 
 		// get the lowest cost node
 		Node current = checkLowest();
@@ -112,14 +120,16 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
 			richting = new Richting[route.size() - 1];
             Collections.reverse(route);
 
-
             for (int i = 0; i < route.size() - 1; i++) {
 				richting[i] = Richting.tussen(route.get(i).getTerrain().getCoordinaat(), route.get(i + 1).getTerrain().getCoordinaat());
 			}
 
 			// show the path in the GUI upon starting the algorithm
 			pad = new PadImpl(richting, totalCost);
-			debugger.debugPad(map, start, pad);
+
+			// Debug the path
+			if(debug)
+                debugger.debugPad(map, start, pad);
 		}
 	}
 
