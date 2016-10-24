@@ -14,34 +14,74 @@ import java.util.Comparator;
 
 public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable {
 
+    /**
+     * List of open nodes for A*.
+     */
+    private ArrayList <Node> openList;
+
+    /**
+     * List of closed nodes for A*.
+     */
 	private ArrayList <Node> closedList;
-	private ArrayList <Node> openList;
-	private ArrayList <Node> route;
 
-    private Richting[]richting;
+    /**
+     * Preferred route calculated by A*.
+     */
+    private ArrayList <Node> route;
 
+    /**
+     * List of directions.
+     */
+    private Richting[] directions;
+
+    /**
+     * Current map that is used for A*.
+     */
 	private Kaart map;
 
-	private Coordinaat eind;
-	private Coordinaat start;
+    /**
+     * Start coordinate.
+     */
+    private Coordinaat start;
 
+    /**
+     * End coordinate.
+     */
+	private Coordinaat end;
+
+    /**
+     * Debugger instance.
+     */
 	private Debugger debugger;
-	private Comparator <Node> sorter;
 
-	private PadImpl pad;
-	private int totalCost = 0;
+    /**
+     * Sorter comparator.
+     */
+    private Comparator<Node> sorter;
+
+    /**
+     * Path instance.
+     */
+	private PadImpl path;
+
+    /**
+     * Total cost to traverse the path that is found.
+     */
+    private int totalCost = 0;
 
 	@Override
 	public Pad bereken(Kaart kaart, Coordinaat start, Coordinaat eind) {
-
+	    // Initialize the open, closed and route lists
+        this.openList = new ArrayList<>();
 		this.closedList = new ArrayList<>();
-		this.openList = new ArrayList<>();
 		this.route = new ArrayList<>();
 
+        // Set the map, start and end coordinates
 		this.map = kaart;
-		this.eind = eind;
 		this.start = start;
+        this.end = eind;
 
+        // Define the sorter (closure)
 		sorter = (o1, o2) -> {
             if(o1.getfCost() > o2.getfCost())
             	return 1;
@@ -51,22 +91,25 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
 				return 0;
         };
 
-        //starting node, has no parent
+        // Starting node (has no parent), add it to the open list
 		Node initial = new Node(kaart.getTerreinOp(start), null, eind);
 		openList.add(initial);
 
-		// run algorithm until it has found the end
-		while(openList.size() >= 1) {
+		// Run algorithm until it has reached the end coordinate
+		while(openList.size() >= 1)
+            // Run the algorithm
             runAlgorithm(true);
-		}
 
-        //clear all the lists and variables
+        // Clear the open, closed and route list
         openList.clear();
 		closedList.clear();
 		route.clear();
+
+        // Reset the total route cost
 		totalCost = 0;
 
-		return pad;
+        // Return the path that was found
+		return path;
 	}
 
 	/**
@@ -79,59 +122,68 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
         if(debugger == null)
             debug = false;
 
-		// get the lowest cost node
-		Node current = checkLowest();
+		// Get the lowest cost node
+		Node current = getLowest();
 
+        // Remove the first entry from the open list, and add it to the closed list, since we're processing it
 		openList.remove(0);
 		closedList.add(current);
 
-		// check for possible richtingen and throw them in an array
-		Richting [] r = current.getTerrain().getMogelijkeRichtingen();
+		// Check for possible directions and throw them in an array
+		Richting[] dirs = current.getTerrain().getMogelijkeRichtingen();
 
-		// create nodes and put them in the list if they're not already in it
-		for (int i = 0; i < r.length; i++) {
-			Node node = new Node(map.kijk(current.getTerrain(), r[i]), current, eind);
+		// Create nodes and put them in the list if they're not already in it
+		for(int i = 0; i < dirs.length; i++) {
+		    // Get the current node
+			Node node = new Node(map.kijk(current.getTerrain(), dirs[i]), current, end);
 
-			//if the node isnt already in the lists, add it to the open list.
-			if(checkOpenList(node) && checkClosedList(node)) {
-					openList.add(node);
-			}
+			// If the node isn't already in the lists, add it to the open list.
+			if(checkOpenList(node) && checkClosedList(node))
+                openList.add(node);
 
-			//Only needed when its possible to go diagonal
+			// Only needed when its possible to go diagonal
 			if(checkClosedList(node) && !checkOpenList(node)){}
 		}
 
-		//end code, you made it to a city!
-		if(current.getTerrain().getCoordinaat().equals(eind)) {
+		// Return if we didn't reach the target yet
+        if(!current.getTerrain().getCoordinaat().equals(end))
+            return;
 
-			// check the total cost
-			totalCost = (int) closedList.get(closedList.size() - 1).getgCost();
+        // Calculate the total cost
+        totalCost = (int) closedList.get(closedList.size() - 1).getgCost();
 
-			// add current node, which was the last one, to the list
-            route.add(current);
+        // Add current node (which was the last one) to the list
+        route.add(current);
 
-			// add all following nodes to the list, this will give you the shortest route in an array
-			while(current.getParent() != null){
-                Node parent = current.getParent();
-                route.add(parent);
-				current = parent;
-			}
+        // Add all following nodes to the list, this will give you the shortest route in an array
+        while(current.getParent() != null){
+            // Get the parent node
+            Node parent = current.getParent();
 
-			richting = new Richting[route.size() - 1];
-            Collections.reverse(route);
+            // Add the parent
+            route.add(parent);
 
-            for (int i = 0; i < route.size() - 1; i++) {
-				richting[i] = Richting.tussen(route.get(i).getTerrain().getCoordinaat(), route.get(i + 1).getTerrain().getCoordinaat());
-			}
+            // Set the parent as current
+            current = parent;
+        }
 
-			// show the path in the GUI upon starting the algorithm
-			pad = new PadImpl(richting, totalCost);
+        // Create a new directions array with the proper size
+        directions = new Richting[route.size() - 1];
 
-			// Debug the path
-			if(debug)
-                debugger.debugPad(map, start, pad);
-		}
-	}
+        // Reverse the route list
+        Collections.reverse(route);
+
+        // Construct the directions array based on the route
+        for(int i = 0; i < route.size() - 1; i++)
+            directions[i] = Richting.tussen(route.get(i).getTerrain().getCoordinaat(), route.get(i + 1).getTerrain().getCoordinaat());
+
+        // Show the path in the GUI upon starting the algorithm
+        path = new PadImpl(directions, totalCost);
+
+        // Debug the path
+        if(debug)
+            debugger.debugPad(map, start, path);
+    }
 
 	/**
 	 *
@@ -139,7 +191,6 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
 	 * @return false if it is in the last, true if its not
 	 */
 	public boolean checkOpenList(Node node){
-
 		for (int i = 0; i < openList.size(); i++) {
 			if(openList.get(i).getTerrain().getCoordinaat().equals(node.getTerrain().getCoordinaat())){
 				return false;
@@ -158,17 +209,30 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
 		return true;
 	}
 
-	public Node checkLowest(){
-
+    /**
+     * Get the lowest (cost) node from the open list.
+     *
+     * @return Lowest node, or null if there is none.
+     */
+    // TODO: Don't sort the list (just get the lowest) sorting is slow
+	public Node getLowest(){
+	    // Sort the open list from lowest to highest
 		Collections.sort(openList, sorter);
 
+        // TODO: Return null if there's nothing in the open list
+
+        // Return the first entry
 		return openList.get(0);
 	}
 
+    /**
+     * String representation of this class, which defines the algorithm name.
+     *
+     * @return Algorithm name.
+     */
 	public String toString(){
-		return "A-Star Algorithm";
+		return "A* Algorithm";
 	}
-
 
 	@Override
 	public void setDebugger(Debugger debugger) {
