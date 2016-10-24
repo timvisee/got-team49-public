@@ -1,15 +1,5 @@
 package io.gameoftrades.student49;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-
-import java.util.HashSet;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import io.gameoftrades.model.Handelaar;
 import io.gameoftrades.model.Wereld;
 import io.gameoftrades.model.algoritme.HandelsplanAlgoritme;
@@ -24,6 +14,13 @@ import io.gameoftrades.model.markt.Handelsplan;
 import io.gameoftrades.model.markt.actie.Actie;
 import io.gameoftrades.model.markt.actie.BeweegActie;
 import io.gameoftrades.model.markt.actie.HandelsPositie;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.HashSet;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 /**
  * Een verzameling eenvoudige tests om te kijken of de handelaar werkt.

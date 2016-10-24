@@ -12,5 +12,6 @@ public class StudentUI {
 	public static void main(String[] args) {
 		MainGui.toon(new HandelaarImpl(), "/kaarten/westeros-kaart.txt");
 	}
+
 	
 }
