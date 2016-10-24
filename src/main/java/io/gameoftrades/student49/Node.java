@@ -50,5 +50,17 @@ public class Node {
         return hCost + gCost;
     }
 
+    @Override
+    public boolean equals(Object other) {
+        // Return if the other instance is the same
+        if(super.equals(other))
+            return true;
 
+        // Make sure the other object is a node instance
+        if(!(other instanceof Node))
+            return false;
+
+        // Compare the coordinates, return the result
+        return this.coordinaat.equals(((Node) other).getTerrain().getCoordinaat());
+    }
 }
