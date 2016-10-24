@@ -138,11 +138,8 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
 			Node node = new Node(map.kijk(current.getTerrain(), dirs[i]), current, end);
 
 			// If the node isn't already in the lists, add it to the open list.
-			if(checkOpenList(node) && checkClosedList(node))
+			if(!openList.contains(node) && !closedList.contains(node))
                 openList.add(node);
-
-			// Only needed when its possible to go diagonal
-			if(checkClosedList(node) && !checkOpenList(node)){}
 		}
 
 		// Return if we didn't reach the target yet
@@ -184,30 +181,6 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
         if(debug)
             debugger.debugPad(map, start, path);
     }
-
-	/**
-	 *
-	 * @param node
-	 * @return false if it is in the last, true if its not
-	 */
-	public boolean checkOpenList(Node node){
-		for (int i = 0; i < openList.size(); i++) {
-			if(openList.get(i).getTerrain().getCoordinaat().equals(node.getTerrain().getCoordinaat())){
-				return false;
-			}
-		}
-		return true;
-	}
-
-	public boolean checkClosedList(Node node){
-
-		for (int i = 0; i < closedList.size(); i++) {
-			if(closedList.get(i).getTerrain().getCoordinaat().equals(node.getTerrain().getCoordinaat())){
-				return false;
-			}
-		}
-		return true;
-	}
 
     /**
      * Get the lowest (cost) node from the open list.
