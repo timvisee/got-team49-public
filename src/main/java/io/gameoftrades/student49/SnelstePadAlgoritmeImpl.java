@@ -50,11 +50,6 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
 	private Debugger debugger;
 
     /**
-     * Sorter comparator.
-     */
-    private Comparator<Node> sorter;
-
-    /**
      * Path instance.
      */
 	private PadImpl path;
@@ -75,16 +70,6 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
 		this.map = kaart;
 		this.start = start;
         this.end = eind;
-
-        // Define the sorter (closure)
-		sorter = (o1, o2) -> {
-            if(o1.getfCost() > o2.getfCost())
-            	return 1;
-			else if(o1.getfCost() < o2.getfCost())
-				return -1;
-			else
-				return 0;
-        };
 
         // Starting node (has no parent), add it to the open list
 		Node initial = new Node(kaart.getTerreinOp(start), null, eind);
@@ -117,12 +102,9 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
         if(debugger == null)
             debug = false;
 
-		// Get the lowest cost node
-		Node current = getLowestOpen();
-
-        // Remove the first entry from the open list, and add it to the closed list, since we're processing it
-		openList.remove(0);
-		closedList.add(current);
+		// Get the lowest cost node and consume it from the open list, add it to the closed list
+		Node current = getLowestOpen(true);
+        closedList.add(current);
 
 		// Check for possible directions and throw them in an array
 		Richting[] dirs = current.getTerrain().getMogelijkeRichtingen();
@@ -150,7 +132,7 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
         // Add all following nodes to the list, this will give you the shortest route in an array
         while(current.getParent() != null){
             // Get the parent node
-            Node parent = current.getParent();
+            final Node parent = current.getParent();
 
             // Add the parent
             route.add(parent);
@@ -180,19 +162,36 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
     /**
      * Get the lowest (cost) node from the open list.
      *
+     * @param consume True to consume the lowest node, which removes the node from the open list. False to not consume.
+     *
      * @return Lowest node, or null if there is none.
      */
-    // TODO: Don't sort the list (just get the lowest) sorting is slow
-    private Node getLowestOpen(){
+    private Node getLowestOpen(boolean consume){
         // Make sure there's anything in the open list
         if(openList.isEmpty())
             return null;
 
-	    // Sort the open list from lowest to highest
-		Collections.sort(openList, sorter);
+        // Define a variable for the lowest node and it's cost
+        Node lowest = null;
+        double cost = -1;
 
-        // Return the first entry
-		return openList.get(0);
+        // Loop through the list of nodes to find the lowest one
+        for(final Node current : this.openList) {
+            // Continue if the cost isn't lower than the current selected
+            if(cost != -1 && current.getfCost() >= cost)
+                continue;
+
+            // Set the lowest and it's cost
+            lowest = current;
+            cost = current.getfCost();
+        }
+
+        // Consume the node
+        if(consume)
+            this.openList.remove(lowest);
+
+        // Return the lowest node
+        return lowest;
 	}
 
     /**
