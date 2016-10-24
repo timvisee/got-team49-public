@@ -128,14 +128,14 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
 		Richting[] dirs = current.getTerrain().getMogelijkeRichtingen();
 
 		// Create nodes and put them in the list if they're not already in it
-		for(int i = 0; i < dirs.length; i++) {
-		    // Get the current node
-			Node node = new Node(map.kijk(current.getTerrain(), dirs[i]), current, end);
+        for(Richting dir : dirs) {
+            // Get the current node
+            final Node node = new Node(map.kijk(current.getTerrain(), dir), current, end);
 
-			// If the node isn't already in the lists, add it to the open list.
-			if(!openList.contains(node) && !closedList.contains(node))
+            // If the node isn't already in the lists, add it to the open list.
+            if(!openList.contains(node) && !closedList.contains(node))
                 openList.add(node);
-		}
+        }
 
 		// Return if we didn't reach the target yet
         if(!current.getTerrain().getCoordinaat().equals(end))
