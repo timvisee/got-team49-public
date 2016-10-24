@@ -32,22 +32,15 @@ public class Node {
     private Coordinaat coordinaat;
 
     /**
-     * Node end.
-     */
-    // TODO: Remove? This is never used.
-    private Coordinaat end;
-
-    /**
      * Constructor.
+     *
      * @param terrain Terrain.
      * @param parent Parent node.
-     * @param end End coordinate.
      */
     public Node(Terrein terrain, Node parent, Coordinaat end){
         // Set the properties
         this.terrain = terrain;
         this.parent = parent;
-        this.end = end;
 
         // Get the coordinate
         this.coordinaat = terrain.getCoordinaat();
