@@ -1,10 +1,11 @@
-package io.gameoftrades.student49;
+package io.gameoftrades.student49.citytour;
 
 import io.gameoftrades.debug.Debuggable;
 import io.gameoftrades.debug.Debugger;
 import io.gameoftrades.model.algoritme.StedenTourAlgoritme;
 import io.gameoftrades.model.kaart.Kaart;
 import io.gameoftrades.model.kaart.Stad;
+import io.gameoftrades.student49.PathChecker;
 
 import java.util.ArrayList;
 import java.util.List;

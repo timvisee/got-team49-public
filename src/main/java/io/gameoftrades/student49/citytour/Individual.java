@@ -1,6 +1,7 @@
-package io.gameoftrades.student49;
+package io.gameoftrades.student49.citytour;
 
 import io.gameoftrades.model.kaart.Stad;
+import io.gameoftrades.student49.PathChecker;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,6 +26,26 @@ public class Individual {
      * Constructor.
      */
     public Individual() {}
+
+    /**
+     * Constructor.
+     *
+     * @param cities List of cities to generate the individual from.
+     */
+    public Individual(List<Stad> cities) {
+        // Generate the individual based on the list of cities
+        generate(cities);
+    }
+
+    /**
+     * Generate a new individual based on a list of cities.
+     *
+     * @param cities List of cities.
+     */
+    private void generate(List<Stad> cities) {
+        // Set the list of cities, and shuffle it
+        Collections.shuffle(this.cities = new ArrayList<>(cities));
+    }
 
     /**
      * Add a city to the individual.
@@ -61,19 +82,6 @@ public class Individual {
     }
 
     /**
-     * Generate a new individual based on a list of cities.
-     *
-     * @param cities List of cities.
-     */
-    public void generateIndividual(List<Stad> cities) {
-        // Set the list of cities
-        this.cities = new ArrayList<>(cities);
-
-        // Shuffle the list
-        Collections.shuffle(this.cities);
-    }
-
-    /**
      * Get the list of cities.
      *
      * @return List of cities.
@@ -91,9 +99,8 @@ public class Individual {
      */
     public boolean hasCity(Stad city) {
         // Loop through the list of cities
-        for(int i = 0; i < cities.size(); i++)
-            // Return true if the given city equals the current city
-            if(cities.get(i).getCoordinaat().equals(city.getCoordinaat()))
+        for(Stad entry : cities)
+            if(entry.getCoordinaat().equals(city.getCoordinaat()))
                 return true;
 
         // City not found, return false

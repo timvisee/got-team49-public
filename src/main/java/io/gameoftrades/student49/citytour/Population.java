@@ -1,4 +1,4 @@
-package io.gameoftrades.student49;
+package io.gameoftrades.student49.citytour;
 
 import io.gameoftrades.model.kaart.Kaart;
 import io.gameoftrades.model.kaart.Stad;
@@ -25,23 +25,16 @@ public class Population {
      */
     public Population(int size, Kaart map, List <Stad> cities, boolean init){
         // Create a new individual array with the proper size
-        population = new Individual[size];
+        this.population = new Individual[size];
 
         // Return if we don't need to initialize
         if(!init)
             return;
 
         // Fill the list of individuals
-        for(int i = 0; i < population.length; i++) {
-            // Create a new individual instance
-            Individual individual = new Individual();
-
-            // Generate the individual based on the list of cities
-            individual.generateIndividual(cities);
-
-            // Set the individual
-            population[i] = individual;
-        }
+        for(int i = 0; i < population.length; i++)
+            // Generate a new individual
+            population[i] = new Individual(cities);
     }
 
     /**
