@@ -1,4 +1,4 @@
-package io.gameoftrades.student49.citytour;
+package io.gameoftrades.student49.algorithm.genetic;
 
 import io.gameoftrades.model.kaart.Kaart;
 import io.gameoftrades.model.kaart.Stad;

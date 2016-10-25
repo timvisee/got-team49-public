@@ -1,4 +1,4 @@
-package io.gameoftrades.student49.citytour;
+package io.gameoftrades.student49.algorithm.genetic;
 
 import io.gameoftrades.debug.Debuggable;
 import io.gameoftrades.debug.Debugger;

@@ -1,4 +1,4 @@
-package io.gameoftrades.student49;
+package io.gameoftrades.student49.algorithm.astar;
 
 import io.gameoftrades.debug.Debuggable;
 import io.gameoftrades.debug.Debugger;
@@ -7,6 +7,7 @@ import io.gameoftrades.model.kaart.Coordinaat;
 import io.gameoftrades.model.kaart.Kaart;
 import io.gameoftrades.model.kaart.Pad;
 import io.gameoftrades.model.kaart.Richting;
+import io.gameoftrades.student49.PadImpl;
 
 import java.util.ArrayList;
 import java.util.Collections;

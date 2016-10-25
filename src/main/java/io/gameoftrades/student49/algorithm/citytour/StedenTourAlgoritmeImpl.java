@@ -1,4 +1,4 @@
-package io.gameoftrades.student49;
+package io.gameoftrades.student49.algorithm.citytour;
 
 import io.gameoftrades.debug.Debuggable;
 import io.gameoftrades.debug.Debugger;
@@ -7,6 +7,8 @@ import io.gameoftrades.model.algoritme.StedenTourAlgoritme;
 import io.gameoftrades.model.kaart.Kaart;
 import io.gameoftrades.model.kaart.Pad;
 import io.gameoftrades.model.kaart.Stad;
+import io.gameoftrades.student49.Path;
+import io.gameoftrades.student49.algorithm.astar.SnelstePadAlgoritmeImpl;
 
 import java.util.ArrayList;
 import java.util.List;

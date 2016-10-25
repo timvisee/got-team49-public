@@ -1,4 +1,4 @@
-package io.gameoftrades.student49;
+package io.gameoftrades.student49.algorithm.citytour;
 
 import io.gameoftrades.model.kaart.Stad;
 
