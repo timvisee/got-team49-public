@@ -7,170 +7,269 @@ import io.gameoftrades.model.kaart.Kaart;
 import io.gameoftrades.model.kaart.Stad;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Timer;
 
+public class StedenTourAlgoritmeImpl2 implements StedenTourAlgoritme, Debuggable {
 
-public class StedenTourAlgoritmeImpl2 implements StedenTourAlgoritme, Debuggable{
+    /**
+     * Maximum amount of tries.
+     */
+    private final static int MAX_TRIES = 20;
 
+    /**
+     * Map instance.
+     */
     private Kaart map;
 
-    private ArrayList <Stad> steden;
+    /**
+     * List of cities to take in consideration.
+     */
+    private ArrayList<Stad> cities;
 
-    private final int TRIES = 20;
-
+    /**
+     * Debugger instance.
+     */
     private Debugger debugger;
 
+    /**
+     * Path checker instance.
+     */
     private PathChecker pathChecker;
 
     @Override
-    public List<Stad> bereken(Kaart kaart, List<Stad> steden) {
+    public List<Stad> bereken(Kaart map, List<Stad> cities) {
+        // Store the parameters
+        this.map = map;
+        this.cities = new ArrayList<>(cities);
 
-        map = kaart;
-        this.steden = new ArrayList<>(steden);
-        ArrayList<Population> populationList = new ArrayList<>();
+        // Create a population list
+        final ArrayList<Population> populationList = new ArrayList<>();
 
+        // Create a new path checker instance, if there isn't one yet
         if(pathChecker == null)
-        pathChecker = new PathChecker(this.steden, map);
+            pathChecker = new PathChecker(this.cities, this.map);
 
-        long time = System.currentTimeMillis();
-        for (int i = 0; i < TRIES; i++) {
+        // Store the current time, used for profiling
+        final long time = System.currentTimeMillis();
 
-            Population pop = new Population(50, kaart, steden, true);
+        // Run the algorithm a few times
+        for(int i = 0; i < MAX_TRIES; i++) {
+            // Define the population
+            Population population = new Population(50, map, cities, true);
 
+            // Keep track of the fittest individual and generation count
             int sameFitness = 0;
             int fittest = -1;
             int generationCount = 0;
 
-            while (sameFitness <= 50) {
-
+            // Find a maximum of 50 that have the same fitness
+            while(sameFitness <= 50) {
+                // Create a new generation
                 generationCount++;
-                pop = evolvePopulation(pop);
+                population = evolvePopulation(population);
 
-                if(fittest == -1 || pop.getFittest().getFitness() < fittest) {
-                    fittest = pop.getFittest().getFitness();
+                // Store the individual if fitter than the current
+                if(fittest == -1 || population.getFittest().getFitness() < fittest) {
+                    fittest = population.getFittest().getFitness();
                     sameFitness = 0;
                 }
 
-                if(fittest == pop.getFittest().getFitness()) sameFitness++;
+                // Increase the sameFitness variable if we encounter the same individual
+                if(fittest == population.getFittest().getFitness())
+                    sameFitness++;
             }
-            System.out.println("Try " + (i + 1) + " --> Evolved through " + generationCount + " generations" +  " --> Best Solution: " + pop.getFittest().getFitness());
-            populationList.add(pop);
+
+            // Store the current population
+            populationList.add(population);
+
+            // Show a simple debug message
+            System.out.println("Try " + (i + 1) + ". Evolved through " + generationCount + " generations. Best solution: " + population.getFittest().getFitness());
         }
 
-        System.out.println("total time passed in ms: " + ((System.currentTimeMillis() - time)) + ".");
+        // Show profiler information
+        System.out.println("Found best route, took " + (System.currentTimeMillis() - time) + " ms.");
 
-        Population fittestPop = getFittestPop(populationList);
+        // Get the fittest population
+        final Population fittestPop = getFittestPopulation(populationList);
 
+        // Debug the most efficient route
         System.out.println("The most efficient route is " +  fittestPop.getFittest().getFitness() + ".");
-        debugger.debugSteden(map, fittestPop.getFittest().getCities());
+        debugger.debugSteden(this.map, fittestPop.getFittest().getCities());
+
+        // Return the list of cities that define the most efficient path
         return fittestPop.getFittest().getCities();
     }
 
-    public Population getFittestPop(ArrayList<Population> populationList){
-
+    /**
+     * Get the fittest population.
+     *
+     * @param populationList List of populations.
+     *
+     * @return Fittest population.
+     */
+    private Population getFittestPopulation(ArrayList<Population> populationList){
+        // Keep track of the
         int lowest = -1;
         int count = 0;
-        for (int i = 0; i < populationList.size(); i++) {
+
+        // Loop through the populations to find the lowest
+        for(int i = 0; i < populationList.size(); i++) {
             if(lowest == -1 || populationList.get(i).getFittest().getFitness() < lowest){
                 lowest =  populationList.get(i).getFittest().getFitness();
                 count = i;
             }
         }
+
+        // Return the fittest population
         return populationList.get(count);
     }
 
-    public Population evolvePopulation(Population pop){
+    /**
+     * Evolve the population.
+     *
+     * @param population Population to evolve.
+     *
+     * @return Evolved population.
+     */
+    private Population evolvePopulation(Population population){
+        // Create a new population
+        final Population evolved = new Population(population.getPopSize(), this.map, this.cities, false);
 
-        Population newPop = new Population(pop.getPopSize(), map, steden, false);
+        // Evolve the fittest individual from the current population
+        evolved.saveIndividual(0, population.getFittest());
 
-            newPop.saveIndividual(0, pop.getFittest());
-
-        for (int i = 1; i < pop.getPopSize(); i++) {
-            Individual indiv1 = tournament(pop);
-            Individual indiv2 = tournament(pop);
-            Individual newIndiv = crossover(indiv1, indiv2);
-            newPop.saveIndividual(i, newIndiv);
+        //
+        for(int i = 1; i < population.getPopSize(); i++) {
+            final Individual first = tournament(population);
+            final Individual second = tournament(population);
+            final Individual evolvedIndividual = crossover(first, second);
+            evolved.saveIndividual(i, evolvedIndividual);
         }
 
-        for (int i = 1; i < newPop.getPopSize(); i++) {
-            mutate(newPop.getIndividual(i));
-        }
+        //
+        for(int i = 1; i < evolved.getPopSize(); i++)
+            mutate(evolved.getIndividual(i));
 
-        return newPop;
+        // Return the evolved population
+        return evolved;
     }
 
-    public Individual tournament(Population pop){
+    /**
+     * Do a population tournament, and get the fittest individual.
+     * This creates a new population with a random combination of individuals from the given population, returns the fittest individual.
+     *
+     * @param population Population to do a tournament for.
+     *
+     * @return Fittest individual after a tournament.
+     */
+    private Individual tournament(Population population){
+        // Create a tournament population
+        final Population tournament = new Population(5, this.map, this.cities, false);
 
-        Population tournamentPop = new Population(5, map, steden, false);
-
-        for (int i = 0; i < tournamentPop.getPopSize(); i++) {
-            int r = (int)(Math.random()*pop.getPopSize());
-            tournamentPop.saveIndividual(i, pop.getPopulation()[r]);
+        // Take random individuals from the current population
+        for(int i = 0; i < tournament.getPopSize(); i++) {
+            final int r = (int) (Math.random() * population.getPopSize());
+            tournament.saveIndividual(i, population.getPopulation()[r]);
         }
 
-        return tournamentPop.getFittest();
+        // Return the fittest individual from the tournament population
+        return tournament.getFittest();
     }
 
-    @SuppressWarnings("Duplicates")
-    public Individual crossover(Individual indiv1, Individual indiv2){
+    /**
+     * Cross over the cities from the first and second individuals into a new evolved individual.
+     *
+     * @param first First individual.
+     * @param second Second individual.
+     * @return Evolved individual.
+     */
+    private Individual crossover(Individual first, Individual second){
+        // Create a new individual
+        final Individual evolved = new Individual();
 
-        Individual newSol = new Individual();
+        // Loop through the list of cities
+        for(int i = 0; i < cities.size(); i++)
 
-        for (int i = 0; i < steden.size(); i++) {
+            if(Math.random() <= 0.5)
+                getCityFrom(evolved, first, second, i);
+            else
+                getCityFrom(evolved, second, first, i);
 
-            if (Math.random() <= 0.500) {
-                getCityFrom(newSol, indiv1, indiv2, i);
-            } else {
-                getCityFrom(newSol, indiv2, indiv1, i);
-            }
-        }
-        return newSol;
+        // Return the evolved individual
+        return evolved;
     }
 
-    public void getCityFrom(Individual newSol, Individual indiv1, Individual indiv2, int i){
+    /**
+     * Add a city to the evolved individual from the {@param first} or {@param second} individual at the given index.
+     * Add's all cities that aren't in the evolved individual if the cities provided by {@param first} or {@param second} aren't new.
+     *
+     * @param evolved Evolved individual.
+     * @param first First individual.
+     * @param second Second individual.
+     * @param i Index of the city.
+     */
+    private void getCityFrom(Individual evolved, Individual first, Individual second, int i){
+        // Add the city from first at the given index to the evolved individual
+        if(!evolved.listContains(first.getCity(i)))
+            evolved.addCity(first.getCity(i));
 
-        if(!newSol.listContains(indiv1.getCity(i))){
-            newSol.addCity(indiv1.getCity(i));
-        }
-        else if(!newSol.listContains(indiv2.getCity(i))){
-            newSol.addCity(indiv2.getCity(i));
-        }
-        else{
-            steden.stream().filter(s -> !newSol.listContains(s)).forEach(newSol::addCity);
-        }
+        // Add the city from second at the given index to the evolved individual
+        else if(!evolved.listContains(second.getCity(i)))
+            evolved.addCity(second.getCity(i));
+
+        // Add each city that isn't in the evolved individual from the list of cities
+        else
+            this.cities.stream().filter(s -> !evolved.listContains(s)).forEach(evolved::addCity);
     }
 
-
-    public void mutate(Individual indiv) {
-
-        for (int i = 0; i < indiv.getCities().size() -1; i++) {
-
+    /**
+     * Mutate the given individual.
+     * This modifies the list of cities of the individual slightly.
+     *
+     * @param individual Individual to mutate.
+     */
+    private void mutate(Individual individual) {
+        // Loop through the list of cities of the individual, except the last city
+        for(int i = 0; i < individual.getCities().size() - 1; i++) {
+            // Flip the current and a random city with a 1.5% chance
             if(Math.random() < 0.015) {
-                    int random = (int) (Math.random() * ((indiv.getCities().size() -1)));
-                    Stad stad1 = indiv.getCities().get(random);
-                    Stad stad2 = indiv.getCities().get(i);
-                    indiv.setCity(i, stad1);
-                    indiv.setCity(random, stad2);
-                }
-            if(Math.random() < 0.075) { {
-                    Stad stad1 = indiv.getCities().get(i);
-                    Stad stad2 = indiv.getCities().get(i + 1);
-                    indiv.setCity(i, stad2);
-                    indiv.setCity(i + 1, stad1);
-                }
+                // Generate a random city index
+                final int random = (int) (Math.random() * ((individual.getCities().size() - 1)));
+
+                // Get both cities
+                Stad first = individual.getCities().get(random);
+                Stad second = individual.getCities().get(i);
+
+                // Store both cities flipped
+                individual.setCity(i, first);
+                individual.setCity(random, second);
             }
+
+            // Flip the current and followed city with a 7.5% chance
+            if(Math.random() < 0.075) {
+                // Get both cities
+                Stad first = individual.getCities().get(i);
+                Stad second = individual.getCities().get(i + 1);
+
+                // Store both cities flipped
+                individual.setCity(i, second);
+                individual.setCity(i + 1, first);
             }
         }
+    }
+
+    /**
+     * String representation of this class, which defines the algorithm name.
+     *
+     * @return Algorithm name.
+     */
+    @Override
+    public String toString(){
+        return "Genetic Algorithm";
+    }
 
     @Override
     public void setDebugger(Debugger debugger) {
         this.debugger = debugger;
     }
-
-    public String toString(){
-        return "Genetic Algorithm";
-    }
-
 }

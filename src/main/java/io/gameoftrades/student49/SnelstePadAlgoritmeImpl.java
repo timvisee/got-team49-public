@@ -16,17 +16,17 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
     /**
      * List of open nodes for A*.
      */
-    private ArrayList <Node> openList;
+    private ArrayList<Node> openList;
 
     /**
      * List of closed nodes for A*.
      */
-	private ArrayList <Node> closedList;
+	private ArrayList<Node> closedList;
 
     /**
      * Preferred route calculated by A*.
      */
-    private ArrayList <Node> route;
+    private ArrayList<Node> route;
 
     /**
      * Current map that is used for A*.
@@ -198,6 +198,7 @@ public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable 
      *
      * @return Algorithm name.
      */
+    @Override
 	public String toString(){
 		return "A* Algorithm";
 	}
