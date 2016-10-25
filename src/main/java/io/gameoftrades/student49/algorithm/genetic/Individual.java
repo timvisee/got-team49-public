@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Individual class.
  */
-public class Individual {
+class Individual {
 
     /**
      * List of cities for this individual.
@@ -25,14 +25,14 @@ public class Individual {
     /**
      * Constructor.
      */
-    public Individual() {}
+    Individual() {}
 
     /**
      * Constructor.
      *
      * @param cities List of cities to generate the individual from.
      */
-    public Individual(List<Stad> cities) {
+    Individual(List<Stad> cities) {
         // Generate the individual based on the list of cities
         generate(cities);
     }
@@ -52,7 +52,7 @@ public class Individual {
      *
      * @param city City to add.
      */
-    public void addCity(Stad city){
+    void addCity(Stad city){
         this.cities.add(city);
     }
 
@@ -63,7 +63,7 @@ public class Individual {
      *
      * @return City.
      */
-    public Stad getCity(int i){
+    Stad getCity(int i){
         return cities.get(i);
     }
 
@@ -73,7 +73,7 @@ public class Individual {
      * @param i Index to set the city at.
      * @param city City to set.
      */
-    public void setCity(int i,Stad city){
+    void setCity(int i, Stad city){
         // Set the city
         this.cities.set(i, city);
 
@@ -86,7 +86,7 @@ public class Individual {
      *
      * @return List of cities.
      */
-    public List<Stad> getCities(){
+    List<Stad> getCities(){
         return this.cities;
     }
 
@@ -97,7 +97,7 @@ public class Individual {
      *
      * @return True if the individual has the city, false if not.
      */
-    public boolean hasCity(Stad city) {
+    boolean hasCity(Stad city) {
         // Loop through the list of cities
         for(Stad entry : cities)
             if(entry.getCoordinaat().equals(city.getCoordinaat()))
@@ -112,7 +112,7 @@ public class Individual {
      *
      * @return Fitness.
      */
-    public int getFitness(){
+    int getFitness(){
         // Loop through the list of cities, and define the fitness value, if the fitness isn't known
         if(this.fitness == 0)
             for(int i = 0; i < cities.size() - 1; i++)

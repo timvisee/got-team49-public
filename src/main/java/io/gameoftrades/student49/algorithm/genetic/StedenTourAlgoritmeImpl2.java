@@ -18,11 +18,6 @@ public class StedenTourAlgoritmeImpl2 implements StedenTourAlgoritme, Debuggable
     private final static int MAX_TRIES = 20;
 
     /**
-     * Map instance.
-     */
-    private Kaart map;
-
-    /**
      * List of cities to take in consideration.
      */
     private ArrayList<Stad> cities;
@@ -40,7 +35,6 @@ public class StedenTourAlgoritmeImpl2 implements StedenTourAlgoritme, Debuggable
     @Override
     public List<Stad> bereken(Kaart map, List<Stad> cities) {
         // Store the parameters
-        this.map = map;
         this.cities = new ArrayList<>(cities);
 
         // Create a population list
@@ -48,7 +42,7 @@ public class StedenTourAlgoritmeImpl2 implements StedenTourAlgoritme, Debuggable
 
         // Create a new path checker instance, if there isn't one yet
         if(pathChecker == null)
-            pathChecker = new PathChecker(this.cities, this.map);
+            pathChecker = new PathChecker(this.cities, map);
 
         // Store the current time, used for profiling
         final long time = System.currentTimeMillis();
@@ -56,7 +50,7 @@ public class StedenTourAlgoritmeImpl2 implements StedenTourAlgoritme, Debuggable
         // Run the algorithm a few times
         for(int i = 0; i < MAX_TRIES; i++) {
             // Define the population
-            Population population = new Population(50, map, cities, true);
+            Population population = new Population(50, cities, true);
 
             // Keep track of the fittest individual and generation count
             int sameFitness = 0;
@@ -95,7 +89,7 @@ public class StedenTourAlgoritmeImpl2 implements StedenTourAlgoritme, Debuggable
 
         // Debug the most efficient route
         System.out.println("The most efficient route is " +  fittestPop.getFittest().getFitness() + ".");
-        debugger.debugSteden(this.map, fittestPop.getFittest().getCities());
+        debugger.debugSteden(map, fittestPop.getFittest().getCities());
 
         // Return the list of cities that define the most efficient path
         return fittestPop.getFittest().getCities();
@@ -134,7 +128,7 @@ public class StedenTourAlgoritmeImpl2 implements StedenTourAlgoritme, Debuggable
      */
     private Population evolvePopulation(Population population){
         // Create a new population
-        final Population evolved = new Population(population.getSize(), this.map, this.cities, false);
+        final Population evolved = new Population(population.getSize(), this.cities, false);
 
         // Evolve the fittest individual from the current population
         evolved.saveIndividual(0, population.getFittest());
@@ -165,7 +159,7 @@ public class StedenTourAlgoritmeImpl2 implements StedenTourAlgoritme, Debuggable
      */
     private Individual tournament(Population population){
         // Create a tournament population
-        final Population tournament = new Population(5, this.map, this.cities, false);
+        final Population tournament = new Population(5, this.cities, false);
 
         // Take random individuals from the current population
         for(int i = 0; i < tournament.getSize(); i++) {

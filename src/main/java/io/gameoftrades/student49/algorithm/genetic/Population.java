@@ -1,6 +1,5 @@
 package io.gameoftrades.student49.algorithm.genetic;
 
-import io.gameoftrades.model.kaart.Kaart;
 import io.gameoftrades.model.kaart.Stad;
 
 import java.util.List;
@@ -8,7 +7,7 @@ import java.util.List;
 /**
  * Population class.
  */
-public class Population {
+class Population {
 
     /**
      * List of individuals that are part of this population.
@@ -19,11 +18,10 @@ public class Population {
      * Constructor.
      *
      * @param size Population size.
-     * @param map Relevant map.
      * @param cities List of cities.
      * @param init True to initialize, false if not.
      */
-    public Population(int size, Kaart map, List <Stad> cities, boolean init){
+    Population(int size, List<Stad> cities, boolean init){
         // Create a new individual array with the proper size
         this.population = new Individual[size];
 
@@ -42,7 +40,7 @@ public class Population {
      *
      * @return List of individuals.
      */
-    public Individual[] getPopulation(){
+    Individual[] getPopulation(){
         return this.population;
     }
 
@@ -53,7 +51,7 @@ public class Population {
      *
      * @return Individual.
      */
-    public Individual getIndividual(int i){
+    Individual getIndividual(int i){
         return this.population[i];
     }
 
@@ -63,7 +61,7 @@ public class Population {
      * @param i Individual index.
      * @param individual Individual to save.
      */
-    public void saveIndividual(int i, Individual individual){
+    void saveIndividual(int i, Individual individual){
         this.population[i] = individual;
     }
 
@@ -72,7 +70,7 @@ public class Population {
      *
      * @return Fittest individual.
      */
-    public Individual getFittest() {
+    Individual getFittest() {
         // Keep track of the fittest individual
         int min = -1;
         Individual individual = null;
