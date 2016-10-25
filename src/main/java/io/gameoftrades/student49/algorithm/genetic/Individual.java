@@ -64,7 +64,7 @@ class Individual {
      * @return City.
      */
     Stad getCity(int i){
-        return cities.get(i);
+        return this.cities.get(i);
     }
 
     /**
@@ -99,8 +99,9 @@ class Individual {
      */
     boolean hasCity(Stad city) {
         // Loop through the list of cities
-        for(Stad entry : cities)
-            if(entry.getCoordinaat().equals(city.getCoordinaat()))
+        //noinspection ForLoopReplaceableByForEach
+        for(int i = 0, length = this.cities.size(); i < length; i++)
+            if(this.cities.get(i).getCoordinaat().equals(city.getCoordinaat()))
                 return true;
 
         // City not found, return false
@@ -115,7 +116,7 @@ class Individual {
     int getFitness(){
         // Loop through the list of cities, and define the fitness value, if the fitness isn't known
         if(this.fitness == 0)
-            for(int i = 0; i < cities.size() - 1; i++)
+            for(int i = 0, size = this.cities.size() - 1; i < size; i++)
                 this.fitness += PathChecker.checkPathCost(this.cities.get(i).getCoordinaat(), this.cities.get(i + 1).getCoordinaat());
 
         // Return the fitness
