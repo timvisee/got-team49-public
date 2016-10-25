@@ -5,60 +5,105 @@ import io.gameoftrades.model.kaart.Stad;
 
 import java.util.List;
 
-
+/**
+ * Population class.
+ */
 public class Population {
 
-    private Individual [] population;
-    private Kaart map;
-    private List <Stad> cities;
+    /**
+     * List of individuals that are part of this population.
+     */
+    private Individual[] population;
 
+    /**
+     * Constructor.
+     *
+     * @param size Population size.
+     * @param map Relevant map.
+     * @param cities List of cities.
+     * @param init True to initialize, false if not.
+     */
     public Population(int size, Kaart map, List <Stad> cities, boolean init){
-
+        // Create a new individual array with the proper size
         population = new Individual[size];
-        this.map = map;
-        this.cities = cities;
 
-        if (init){
-            for (int i = 0; i < population.length; i++) {
-                Individual newIndividual = new Individual();
-                newIndividual.generateIndividual(cities);
-                population[i] = newIndividual;
-            }
+        // Return if we don't need to initialize
+        if(!init)
+            return;
+
+        // Fill the list of individuals
+        for(int i = 0; i < population.length; i++) {
+            // Create a new individual instance
+            Individual individual = new Individual();
+
+            // Generate the individual based on the list of cities
+            individual.generateIndividual(cities);
+
+            // Set the individual
+            population[i] = individual;
         }
     }
 
-    public List<Stad> getCities(){
-        return cities;
-    }
-
+    /**
+     * Get the population.
+     *
+     * @return List of individuals.
+     */
     public Individual[] getPopulation(){
-        return population;
+        return this.population;
     }
 
+    /**
+     * Get the individual at the given index.
+     *
+     * @param i Individual index.
+     *
+     * @return Individual.
+     */
     public Individual getIndividual(int i){
-        return population[i];
+        return this.population[i];
     }
 
-    public void saveIndividual(int i, Individual indiv){
-
-        population[i] = indiv;
+    /**
+     * Save the given individual.
+     *
+     * @param i Individual index.
+     * @param individual Individual to save.
+     */
+    public void saveIndividual(int i, Individual individual){
+        this.population[i] = individual;
     }
 
-    public Individual getFittest(){
-
+    /**
+     * Get the fittest individual.
+     *
+     * @return Fittest individual.
+     */
+    public Individual getFittest() {
+        // Keep track of the fittest individual
         int min = -1;
-        int city = -1;
+        Individual individual = null;
 
-        for (int i = 0; i < population.length; i++) {
+        // Loop through the population
+        for(int i = 0; i < population.length; i++) {
+            // Store the individual if it's fitter than the current
             if(min == -1 || population[i].getFitness() < min){
                 min = population[i].getFitness();
-                city = i;
+                individual = population[i];
             }
         }
-        return population[city];
+
+        // Return the fittest individual
+        return individual;
     }
 
-    public int getPopSize(){
-        return population.length;
+    /**
+     * Get the population size of this population.
+     * This counts the number of individuals.
+     *
+     * @return Population size.
+     */
+    public int getSize(){
+        return this.population.length;
     }
 }

@@ -133,13 +133,13 @@ public class StedenTourAlgoritmeImpl2 implements StedenTourAlgoritme, Debuggable
      */
     private Population evolvePopulation(Population population){
         // Create a new population
-        final Population evolved = new Population(population.getPopSize(), this.map, this.cities, false);
+        final Population evolved = new Population(population.getSize(), this.map, this.cities, false);
 
         // Evolve the fittest individual from the current population
         evolved.saveIndividual(0, population.getFittest());
 
         //
-        for(int i = 1; i < population.getPopSize(); i++) {
+        for(int i = 1; i < population.getSize(); i++) {
             final Individual first = tournament(population);
             final Individual second = tournament(population);
             final Individual evolvedIndividual = crossover(first, second);
@@ -147,7 +147,7 @@ public class StedenTourAlgoritmeImpl2 implements StedenTourAlgoritme, Debuggable
         }
 
         //
-        for(int i = 1; i < evolved.getPopSize(); i++)
+        for(int i = 1; i < evolved.getSize(); i++)
             mutate(evolved.getIndividual(i));
 
         // Return the evolved population
@@ -167,8 +167,8 @@ public class StedenTourAlgoritmeImpl2 implements StedenTourAlgoritme, Debuggable
         final Population tournament = new Population(5, this.map, this.cities, false);
 
         // Take random individuals from the current population
-        for(int i = 0; i < tournament.getPopSize(); i++) {
-            final int r = (int) (Math.random() * population.getPopSize());
+        for(int i = 0; i < tournament.getSize(); i++) {
+            final int r = (int) (Math.random() * population.getSize());
             tournament.saveIndividual(i, population.getPopulation()[r]);
         }
 
