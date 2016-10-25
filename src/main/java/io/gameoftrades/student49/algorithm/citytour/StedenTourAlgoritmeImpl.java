@@ -13,142 +13,214 @@ import io.gameoftrades.student49.algorithm.astar.SnelstePadAlgoritmeImpl;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class StedenTourAlgoritmeImpl implements StedenTourAlgoritme, Debuggable {
 
+    /**
+     * Debugger instance.
+     */
     private Debugger debugger;
 
+    /**
+     * Map instance.
+     */
     private Kaart map;
 
-    private List <Stad> cities;
-    private List <Stad> fixedCities;
+    /**
+     * List of cities.
+     */
+    private List<Stad> cities;
 
-    private ArrayList <Path> paths;
+    /**
+     * List of fixed cities.
+     */
+    private List<Stad> fixedCities;
 
-    private ArrayList <CityGroup> cityGroupList;
+    /**
+     * List of paths.
+     */
+    private ArrayList<Path> paths;
 
-    private SnelstePadAlgoritme spa;
+    /**
+     * List of city groups.
+     */
+    private ArrayList<CityGroup> cityGroupList;
+
+    /**
+     * Fastest path algorithm instance.
+     */
+    private SnelstePadAlgoritme fastPathAlgorithm;
 
     @Override
     public List<Stad> bereken(Kaart kaart, List<Stad> list) {
-
+        // Set the map
         map = kaart;
-        paths = new ArrayList<>();
-        spa = new SnelstePadAlgoritmeImpl();
 
+        // Instantiate the paths list and fast path algorithm
+        paths = new ArrayList<>();
+        fastPathAlgorithm = new SnelstePadAlgoritmeImpl();
+
+        // Set the list of cities and fixed cities
         cities = new ArrayList<>(list);
         fixedCities = new ArrayList<>(cities);
+
+        // Clear the city group list
         cityGroupList = new ArrayList<>();
 
+        // Run the algorithm
         runAlgorithm();
 
+        // Keep track of the lowest path cost
         int lowestPathCost = -1;
-        int count = 0;
-        for (int i = 0; i < cityGroupList.size(); i++) {
+        int index = 0;
+
+        // Loop through the list of city groups, to find the lowest path cost
+        for(int i = 0; i < cityGroupList.size(); i++) {
+            // Store the best city group
             if(lowestPathCost == -1 || cityGroupList.get(i).getTotalPathCost() < lowestPathCost){
                 lowestPathCost = cityGroupList.get(i).getTotalPathCost();
-                count = i;
+                index = i;
             }
         }
 
-        System.out.println("The fastest route using the 'Nearest-Neighbour Algorithm' takes " + cityGroupList.get(count).getTotalPathCost() +" moves.");
+        // Show a debug message
+        System.out.println("The fastest route using the 'Nearest-Neighbour Algorithm' takes " + cityGroupList.get(index).getTotalPathCost() +" moves.");
         System.out.println("Paths learned: " + paths.size() + ".");
-        debugger.debugSteden(map, cityGroupList.get(count).getCities());
-        return cityGroupList.get(count).getCities();
+
+        // Visually debug the path
+        debugger.debugSteden(map, this.cityGroupList.get(index).getCities());
+
+        // Get the list of cities and return it as fastest path
+        return cityGroupList.get(index).getCities();
     }
 
-    public void runAlgorithm(){
-
-        for (int start = 0; start < fixedCities.size(); start++) {
-
-            ArrayList<Stad> fastestRoute = new ArrayList<>();
-
+    /**
+     * Run the algorithm to find the best path.
+     */
+    public void runAlgorithm() {
+        // Loop through the list of cities.
+        for(int start = 0; start < fixedCities.size(); start++) {
+            // Define a list with the fastest route and a variable to store the path cost
+            final ArrayList<Stad> fastestRoute = new ArrayList<>();
             int totalPathCost = 0;
 
-            // add the city you start with to the fastest route
-            fastestRoute.add(cities.get(start));
-            cities.remove(start);
+            // Add the first city
+            fastestRoute.add(this.cities.get(start));
+            this.cities.remove(start);
 
-            // variable to keep track of current city in loop
+            // Variable to keep track of current city in loop
             int cityNumber = 0;
 
-
-            while (!cities.isEmpty()) {
+            // Loop until the list of cities is empty
+            while(!this.cities.isEmpty()) {
+                // Store the fastest path
                 int fastestPath = -1;
                 int pathLength = 0;
 
+                // Loop through the list of cities
                 for (int i = 0; i < cities.size(); i++) {
-
-                    // get the path-length, checks if the path is already learned
-                    if(!paths.isEmpty()) {
+                    // Get the path length, checks if the path is already learned
+                    if(!paths.isEmpty())
                         pathLength = getPathLength(fastestRoute, pathLength, i);
-                    }
-                    // get executed once, because the paths list is empty at the start
-                    // calculates the path-length from a certain city to another one.
-                    else {
-                        pathLength = calculateFastestPath(fastestRoute.get(fastestRoute.size() - 1),
-                                cities.get(i));
-                    }
 
-                    // if the path is faster than the current one, pick this city as the fastest option.
-                    if (fastestPath == -1 || pathLength <= fastestPath) {
+                    // Get executed once, because the paths list is empty at the start
+                    // calculates the path-length from a certain city to another one.
+                    else
+                        pathLength = calculateFastestPath(fastestRoute.get(fastestRoute.size() - 1), cities.get(i));
+
+                    // If the path is faster than the current one, pick this city as the fastest option.
+                    if(fastestPath == -1 || pathLength <= fastestPath) {
                         fastestPath = pathLength;
                         cityNumber = i;
                     }
                 }
 
+                // Increase the total path cost
                 totalPathCost += fastestPath;
-                fastestRoute.add(cities.get(cityNumber));
-                cities.remove(cityNumber);
+
+                // Add the city to the fastest route list, and remove it from the current list
+                fastestRoute.add(this.cities.get(cityNumber));
+                this.cities.remove(cityNumber);
             }
 
-            cityGroupList.add(new CityGroup(fastestRoute, totalPathCost));
+            // Add the fastest route to the city group along with the total path cost
+            this.cityGroupList.add(new CityGroup(fastestRoute, totalPathCost));
 
-            // reset the city ArrayList.
-            cities = new ArrayList<>(fixedCities);
+            // Reset the city ArrayList.
+            this.cities = new ArrayList<>(fixedCities);
 
-            System.out.println(start + " - 'Nearest Neighbour' combinations calculated..");
-
+            // Show a debug message
+            System.out.println(start + " - 'Nearest Neighbour' combinations calculated...");
         }
-
     }
 
+    /**
+     * TODO: Specify method description.
+     *
+     * @param fastestRoute List of cities that define the fastest route.
+     * @param pathLength Path length.
+     * @param i City index.
+     *
+     * @return Path length.
+     */
     private int getPathLength(ArrayList<Stad> fastestRoute, int pathLength, int i) {
-
+        // Define whether we succeed
         boolean success = false;
 
-        for (int j = 0; j < paths.size(); j++) {
-            // check if a path between 2 given cities is in the paths list(from start to end, and end to start)
-            if((paths.get(j).getStart().equals(fastestRoute.get(fastestRoute.size() -1).getCoordinaat()) &&
-                    paths.get(j).getEnd().equals(cities.get(i).getCoordinaat())) ||
-                    (paths.get(j).getEnd().equals(fastestRoute.get(fastestRoute.size() -1).getCoordinaat()) &&
-                    paths.get(j).getStart().equals(cities.get(i).getCoordinaat()))) {
-                pathLength = paths.get(j).getLength();
-                success = true;
-            }
+        // Loop through the list of paths
+        for(Path path : paths) {
+            // Check if a path between 2 given cities is in the paths list (from start to end, and end to start), continue the loop if it isn't
+            if((!path.getStart().equals(fastestRoute.get(fastestRoute.size() - 1).getCoordinaat()) ||
+                !path.getEnd().equals(cities.get(i).getCoordinaat())) &&
+                (!path.getEnd().equals(fastestRoute.get(fastestRoute.size() - 1).getCoordinaat()) ||
+                    !path.getStart().equals(cities.get(i).getCoordinaat())))
+                continue;
+
+            // Redefine the path length
+            pathLength = path.getLength();
+
+            // Set the success flag
+            success = true;
         }
-        //if the path is not in the path list, calculate it and put in in the paths list.
-        if(!success) {
-            pathLength = calculateFastestPath(fastestRoute.get(fastestRoute.size() - 1),
-                    cities.get(i));
-        }
+
+        // If the path is not in the path list, calculate it and put in in the paths list
+        if(!success)
+            pathLength = calculateFastestPath(fastestRoute.get(fastestRoute.size() - 1), cities.get(i));
+
+        // Return the path length
         return pathLength;
     }
 
+    /**
+     * Calculate the fastest path between two cities.
+     *
+     * @param first First city.
+     * @param second Second city.
+     *
+     * @return Cost of fastest path.
+     */
+    private int calculateFastestPath(Stad first, Stad second){
+        // Calculate the fastest path between the two given cities
+        final Pad pad = fastPathAlgorithm.bereken(this.map, first.getCoordinaat(), second.getCoordinaat());
 
-    public int calculateFastestPath(Stad c1, Stad c2){
+        // add the path to the list of paths
+        paths.add(new Path(first, second, pad.getTotaleTijd()));
 
-        Pad pad = spa.bereken(map ,c1.getCoordinaat(), c2.getCoordinaat());
-        paths.add(new Path(c1, c2, pad.getTotaleTijd()));
+        // Return the total time for the calculated path
         return pad.getTotaleTijd();
+    }
+
+    /**
+     * String representation of this class, which defines the algorithm name.
+     *
+     * @return Algorithm name.
+     */
+    @Override
+    public String toString(){
+        return "Nearest Neighbour Algorithm";
     }
 
     @Override
     public void setDebugger(Debugger debugger) {
         this.debugger = debugger;
-    }
-
-    public String toString(){
-        return "Nearest Neighbour Algorithm";
     }
 }

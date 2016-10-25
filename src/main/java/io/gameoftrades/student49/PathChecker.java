@@ -22,7 +22,7 @@ public class PathChecker {
         this.cities = cities;
         this.map = map;
         this.spa = new SnelstePadAlgoritmeImpl();
-        this.paths = new ArrayList<>();
+        paths = new ArrayList<>();
 
         FillPathsArrayList();
     }
