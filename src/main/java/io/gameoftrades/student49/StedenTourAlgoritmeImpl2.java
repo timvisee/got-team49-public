@@ -210,16 +210,16 @@ public class StedenTourAlgoritmeImpl2 implements StedenTourAlgoritme, Debuggable
      */
     private void getCityFrom(Individual evolved, Individual first, Individual second, int i){
         // Add the city from first at the given index to the evolved individual
-        if(!evolved.listContains(first.getCity(i)))
+        if(!evolved.hasCity(first.getCity(i)))
             evolved.addCity(first.getCity(i));
 
         // Add the city from second at the given index to the evolved individual
-        else if(!evolved.listContains(second.getCity(i)))
+        else if(!evolved.hasCity(second.getCity(i)))
             evolved.addCity(second.getCity(i));
 
         // Add each city that isn't in the evolved individual from the list of cities
         else
-            this.cities.stream().filter(s -> !evolved.listContains(s)).forEach(evolved::addCity);
+            this.cities.stream().filter(s -> !evolved.hasCity(s)).forEach(evolved::addCity);
     }
 
     /**
