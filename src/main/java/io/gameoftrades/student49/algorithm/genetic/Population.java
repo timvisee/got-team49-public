@@ -30,7 +30,7 @@ class Population {
             return;
 
         // Fill the list of individuals
-        for(int i = 0; i < population.length; i++)
+        for(int i = 0; i < size; i++)
             // Generate a new individual
             population[i] = new Individual(cities);
     }
