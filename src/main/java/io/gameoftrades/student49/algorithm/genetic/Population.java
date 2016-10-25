@@ -72,15 +72,15 @@ class Population {
      */
     Individual getFittest() {
         // Keep track of the fittest individual
-        int min = -1;
+        int fitness = -1;
         Individual individual = null;
 
         // Loop through the population
-        for(int i = 0; i < population.length; i++) {
+        for(Individual entry : this.population) {
             // Store the individual if it's fitter than the current
-            if(min == -1 || population[i].getFitness() < min){
-                min = population[i].getFitness();
-                individual = population[i];
+            if(fitness == -1 || entry.getFitness() < fitness) {
+                fitness = entry.getFitness();
+                individual = entry;
             }
         }
 

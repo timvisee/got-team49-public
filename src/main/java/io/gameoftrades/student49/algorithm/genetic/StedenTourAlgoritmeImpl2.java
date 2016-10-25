@@ -184,7 +184,7 @@ public class StedenTourAlgoritmeImpl2 implements StedenTourAlgoritme, Debuggable
 
         // Loop through the list of cities
         for(int i = 0; i < cities.size(); i++)
-
+            // Randomly add a city to evolved from the first or second individual
             if(Math.random() <= 0.5)
                 getCityFrom(evolved, first, second, i);
             else
