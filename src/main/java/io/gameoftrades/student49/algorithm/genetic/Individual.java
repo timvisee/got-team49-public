@@ -116,7 +116,7 @@ class Individual {
     int getFitness(){
         // Loop through the list of cities, and define the fitness value, if the fitness isn't known
         if(this.fitness == 0)
-            for(int i = 0, size = this.cities.size() - 1; i < size; i++)
+            for(int i = 0, length = this.cities.size() - 1; i < length; i++)
                 this.fitness += PathChecker.checkPathCost(this.cities.get(i).getCoordinaat(), this.cities.get(i + 1).getCoordinaat());
 
         // Return the fitness

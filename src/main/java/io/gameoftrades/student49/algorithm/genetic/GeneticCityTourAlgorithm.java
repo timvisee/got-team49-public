@@ -10,7 +10,7 @@ import io.gameoftrades.student49.PathChecker;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StedenTourAlgoritmeImpl2 implements StedenTourAlgoritme, Debuggable {
+public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable {
 
     /**
      * Maximum amount of tries.
@@ -85,14 +85,17 @@ public class StedenTourAlgoritmeImpl2 implements StedenTourAlgoritme, Debuggable
         System.out.println("Found best route, took " + (System.currentTimeMillis() - time) + " ms.");
 
         // Get the fittest population
-        final Population fittestPop = getFittestPopulation(populationList);
+        final Population fittestPopulation = getFittestPopulation(populationList);
+
+        // Find the fittest individual
+        final Individual fittest = fittestPopulation.getFittest();
 
         // Debug the most efficient route
-        System.out.println("The most efficient route is " +  fittestPop.getFittest().getFitness() + ".");
-        debugger.debugSteden(map, fittestPop.getFittest().getCities());
+        System.out.println("The most efficient route is " +  fittest.getFitness() + ".");
+        debugger.debugSteden(map, fittest.getCities());
 
         // Return the list of cities that define the most efficient path
-        return fittestPop.getFittest().getCities();
+        return fittest.getCities();
     }
 
     /**
@@ -102,21 +105,25 @@ public class StedenTourAlgoritmeImpl2 implements StedenTourAlgoritme, Debuggable
      *
      * @return Fittest population.
      */
-    private Population getFittestPopulation(ArrayList<Population> populationList){
+    private Population getFittestPopulation(ArrayList<Population> populationList) {
         // Keep track of the
-        int lowest = -1;
-        int count = 0;
+        int population = -1;
+        int index = 0;
 
         // Loop through the populations to find the lowest
-        for(int i = 0; i < populationList.size(); i++) {
-            if(lowest == -1 || populationList.get(i).getFittest().getFitness() < lowest){
-                lowest =  populationList.get(i).getFittest().getFitness();
-                count = i;
+        for(int i = 0, length = populationList.size(); i < length; i++) {
+            // Get the fittest individual fitness
+            final int fitness = populationList.get(i).getFittest().getFitness();
+
+            // Store the population if it's fitter
+            if(population == -1 || fitness < population){
+                population = fitness;
+                index = i;
             }
         }
 
         // Return the fittest population
-        return populationList.get(count);
+        return populationList.get(index);
     }
 
     /**
@@ -126,23 +133,19 @@ public class StedenTourAlgoritmeImpl2 implements StedenTourAlgoritme, Debuggable
      *
      * @return Evolved population.
      */
-    private Population evolvePopulation(Population population){
+    private Population evolvePopulation(Population population) {
         // Create a new population
         final Population evolved = new Population(population.getSize(), this.cities, false);
 
         // Evolve the fittest individual from the current population
         evolved.saveIndividual(0, population.getFittest());
 
-        //
-        for(int i = 1; i < population.getSize(); i++) {
-            final Individual first = tournament(population);
-            final Individual second = tournament(population);
-            final Individual evolvedIndividual = crossover(first, second);
-            evolved.saveIndividual(i, evolvedIndividual);
-        }
+        // Cross over individuals from the given population
+        for(int i = 1, length = population.getSize(); i < length; i++)
+            evolved.saveIndividual(i, crossover(tournament(population), tournament(population)));
 
-        //
-        for(int i = 1; i < evolved.getSize(); i++)
+        // Mutate evolved individuals
+        for(int i = 1, length = evolved.getSize(); i < length; i++)
             mutate(evolved.getIndividual(i));
 
         // Return the evolved population
@@ -161,11 +164,12 @@ public class StedenTourAlgoritmeImpl2 implements StedenTourAlgoritme, Debuggable
         // Create a tournament population
         final Population tournament = new Population(5, this.cities, false);
 
+        // Get the population size
+        final int populationSize = population.getSize();
+
         // Take random individuals from the current population
-        for(int i = 0; i < tournament.getSize(); i++) {
-            final int r = (int) (Math.random() * population.getSize());
-            tournament.saveIndividual(i, population.getPopulation()[r]);
-        }
+        for(int i = 0, length = tournament.getSize(); i < length; i++)
+            tournament.saveIndividual(i, population.getPopulation()[(int) (Math.random() * populationSize)]);
 
         // Return the fittest individual from the tournament population
         return tournament.getFittest();
@@ -176,19 +180,17 @@ public class StedenTourAlgoritmeImpl2 implements StedenTourAlgoritme, Debuggable
      *
      * @param first First individual.
      * @param second Second individual.
+     *
      * @return Evolved individual.
      */
     private Individual crossover(Individual first, Individual second){
         // Create a new individual
         final Individual evolved = new Individual();
 
-        // Loop through the list of cities
-        for(int i = 0; i < cities.size(); i++)
-            // Randomly add a city to evolved from the first or second individual
-            if(Math.random() <= 0.5)
-                getCityFrom(evolved, first, second, i);
-            else
-                getCityFrom(evolved, second, first, i);
+        // Loop through the list of cities, and randomly add a city to the evolved from the first or second individual
+        boolean useFirst;
+        for(int i = 0, length = cities.size(); i < length; i++)
+            getCityFrom(evolved, (useFirst = Math.random() <= 0.5) ? first : second, useFirst ? second : first, i);
 
         // Return the evolved individual
         return evolved;
@@ -203,18 +205,21 @@ public class StedenTourAlgoritmeImpl2 implements StedenTourAlgoritme, Debuggable
      * @param second Second individual.
      * @param i Index of the city.
      */
-    private void getCityFrom(Individual evolved, Individual first, Individual second, int i){
+    private void getCityFrom(Individual evolved, Individual first, Individual second, int i) {
         // Add the city from first at the given index to the evolved individual
-        if(!evolved.hasCity(first.getCity(i)))
+        if(!evolved.hasCity(first.getCity(i))) {
             evolved.addCity(first.getCity(i));
+            return;
+        }
 
         // Add the city from second at the given index to the evolved individual
-        else if(!evolved.hasCity(second.getCity(i)))
+        if(!evolved.hasCity(second.getCity(i))) {
             evolved.addCity(second.getCity(i));
+            return;
+        }
 
         // Add each city that isn't in the evolved individual from the list of cities
-        else
-            this.cities.stream().filter(s -> !evolved.hasCity(s)).forEach(evolved::addCity);
+        this.cities.stream().filter(s -> !evolved.hasCity(s)).forEach(evolved::addCity);
     }
 
     /**
@@ -225,15 +230,15 @@ public class StedenTourAlgoritmeImpl2 implements StedenTourAlgoritme, Debuggable
      */
     private void mutate(Individual individual) {
         // Loop through the list of cities of the individual, except the last city
-        for(int i = 0; i < individual.getCities().size() - 1; i++) {
+        for(int i = 0, length = individual.getCities().size() - 1; i < length; i++) {
             // Flip the current and a random city with a 1.5% chance
             if(Math.random() < 0.015) {
                 // Generate a random city index
                 final int random = (int) (Math.random() * ((individual.getCities().size() - 1)));
 
                 // Get both cities
-                Stad first = individual.getCities().get(random);
-                Stad second = individual.getCities().get(i);
+                final Stad first = individual.getCities().get(random);
+                final Stad second = individual.getCities().get(i);
 
                 // Store both cities flipped
                 individual.setCity(i, first);
@@ -243,8 +248,8 @@ public class StedenTourAlgoritmeImpl2 implements StedenTourAlgoritme, Debuggable
             // Flip the current and followed city with a 7.5% chance
             if(Math.random() < 0.075) {
                 // Get both cities
-                Stad first = individual.getCities().get(i);
-                Stad second = individual.getCities().get(i + 1);
+                final Stad first = individual.getCities().get(i);
+                final Stad second = individual.getCities().get(i + 1);
 
                 // Store both cities flipped
                 individual.setCity(i, second);

@@ -6,7 +6,7 @@ import io.gameoftrades.model.algoritme.SnelstePadAlgoritme;
 import io.gameoftrades.model.algoritme.StedenTourAlgoritme;
 import io.gameoftrades.model.lader.WereldLader;
 import io.gameoftrades.student49.algorithm.astar.SnelstePadAlgoritmeImpl;
-import io.gameoftrades.student49.algorithm.genetic.StedenTourAlgoritmeImpl2;
+import io.gameoftrades.student49.algorithm.genetic.GeneticCityTourAlgorithm;
 
 /**
  * Welkom bij Game of Trades! 
@@ -45,7 +45,7 @@ public class HandelaarImpl implements Handelaar {
     public StedenTourAlgoritme nieuwStedenTourAlgoritme() {
         // TODO Auto-generated method stub
 //        return new StedenTourAlgoritmeImpl();
-        return new StedenTourAlgoritmeImpl2();
+        return new GeneticCityTourAlgorithm();
     }
 
     /**
