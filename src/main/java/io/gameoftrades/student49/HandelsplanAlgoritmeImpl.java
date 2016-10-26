@@ -78,7 +78,7 @@ public class HandelsplanAlgoritmeImpl implements HandelsplanAlgoritme {
                 maxprofit = (handelsPositie.getKapitaal()/tradeRoutes.get(i).getBuy())*tradeRoutes.get(i).getProfit();
 
             System.out.printf("%-10d %-15s %-30s %-15s %-10d %-10d %-10d %-20f %-10d %-15d %-10f", i,
-                     tradeRoutes.get(i).getOfferCity().getNaam(), tradeRoutes.get(i).getHandelswaar().getNaam(),
+                     tradeRoutes.get(i).getOfferCity().getNaam(), tradeRoutes.get(i).getGoods().getNaam(),
                     tradeRoutes.get(i).getDemandCity().getNaam(),tradeRoutes.get(i).getBuy(), tradeRoutes.get(i).getProfit(), tradeRoutes.get(i).getPathCost(),
                     tradeRoutes.get(i).getEfficiency(),
                     handelsPositie.getKapitaal()/tradeRoutes.get(i).getBuy() > handelsPositie.getRuimte()
