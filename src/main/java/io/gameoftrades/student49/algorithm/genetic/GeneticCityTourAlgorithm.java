@@ -5,7 +5,7 @@ import io.gameoftrades.debug.Debugger;
 import io.gameoftrades.model.algoritme.StedenTourAlgoritme;
 import io.gameoftrades.model.kaart.Kaart;
 import io.gameoftrades.model.kaart.Stad;
-import io.gameoftrades.student49.PathChecker;
+import io.gameoftrades.student49.util.PathChecker;
 
 import java.util.ArrayList;
 import java.util.List;

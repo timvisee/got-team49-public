@@ -10,6 +10,7 @@ import io.gameoftrades.model.markt.Handelsplan;
 import io.gameoftrades.model.markt.actie.Actie;
 import io.gameoftrades.model.markt.actie.HandelsPositie;
 import io.gameoftrades.model.markt.actie.NavigeerActie;
+import io.gameoftrades.student49.util.PathChecker;
 
 import java.util.ArrayList;
 import java.util.List;

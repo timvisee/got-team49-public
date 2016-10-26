@@ -3,6 +3,7 @@ package io.gameoftrades.student49;
 import io.gameoftrades.model.kaart.Coordinaat;
 import io.gameoftrades.model.kaart.Stad;
 import io.gameoftrades.model.markt.Handelswaar;
+import io.gameoftrades.student49.util.PathChecker;
 
 public class TradeRoute {
 

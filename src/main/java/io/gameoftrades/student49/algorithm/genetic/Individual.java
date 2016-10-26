@@ -1,7 +1,7 @@
 package io.gameoftrades.student49.algorithm.genetic;
 
 import io.gameoftrades.model.kaart.Stad;
-import io.gameoftrades.student49.PathChecker;
+import io.gameoftrades.student49.util.PathChecker;
 
 import java.util.ArrayList;
 import java.util.Collections;
