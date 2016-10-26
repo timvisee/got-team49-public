@@ -5,8 +5,10 @@ import io.gameoftrades.model.algoritme.HandelsplanAlgoritme;
 import io.gameoftrades.model.algoritme.SnelstePadAlgoritme;
 import io.gameoftrades.model.algoritme.StedenTourAlgoritme;
 import io.gameoftrades.model.lader.WereldLader;
-import io.gameoftrades.student49.algorithm.astar.SnelstePadAlgoritmeImpl;
+import io.gameoftrades.student49.algorithm.astar.FastestPathAlgorithm;
 import io.gameoftrades.student49.algorithm.genetic.GeneticCityTourAlgorithm;
+import io.gameoftrades.student49.algorithm.traderoute.TradeRouteAlgorithm;
+import io.gameoftrades.student49.world.WorldLoader;
 
 /**
  * Welkom bij Game of Trades! 
@@ -26,7 +28,7 @@ public class HandelaarImpl implements Handelaar {
      */
     @Override
     public WereldLader nieuweWereldLader() {
-        return new WereldLaderImpl();
+        return new WorldLoader();
     }
 
     /**
@@ -34,8 +36,7 @@ public class HandelaarImpl implements Handelaar {
      */
     @Override
     public SnelstePadAlgoritme nieuwSnelstePadAlgoritme() {
-    	// TODO Auto-generated method stub
-    	return new SnelstePadAlgoritmeImpl();
+    	return new FastestPathAlgorithm();
     }
 
     /**
@@ -43,8 +44,6 @@ public class HandelaarImpl implements Handelaar {
      */
     @Override
     public StedenTourAlgoritme nieuwStedenTourAlgoritme() {
-        // TODO Auto-generated method stub
-//        return new StedenTourAlgoritmeImpl();
         return new GeneticCityTourAlgorithm();
     }
 
@@ -53,7 +52,6 @@ public class HandelaarImpl implements Handelaar {
      */
     @Override
     public HandelsplanAlgoritme nieuwHandelsplanAlgoritme() {
-        // TODO Auto-generated method stub
-        return new HandelsplanAlgoritmeImpl();
+        return new TradeRouteAlgorithm();
     }
 }

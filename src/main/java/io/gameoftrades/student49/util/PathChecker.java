@@ -6,7 +6,7 @@ import io.gameoftrades.model.kaart.Kaart;
 import io.gameoftrades.model.kaart.Pad;
 import io.gameoftrades.model.kaart.Stad;
 import io.gameoftrades.student49.Path;
-import io.gameoftrades.student49.algorithm.astar.SnelstePadAlgoritmeImpl;
+import io.gameoftrades.student49.algorithm.astar.FastestPathAlgorithm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +49,7 @@ public class PathChecker {
         this.map = map;
 
         // Instantiate the fastest path algorithm
-        this.fastPathAlgorithm = new SnelstePadAlgoritmeImpl();
+        this.fastPathAlgorithm = new FastestPathAlgorithm();
 
         // Reset the lists of paths
         paths = new ArrayList<>();

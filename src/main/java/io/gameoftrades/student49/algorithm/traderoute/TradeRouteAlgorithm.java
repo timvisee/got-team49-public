@@ -1,4 +1,4 @@
-package io.gameoftrades.student49;
+package io.gameoftrades.student49.algorithm.traderoute;
 
 import io.gameoftrades.model.Wereld;
 import io.gameoftrades.model.algoritme.HandelsplanAlgoritme;
@@ -10,12 +10,13 @@ import io.gameoftrades.model.markt.Handelsplan;
 import io.gameoftrades.model.markt.actie.Actie;
 import io.gameoftrades.model.markt.actie.HandelsPositie;
 import io.gameoftrades.model.markt.actie.NavigeerActie;
+import io.gameoftrades.student49.TradeRoute;
 import io.gameoftrades.student49.util.PathChecker;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HandelsplanAlgoritmeImpl implements HandelsplanAlgoritme {
+public class TradeRouteAlgorithm implements HandelsplanAlgoritme {
 
     private List <Actie> actions;
     private HandelsPositie handelsPositie;

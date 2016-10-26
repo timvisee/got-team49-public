@@ -12,7 +12,7 @@ import io.gameoftrades.student49.PadImpl;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class SnelstePadAlgoritmeImpl implements SnelstePadAlgoritme, Debuggable {
+public class FastestPathAlgorithm implements SnelstePadAlgoritme, Debuggable {
 
     /**
      * List of open nodes for A*.

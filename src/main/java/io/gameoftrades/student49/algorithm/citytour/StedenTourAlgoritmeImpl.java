@@ -8,7 +8,7 @@ import io.gameoftrades.model.kaart.Kaart;
 import io.gameoftrades.model.kaart.Pad;
 import io.gameoftrades.model.kaart.Stad;
 import io.gameoftrades.student49.Path;
-import io.gameoftrades.student49.algorithm.astar.SnelstePadAlgoritmeImpl;
+import io.gameoftrades.student49.algorithm.astar.FastestPathAlgorithm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +57,7 @@ public class StedenTourAlgoritmeImpl implements StedenTourAlgoritme, Debuggable 
 
         // Instantiate the paths list and fast path algorithm
         paths = new ArrayList<>();
-        fastPathAlgorithm = new SnelstePadAlgoritmeImpl();
+        fastPathAlgorithm = new FastestPathAlgorithm();
 
         // Set the list of cities and fixed cities
         cities = new ArrayList<>(list);

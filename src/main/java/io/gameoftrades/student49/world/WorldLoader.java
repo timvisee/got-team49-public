@@ -1,4 +1,4 @@
-package io.gameoftrades.student49;
+package io.gameoftrades.student49.world;
 
 import io.gameoftrades.model.Wereld;
 import io.gameoftrades.model.kaart.*;
@@ -15,7 +15,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class WereldLaderImpl implements WereldLader {
+public class WorldLoader implements WereldLader {
 
     /**
      * Regex for the map size.

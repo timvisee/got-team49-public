@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import io.gameoftrades.student49.world.WorldLoader;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,13 +18,13 @@ import io.gameoftrades.model.markt.HandelType;
  * Handige test om de WereldLader implementatie te testen.
  * Zorg dat alle testen groen worden.
  */
-public class WereldLaderImplTest {
+public class WorldLoaderTest {
 
     private WereldLader lader;
 
     @Before
     public void init() {
-        lader = new WereldLaderImpl();
+        lader = new WorldLoader();
     }
 
     @Test
