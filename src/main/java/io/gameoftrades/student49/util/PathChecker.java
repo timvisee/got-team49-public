@@ -43,7 +43,7 @@ public class PathChecker {
      * @param cities List of cities.
      * @param map Map.
      */
-    public PathChecker(ArrayList <Stad> cities, Kaart map){
+    public PathChecker(ArrayList <Stad> cities, Kaart map) {
         // Set the list of cities and the map
         this.cities = cities;
         this.map = map;
@@ -61,7 +61,7 @@ public class PathChecker {
     /**
      * Fill the city paths array list.
      */
-    private void buildCityPathsArrayList(){
+    private void buildCityPathsArrayList() {
         // Loop through all cities by index
         for(int i = 0; i < cities.size(); i++)
             // Loop through all cities
@@ -78,7 +78,7 @@ public class PathChecker {
      * @param first First city.
      * @param second Second city.
      */
-    private void calculatePaths(Stad first, Stad second){
+    private void calculatePaths(Stad first, Stad second) {
         // Get the coordinates of the both cities
         final Coordinaat firstCoordinate = first.getCoordinaat();
         final Coordinaat secondCoordinate = second.getCoordinaat();
@@ -107,7 +107,7 @@ public class PathChecker {
      *
      * @return Path cost between the given two coordinates.
      */
-    public static int checkPathCost(Coordinaat first, Coordinaat second){
+    public static int checkPathCost(Coordinaat first, Coordinaat second) {
         // Loop through the list of paths
         for(Path path : paths)
             // Find the path for these two coordinates
