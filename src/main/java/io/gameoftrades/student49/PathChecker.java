@@ -9,80 +9,133 @@ import io.gameoftrades.student49.algorithm.astar.SnelstePadAlgoritmeImpl;
 
 import java.util.ArrayList;
 
+/**
+ * Path checker class.
+ */
+@SuppressWarnings("WeakerAccess")
 public class PathChecker {
 
-    private static ArrayList <Path> paths;
-    private ArrayList <Stad> cities;
+    /**
+     * List of paths.
+     */
+    private static ArrayList<Path> paths;
 
-    private SnelstePadAlgoritme spa;
+    /**
+     * List of relevant cities.
+     */
+    private ArrayList<Stad> cities;
+
+    /**
+     * Map instance.
+     */
     private Kaart map;
 
-    public PathChecker(ArrayList <Stad> cities, Kaart map){
+    /**
+     * Fastest path algorithm.
+     */
+    private SnelstePadAlgoritme fastPathAlgorithm;
 
+    /**
+     * Constructor.
+     *
+     * @param cities List of cities.
+     * @param map Map.
+     */
+    public PathChecker(ArrayList <Stad> cities, Kaart map){
+        // Set the list of cities and the map
         this.cities = cities;
         this.map = map;
-        this.spa = new SnelstePadAlgoritmeImpl();
+
+        // Instantiate the fastest path algorithm
+        this.fastPathAlgorithm = new SnelstePadAlgoritmeImpl();
+
+        // Reset the list of paths
         paths = new ArrayList<>();
 
-        FillPathsArrayList();
+        // Fill the paths array list
+        fillPathsArrayList();
     }
 
-    private void FillPathsArrayList(){
-
-        for (int i = 0; i < cities.size(); i++) {
-            for (int j = 0; j < cities.size(); j++) {
-                if(!cities.get(i).getCoordinaat().equals(cities.get(j).getCoordinaat()))
-                    calculatePaths(cities.get(i), cities.get(j));
-            }
-        }
+    /**
+     * Fill the paths array list.
+     */
+    private void fillPathsArrayList(){
+        // Loop through all cities by index
+        for(int i = 0; i < cities.size(); i++)
+            // Loop through all cities
+            for(Stad city : cities)
+                // Make sure the cities aren't equal to each other
+                if(!cities.get(i).getCoordinaat().equals(city.getCoordinaat()))
+                    // Calculate the paths for the two cities
+                    calculatePaths(cities.get(i), city);
     }
 
-    private void calculatePaths(Stad c1, Stad c2){
+    /**
+     * Calculate the paths between two cities.
+     *
+     * @param first First city.
+     * @param second Second city.
+     */
+    private void calculatePaths(Stad first, Stad second){
+        // Get the coordinates of the both cities
+        final Coordinaat firstCoordinate = first.getCoordinaat();
+        final Coordinaat secondCoordinate = second.getCoordinaat();
 
-        boolean foundPath = false;
+        // Check whether any paths are found
+        if(!paths.isEmpty())
+            // Loop through the list of paths and determine if we already know a path for these two cities
+            for(Path path : paths)
+                // Return if the path is for the two given cities
+                if((path.getStart().equals(firstCoordinate) && path.getEnd().equals(secondCoordinate)) ||
+                    (path.getEnd().equals(firstCoordinate) && path.getStart().equals(secondCoordinate)))
+                    return;
 
-        if(paths.isEmpty()){
-            Pad pad = spa.bereken(map, c1.getCoordinaat(), c2.getCoordinaat());
-            paths.add(new Path(c1, c2, pad.getTotaleTijd()));
-            return;
-        }
+        // Calculate the path between the two cities.
+        final Pad pad = fastPathAlgorithm.bereken(this.map, firstCoordinate, secondCoordinate);
 
-        if(!paths.isEmpty()){
-            for (int i = 0; i < paths.size(); i++) {
-                if ((paths.get(i).getStart().equals(c1) && paths.get(i).getEnd().equals(c2)) ||
-                        (paths.get(i).getEnd().equals(c1) && paths.get(i).getStart().equals(c2))) {
-                    foundPath = true;
-                }
-            }
-        }
-        if(!foundPath && !paths.isEmpty()){
-            Pad pad = spa.bereken(map, c1.getCoordinaat(), c2.getCoordinaat());
-            paths.add(new Path(c1, c2, pad.getTotaleTijd()));
-        }
+        // Add the path to the list
+        paths.add(new Path(first, second, pad.getTotaleTijd()));
     }
 
-    public static int checkPathCost(Coordinaat c1, Coordinaat c2){
+    /**
+     * Get the cost for the path between the given two coordinates.
+     *
+     * @param first First coordinate.
+     * @param second Second coordinate.
+     *
+     * @return Path cost between the given two coordinates.
+     */
+    public static int checkPathCost(Coordinaat first, Coordinaat second){
+        // Loop through the list of paths
+        for(Path path : paths)
+            // Find the path for these two coordinates
+            if((first.equals(path.getStart()) && second.equals(path.getEnd())) ||
+                (first.equals(path.getEnd()) && second.equals(path.getStart())))
+                // Return the path length
+                return path.getLength();
 
-        int pathCost = 0;
+        // TODO: Calculate the path here, so we can return the proper cost!
 
-            for (int j = 0; j < paths.size(); j++) {
-                if((c1.equals(paths.get(j).getStart()) && c2.equals(paths.get(j).getEnd())) ||
-                        (c1.equals(paths.get(j).getEnd()) && c2.equals(paths.get(j).getStart()))){
-                    return paths.get(j).getLength();
-            }
-        }
-        return pathCost;
+        // We don't know the path cost, so return zero
+        return 0;
     }
 
+    /**
+     * Get the path between the two given coordinates.
+     *
+     * @param first First coordinate.
+     * @param second Second coordinate.
+     *
+     * @return Path between the two coordinates.
+     */
+    public Path getPath(Coordinaat first, Coordinaat second) {
+        // Loop through the list of paths
+        for(Path path : paths)
+            // Make sure the path is for the given two coordinates, return the path in that case
+            if((first.equals(path.getStart()) && second.equals(path.getEnd())))
+                return path;
 
-
-    public Path getPath(Coordinaat c1, Coordinaat c2) {
-        for (int i = 0; i < paths.size(); i++) {
-            if ((c1.equals(paths.get(i).getStart()) && c2.equals(paths.get(i).getEnd()))) {
-                return paths.get(i);
-            }
-        }
+        // We don't have a path, return null
         return null;
     }
-
 }
