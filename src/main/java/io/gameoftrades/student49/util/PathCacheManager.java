@@ -63,25 +63,31 @@ public class PathCacheManager {
         PathCacheManager.cities = cities;
         PathCacheManager.map = map;
 
-        // Fill the cityPaths array list
-        buildCityPathsArrayList();
+        // Generate all common city paths in the background
+        generateCityPaths();
     }
 
     /**
-     * Fill the city cityPaths array list.
+     * Generate common city paths in the background.
      */
-    private static void buildCityPathsArrayList() {
-        // Show a debug message
-        System.out.println("Generating city paths...");
+    private static void generateCityPaths() {
+        // Create a new thread to generate city paths in the background
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Show a debug message
+                System.out.println("Generating common city paths in the background...");
 
-        // Generate paths for all cities
-        for(Stad startCity : PathCacheManager.cities)
-            PathCacheManager.cities.stream()
-                .filter(endCity -> !startCity.getCoordinaat().equals(endCity.getCoordinaat()))
-                .forEach(endCity -> getCityPath(startCity, endCity, false));
+                // Generate paths for all cities
+                for(Stad startCity : PathCacheManager.cities)
+                    PathCacheManager.cities.stream()
+                        .filter(endCity -> !startCity.getCoordinaat().equals(endCity.getCoordinaat()))
+                        .forEach(endCity -> getCityPath(startCity, endCity, false));
 
-        // Show a debug message
-        System.out.println("Successfully generated city paths!");
+                // Show a debug message
+                System.out.println(PathCacheManager.cityPaths.size() + " city paths generated!");
+            }
+        }).start();
     }
 
     /**
