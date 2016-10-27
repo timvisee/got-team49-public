@@ -3,14 +3,14 @@ package io.gameoftrades.student49;
 import io.gameoftrades.model.kaart.Coordinaat;
 import io.gameoftrades.model.kaart.Stad;
 import io.gameoftrades.model.markt.Handelswaar;
-import io.gameoftrades.student49.util.PathChecker;
+import io.gameoftrades.student49.util.PathCacheManager;
 
 public class TradeRoute {
 
     /**
-     * Path instance.
+     * CityPath instance.
      */
-    private Path path;
+    private CityPath cityPath;
 
     /**
      * Buy amount.
@@ -35,14 +35,14 @@ public class TradeRoute {
     /**
      * Constructor.
      *
-     * @param path Path.
-     * @param goods Trade goods.
-     * @param buy Buy amount.
-     * @param sell Sell amount.
+     * @param cityPath   CityPath.
+     * @param goods      Trade goods.
+     * @param buy        Buy amount.
+     * @param sell       Sell amount.
      * @param currentPos Current position.
      */
-    public TradeRoute(Path path, Handelswaar goods, double buy, double sell, Coordinaat currentPos){
-        this.path = path;
+    public TradeRoute(CityPath cityPath, Handelswaar goods, double buy, double sell, Coordinaat currentPos) {
+        this.cityPath = cityPath;
         this.buy = buy;
         this.sell = sell;
         this.goods = goods;
@@ -54,7 +54,7 @@ public class TradeRoute {
      *
      * @return Profit.
      */
-    public int getProfit(){
+    public int getProfit() {
         return (int) (this.sell - this.buy);
     }
 
@@ -63,7 +63,7 @@ public class TradeRoute {
      *
      * @param pos Position.
      */
-    public void setCurrentPos(Coordinaat pos){
+    public void setCurrentPos(Coordinaat pos) {
         this.currentPos = pos;
     }
 
@@ -72,7 +72,7 @@ public class TradeRoute {
      *
      * @return Buy amount.
      */
-    public int getBuy(){
+    public int getBuy() {
         return (int) this.buy;
     }
 
@@ -81,7 +81,7 @@ public class TradeRoute {
      *
      * @return Sell amount.
      */
-    public int getSell(){
+    public int getSell() {
         return (int) this.sell;
     }
 
@@ -90,8 +90,8 @@ public class TradeRoute {
      *
      * @return Offering city.
      */
-    public Stad getOfferCity(){
-        return this.path.getStartCity();
+    public Stad getOfferCity() {
+        return this.cityPath.getStartCity();
     }
 
     /**
@@ -99,8 +99,8 @@ public class TradeRoute {
      *
      * @return Demanding city.
      */
-    public Stad getDemandCity(){
-        return this.path.getEndCity();
+    public Stad getDemandCity() {
+        return this.cityPath.getEndCity();
     }
 
     /**
@@ -108,7 +108,7 @@ public class TradeRoute {
      *
      * @return Efficiency for 1 product.
      */
-    public double getEfficiency(){
+    public double getEfficiency() {
         return (this.sell - this.buy) / getPathCost();
     }
 
@@ -117,25 +117,25 @@ public class TradeRoute {
      *
      * @return Goods.
      */
-    public Handelswaar getGoods(){
+    public Handelswaar getGoods() {
         return this.goods;
     }
 
     /**
-     * Get the path.
+     * Get the cityPath.
      *
-     * @return Path.
+     * @return CityPath.
      */
-    public Path getPath(){
-        return this.path;
+    public CityPath getCityPath() {
+        return this.cityPath;
     }
 
     /**
-     * Get the path cost.
+     * Get the cityPath cost.
      *
-     * @return Path cost.
+     * @return CityPath cost.
      */
-    public int getPathCost(){
-        return PathChecker.checkPathCost(this.path.getStart(), this.currentPos) + this.path.getLength();
+    public int getPathCost() {
+        return PathCacheManager.getPathCost(this.cityPath.getStart(), this.currentPos) + this.cityPath.getLength();
     }
 }

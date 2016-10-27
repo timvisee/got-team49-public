@@ -35,9 +35,9 @@ public class Node {
      * Constructor.
      *
      * @param terrain Terrain.
-     * @param parent Parent node.
+     * @param parent  Parent node.
      */
-    public Node(Terrein terrain, Node parent, Coordinaat end){
+    public Node(Terrein terrain, Node parent, Coordinaat end) {
         // Set the properties
         this.terrain = terrain;
         this.parent = parent;
@@ -58,7 +58,7 @@ public class Node {
      *
      * @return Parent node or null.
      */
-    public Node getParent(){
+    public Node getParent() {
         return parent;
     }
 
@@ -67,7 +67,7 @@ public class Node {
      *
      * @return Terrain.
      */
-    public Terrein getTerrain(){
+    public Terrein getTerrain() {
         return terrain;
     }
 
@@ -76,7 +76,7 @@ public class Node {
      *
      * @return G cost value.
      */
-    public double getgCost(){
+    public double getgCost() {
         return this.gCost;
     }
 
@@ -85,7 +85,7 @@ public class Node {
      *
      * @return H cost value.
      */
-    public double gethCost(){
+    public double gethCost() {
         return this.hCost;
     }
 
@@ -94,7 +94,7 @@ public class Node {
      *
      * @return F cost value.
      */
-    public double getfCost(){
+    public double getfCost() {
         return gethCost() + getgCost();
     }
 

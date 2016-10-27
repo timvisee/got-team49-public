@@ -7,6 +7,7 @@ import io.gameoftrades.model.markt.Handel;
 import io.gameoftrades.model.markt.HandelType;
 import io.gameoftrades.model.markt.Handelswaar;
 import io.gameoftrades.model.markt.Markt;
+import io.gameoftrades.student49.util.PathCacheManager;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -52,6 +53,9 @@ public class WorldLoader implements WereldLader {
 
         // Load market
         final Markt market = loadMarket(scanner);
+
+        // Initialize the path manager
+        PathCacheManager.init(this.cities, map);
 
         // Return the world instance
         return new Wereld(map, this.cities, market);
@@ -128,7 +132,7 @@ public class WorldLoader implements WereldLader {
                 throw new IllegalArgumentException("City coordinates exceed the mapWidth or mapHeight");
 
             // Create a new city object
-            Stad city = new Stad(Coordinaat.op(x -1, y -1), cityData[2]);
+            Stad city = new Stad(Coordinaat.op(x - 1, y - 1), cityData[2]);
 
             // Add the city object to the list
             cities.add(city);
@@ -165,10 +169,10 @@ public class WorldLoader implements WereldLader {
 
             // Create a new trade and market
             Handel trade = new Handel(
-                    findCity(marketMatcher.group(1)),
-                    HandelType.valueOf(marketMatcher.group(2)),
-                    new Handelswaar(marketMatcher.group(3)),
-                    Integer.parseInt(marketMatcher.group(4).replaceAll("\\s+", "")));
+                findCity(marketMatcher.group(1)),
+                HandelType.valueOf(marketMatcher.group(2)),
+                new Handelswaar(marketMatcher.group(3)),
+                Integer.parseInt(marketMatcher.group(4).replaceAll("\\s+", "")));
             trades.add(trade);
         }
 

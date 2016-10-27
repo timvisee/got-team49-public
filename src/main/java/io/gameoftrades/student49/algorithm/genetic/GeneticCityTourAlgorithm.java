@@ -5,7 +5,6 @@ import io.gameoftrades.debug.Debugger;
 import io.gameoftrades.model.algoritme.StedenTourAlgoritme;
 import io.gameoftrades.model.kaart.Kaart;
 import io.gameoftrades.model.kaart.Stad;
-import io.gameoftrades.student49.util.PathChecker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +26,6 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
      */
     private Debugger debugger;
 
-    /**
-     * Path checker instance.
-     */
-    private PathChecker pathChecker;
-
     @Override
     public List<Stad> bereken(Kaart map, List<Stad> cities) {
         // Store the parameters
@@ -39,10 +33,6 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
 
         // Create a population list
         final ArrayList<Population> populationList = new ArrayList<>();
-
-        // Create a new path checker instance, if there isn't one yet
-        if(pathChecker == null)
-            pathChecker = new PathChecker(this.cities, map);
 
         // Store the current time, used for profiling
         final long time = System.currentTimeMillis();
@@ -91,7 +81,7 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
         final Individual fittest = fittestPopulation.getFittest();
 
         // Debug the most efficient route
-        System.out.println("The most efficient route is " +  fittest.getFitness() + ".");
+        System.out.println("The most efficient route is " + fittest.getFitness() + ".");
         debugger.debugSteden(map, fittest.getCities());
 
         // Return the list of cities that define the most efficient path
@@ -102,7 +92,6 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
      * Get the fittest population.
      *
      * @param populationList List of populations.
-     *
      * @return Fittest population.
      */
     private Population getFittestPopulation(ArrayList<Population> populationList) {
@@ -116,7 +105,7 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
             final int fitness = populationList.get(i).getFittest().getFitness();
 
             // Store the population if it's fitter
-            if(population == -1 || fitness < population){
+            if(population == -1 || fitness < population) {
                 population = fitness;
                 index = i;
             }
@@ -130,7 +119,6 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
      * Evolve the population.
      *
      * @param population Population to evolve.
-     *
      * @return Evolved population.
      */
     private Population evolvePopulation(Population population) {
@@ -157,10 +145,9 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
      * This creates a new population with a random combination of individuals from the given population, returns the fittest individual.
      *
      * @param population Population to do a tournament for.
-     *
      * @return Fittest individual after a tournament.
      */
-    private Individual tournament(Population population){
+    private Individual tournament(Population population) {
         // Create a tournament population
         final Population tournament = new Population(5, this.cities, false);
 
@@ -178,12 +165,11 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
     /**
      * Cross over the cities from the first and second individuals into a new evolved individual.
      *
-     * @param first First individual.
+     * @param first  First individual.
      * @param second Second individual.
-     *
      * @return Evolved individual.
      */
-    private Individual crossover(Individual first, Individual second){
+    private Individual crossover(Individual first, Individual second) {
         // Create a new individual
         final Individual evolved = new Individual();
 
@@ -201,9 +187,9 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
      * Add's all cities that aren't in the evolved individual if the cities provided by {@param first} or {@param second} aren't new.
      *
      * @param evolved Evolved individual.
-     * @param first First individual.
-     * @param second Second individual.
-     * @param i Index of the city.
+     * @param first   First individual.
+     * @param second  Second individual.
+     * @param i       Index of the city.
      */
     private void getCityFrom(Individual evolved, Individual first, Individual second, int i) {
         // Add the city from first at the given index to the evolved individual
@@ -264,7 +250,7 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
      * @return Algorithm name.
      */
     @Override
-    public String toString(){
+    public String toString() {
         return "Genetic Algorithm";
     }
 

@@ -17,11 +17,11 @@ class Population {
     /**
      * Constructor.
      *
-     * @param size Population size.
+     * @param size   Population size.
      * @param cities List of cities.
-     * @param init True to initialize, false if not.
+     * @param init   True to initialize, false if not.
      */
-    Population(int size, List<Stad> cities, boolean init){
+    Population(int size, List<Stad> cities, boolean init) {
         // Create a new individual array with the proper size
         this.population = new Individual[size];
 
@@ -40,7 +40,7 @@ class Population {
      *
      * @return List of individuals.
      */
-    Individual[] getPopulation(){
+    Individual[] getPopulation() {
         return this.population;
     }
 
@@ -48,20 +48,19 @@ class Population {
      * Get the individual at the given index.
      *
      * @param i Individual index.
-     *
      * @return Individual.
      */
-    Individual getIndividual(int i){
+    Individual getIndividual(int i) {
         return this.population[i];
     }
 
     /**
      * Save the given individual.
      *
-     * @param i Individual index.
+     * @param i          Individual index.
      * @param individual Individual to save.
      */
-    void saveIndividual(int i, Individual individual){
+    void saveIndividual(int i, Individual individual) {
         this.population[i] = individual;
     }
 
@@ -94,7 +93,7 @@ class Population {
      *
      * @return Population size.
      */
-    public int getSize(){
+    public int getSize() {
         return this.population.length;
     }
 }

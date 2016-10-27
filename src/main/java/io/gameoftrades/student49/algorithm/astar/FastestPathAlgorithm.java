@@ -22,7 +22,7 @@ public class FastestPathAlgorithm implements SnelstePadAlgoritme, Debuggable {
     /**
      * List of closed nodes for A*.
      */
-	private ArrayList<Node> closedList;
+    private ArrayList<Node> closedList;
 
     /**
      * Preferred route calculated by A*.
@@ -32,7 +32,7 @@ public class FastestPathAlgorithm implements SnelstePadAlgoritme, Debuggable {
     /**
      * Current map that is used for A*.
      */
-	private Kaart map;
+    private Kaart map;
 
     /**
      * Start coordinate.
@@ -42,74 +42,74 @@ public class FastestPathAlgorithm implements SnelstePadAlgoritme, Debuggable {
     /**
      * End coordinate.
      */
-	private Coordinaat end;
+    private Coordinaat end;
 
     /**
      * Debugger instance.
      */
-	private Debugger debugger;
+    private Debugger debugger;
 
     /**
-     * Path instance.
+     * CityPath instance.
      */
-	private PadImpl path;
+    private PadImpl path;
 
     /**
      * Total cost to traverse the path that is found.
      */
     private int totalCost = 0;
 
-	@Override
-	public Pad bereken(Kaart kaart, Coordinaat start, Coordinaat eind) {
-	    // Initialize the open, closed and route lists
+    @Override
+    public Pad bereken(Kaart kaart, Coordinaat start, Coordinaat eind) {
+        // Initialize the open, closed and route lists
         this.openList = new ArrayList<>();
-		this.closedList = new ArrayList<>();
-		this.route = new ArrayList<>();
+        this.closedList = new ArrayList<>();
+        this.route = new ArrayList<>();
 
         // Set the map, start and end coordinates
-		this.map = kaart;
-		this.start = start;
+        this.map = kaart;
+        this.start = start;
         this.end = eind;
 
         // Starting node (has no parent), add it to the open list
-		Node initial = new Node(kaart.getTerreinOp(start), null, eind);
-		openList.add(initial);
+        Node initial = new Node(kaart.getTerreinOp(start), null, eind);
+        openList.add(initial);
 
-		// Run algorithm until it has reached the end coordinate
-		while(openList.size() >= 1)
+        // Run algorithm until it has reached the end coordinate
+        while(openList.size() >= 1)
             // Run the algorithm
             runAlgorithm(true);
 
         // Clear the open, closed and route list
         openList.clear();
-		closedList.clear();
-		route.clear();
+        closedList.clear();
+        route.clear();
 
         // Reset the total route cost
-		totalCost = 0;
+        totalCost = 0;
 
         // Return the path that was found
-		return path;
-	}
+        return path;
+    }
 
-	/**
-	 * Run the A* algorithm.
-	 *
-	 * @param debug True to debug the path, false otherwise.
-	 */
-	public void runAlgorithm(boolean debug){
-	    // Do not debug if no debugger instance is found
+    /**
+     * Run the A* algorithm.
+     *
+     * @param debug True to debug the path, false otherwise.
+     */
+    public void runAlgorithm(boolean debug) {
+        // Do not debug if no debugger instance is found
         if(debugger == null)
             debug = false;
 
-		// Get the lowest cost node and consume it from the open list, add it to the closed list
-		Node current = getLowestOpen(true);
+        // Get the lowest cost node and consume it from the open list, add it to the closed list
+        Node current = getLowestOpen(true);
         closedList.add(current);
 
-		// Check for possible directions and throw them in an array
-		Richting[] dirs = current.getTerrain().getMogelijkeRichtingen();
+        // Check for possible directions and throw them in an array
+        Richting[] dirs = current.getTerrain().getMogelijkeRichtingen();
 
-		// Create nodes and put them in the list if they're not already in it
+        // Create nodes and put them in the list if they're not already in it
         for(Richting dir : dirs) {
             // Get the current node
             final Node node = new Node(map.kijk(current.getTerrain(), dir), current, end);
@@ -119,7 +119,7 @@ public class FastestPathAlgorithm implements SnelstePadAlgoritme, Debuggable {
                 openList.add(node);
         }
 
-		// Return if we didn't reach the target yet
+        // Return if we didn't reach the target yet
         if(!current.getTerrain().getCoordinaat().equals(end))
             return;
 
@@ -130,7 +130,7 @@ public class FastestPathAlgorithm implements SnelstePadAlgoritme, Debuggable {
         route.add(current);
 
         // Add all following nodes to the list, this will give you the shortest route in an array
-        while(current.getParent() != null){
+        while(current.getParent() != null) {
             // Get the parent node
             final Node parent = current.getParent();
 
@@ -163,10 +163,9 @@ public class FastestPathAlgorithm implements SnelstePadAlgoritme, Debuggable {
      * Get the lowest (cost) node from the open list.
      *
      * @param consume True to consume the lowest node, which removes the node from the open list. False to not consume.
-     *
      * @return Lowest node, or null if there is none.
      */
-    private Node getLowestOpen(boolean consume){
+    private Node getLowestOpen(boolean consume) {
         // Make sure there's anything in the open list
         if(openList.isEmpty())
             return null;
@@ -192,7 +191,7 @@ public class FastestPathAlgorithm implements SnelstePadAlgoritme, Debuggable {
 
         // Return the lowest node
         return lowest;
-	}
+    }
 
     /**
      * String representation of this class, which defines the algorithm name.
@@ -200,12 +199,12 @@ public class FastestPathAlgorithm implements SnelstePadAlgoritme, Debuggable {
      * @return Algorithm name.
      */
     @Override
-	public String toString(){
-		return "A* Algorithm";
-	}
+    public String toString() {
+        return "A* Algorithm (Cached)";
+    }
 
-	@Override
-	public void setDebugger(Debugger debugger) {
-		this.debugger = debugger;
-	}
+    @Override
+    public void setDebugger(Debugger debugger) {
+        this.debugger = debugger;
+    }
 }

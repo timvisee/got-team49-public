@@ -11,15 +11,14 @@ import io.gameoftrades.student49.algorithm.traderoute.TradeRouteAlgorithm;
 import io.gameoftrades.student49.world.WorldLoader;
 
 /**
- * Welkom bij Game of Trades! 
- * 
+ * Welkom bij Game of Trades!
+ * <p>
  * Voordat er begonnen kan worden moet eerst de 'student49' package omgenoemd worden
  * zodat iedere groep zijn eigen namespace heeft. Vervang de NN met je groep nummer.
  * Dus als je in groep 3 zit dan wordt de packagenaam 'student03' en ben je in groep
  * 42 dan wordt de package naam 'student42'.
- * 
+ * <p>
  * Om te controleren of je het goed hebt gedaan is er de ProjectSanityTest die je kan draaien.
- * 
  */
 public class HandelaarImpl implements Handelaar {
 
@@ -36,7 +35,7 @@ public class HandelaarImpl implements Handelaar {
      */
     @Override
     public SnelstePadAlgoritme nieuwSnelstePadAlgoritme() {
-    	return new FastestPathAlgorithm();
+        return new FastestPathAlgorithm();
     }
 
     /**
