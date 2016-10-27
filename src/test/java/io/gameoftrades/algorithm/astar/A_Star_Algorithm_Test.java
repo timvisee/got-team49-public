@@ -49,4 +49,27 @@ public class A_Star_Algorithm_Test {
 		assertEquals(eind, assertEind);
 	}
 
+	// Bevat het resulterende pad geen dubbele coördinaten?
+	@Test
+	public void bevatGeenDubbeleCoordinaten() {
+		fail("Not yet implemented.");
+	}
+	
+	// Liggen alle coördinaten in het resulterende pad naast elkaar?
+	@Test
+	public void alleCoordinatenNaastElkaar() {
+		fail("Not yet implemented.");
+	}
+	
+	// Word er geen pad gevonden als twee steden worden gescheiden door zee?
+	@Test
+	public void geenPadDoorZeeGevonden() {
+		fail("Not yet implemented");
+	}
+	
+	// Is het resulterende pad werkelijk het snelste pad vs het kortste pad?
+	@Test
+	public void isWerkelijkHetSnelstePad() {
+		fail("Not yet implemented.");
+	}
 }
