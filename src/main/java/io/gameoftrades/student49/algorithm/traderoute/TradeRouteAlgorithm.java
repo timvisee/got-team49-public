@@ -11,134 +11,229 @@ import io.gameoftrades.model.markt.actie.Actie;
 import io.gameoftrades.model.markt.actie.HandelsPositie;
 import io.gameoftrades.model.markt.actie.NavigeerActie;
 import io.gameoftrades.student49.TradeRoute;
-import io.gameoftrades.student49.util.PathChecker;
+import io.gameoftrades.student49.util.PathCacheManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TradeRouteAlgorithm implements HandelsplanAlgoritme {
 
-    private List <Actie> actions;
-    private HandelsPositie handelsPositie;
-    private ArrayList<Handel> vraag;
-    private ArrayList<Handel> aanbod;
-    private ArrayList<Handel> cityMarkets;
+    /**
+     * List of actions that define the trade plan.
+     */
+    private List<Actie> actions;
 
+    /**
+     * Trade position.
+     */
+    private HandelsPositie tradePosition;
+
+    /**
+     * Goods we're buying (requesting).
+     */
+    private ArrayList<Handel> buying;
+
+    /**
+     * Goods we're selling (offering).
+     */
+    private ArrayList<Handel> selling;
+
+    /**
+     * List of goods for cities.
+     */
+    private ArrayList<Handel> cityGoods;
+
+    /**
+     * List of trade routes.
+     */
     private ArrayList<TradeRoute> tradeRoutes;
 
     @Override
-    public Handelsplan bereken(Wereld wereld, HandelsPositie handelsPositie) {
+    public Handelsplan bereken(Wereld world, HandelsPositie tradePosition) {
+        // Set the trade position
+        this.tradePosition = tradePosition;
 
+        // Instantiate the list of actions and trade routes
         actions = new ArrayList<>();
-        this.handelsPositie = handelsPositie;
-
-        cityMarkets = getHandel(handelsPositie.getCoordinaat(), wereld);
-        vraag = getVraag(handelsPositie.getCoordinaat(), wereld);
-        aanbod = getAanbod(handelsPositie.getCoordinaat(), wereld);
-
-        ArrayList<Handel> vraagTest = new ArrayList<>(wereld.getMarkt().getVraag());
-        ArrayList<Handel> aanbodTest = new ArrayList<>(wereld.getMarkt().getAanbod());
-        ArrayList<Stad> stedenTest = new ArrayList<>(wereld.getSteden());
         tradeRoutes = new ArrayList<>();
 
-        Actie actie = new NavigeerActie(handelsPositie.getCoordinaat(), Richting.WEST);
-        actions.add(actie);
-        PathChecker pc = new PathChecker(stedenTest, wereld.getKaart());
+        // Get the city goods and buying and selling offers
+        cityGoods = getGoodsAt(tradePosition.getCoordinaat(), world);
+        buying = getRequestsAt(tradePosition.getCoordinaat(), world);
+        selling = getOfferingsAt(tradePosition.getCoordinaat(), world);
 
-        for (int i = 0; i < aanbodTest.size(); i++) {
-            for (int j = 0; j < vraagTest.size(); j++) {
-                if (vraagTest.get(j).getHandelswaar().equals(aanbodTest.get(i).getHandelswaar())) {
-                    tradeRoutes.add(new TradeRoute(pc.getPath(aanbodTest.get(i).getStad().getCoordinaat(),
-                            vraagTest.get(j).getStad().getCoordinaat()), aanbodTest.get(i).getHandelswaar(),
-                            aanbodTest.get(i).getPrijs(), vraagTest.get(j).getPrijs(), handelsPositie.getCoordinaat()));
+        // Get the list of requested and offered goods in this world
+        final ArrayList<Handel> requestGoods = new ArrayList<>(world.getMarkt().getVraag());
+        final ArrayList<Handel> offerGoods = new ArrayList<>(world.getMarkt().getAanbod());
+
+        // Get a list of cities in this world
+        final ArrayList<Stad> cities = new ArrayList<>(world.getSteden());
+
+
+        Actie actie = new NavigeerActie(tradePosition.getCoordinaat(), Richting.WEST);
+        actions.add(actie);
+
+        for(Handel offer : offerGoods) {
+            for(Handel request : requestGoods) {
+                if(request.getHandelswaar().equals(offer.getHandelswaar())) {
+                    tradeRoutes.add(new TradeRoute(PathCacheManager.getCityPath(offer.getStad().getCoordinaat(),
+                        request.getStad().getCoordinaat()), offer.getHandelswaar(),
+                        offer.getPrijs(), request.getPrijs(), tradePosition.getCoordinaat()));
                 }
             }
         }
-        //Als de kosten van het pad hoger zijn dan de totale bewegingspunten is die handelsroute sowieso geen optie.
 
+        // Als de kosten van het pad hoger zijn dan de totale bewegingspunten is die handelsroute sowieso geen optie.
+
+        // Print a cost table, to make debugging easier
         printCostTable();
 
+        // Return a trade plan with the list of actions to perform
         return new Handelsplan(actions);
     }
 
-    public void printCostTable(){
-        System.out.printf("%-5s %-5s %-5s %-5s", "City: " + handelsPositie.getStad().getNaam(), "|  Money: " + handelsPositie.getKapitaal(), "|  Actions: " +handelsPositie.getMaxActie(), "|  Bag capacity: " + handelsPositie.getRuimte());
+    /**
+     * Print the cost table, to make debugging easier.
+     */
+    public void printCostTable() {
+        // Print city information and the table header
+        System.out.printf("%-5s %-5s %-5s %-5s", "City: " + tradePosition.getStad().getNaam(), "|  Money: " + tradePosition.getKapitaal(), "|  Actions: " + tradePosition.getMaxActie(), "|  Bag capacity: " + tradePosition.getRuimte());
         System.out.println(" ");
         System.out.println(" ");
         System.out.printf("%-10s %-15s %-30s %-15s %-10s %-10s %-10s %-20s %-10s %-15s %-10s", "Route:", "From", "Product:", "To", "Buy",
-                "Profit", "Pathcost", "efficiency(1)", "Max-Buy", "Max Profit", "Efficiency(MAX)");
+            "Profit", "Pathcost", "efficiency(1)", "Max-Buy", "Max Profit", "Efficiency(MAX)");
         System.out.println("");
         System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------");
 
-        for (int i = 0; i < tradeRoutes.size(); i++) {
-
-            double maxprofit;
-            if( handelsPositie.getKapitaal()/tradeRoutes.get(i).getBuy() > handelsPositie.getRuimte())
-                maxprofit =  handelsPositie.getRuimte()*tradeRoutes.get(i).getProfit();
+        // Loop through the trade routes
+        for(int i = 0; i < tradeRoutes.size(); i++) {
+            // Determine the maximum profit
+            double maxProfit;
+            if(tradePosition.getKapitaal() / tradeRoutes.get(i).getBuy() > tradePosition.getRuimte())
+                maxProfit = tradePosition.getRuimte() * tradeRoutes.get(i).getProfit();
             else
-                maxprofit = (handelsPositie.getKapitaal()/tradeRoutes.get(i).getBuy())*tradeRoutes.get(i).getProfit();
+                maxProfit = (tradePosition.getKapitaal() / tradeRoutes.get(i).getBuy()) * tradeRoutes.get(i).getProfit();
 
-            System.out.printf("%-10d %-15s %-30s %-15s %-10d %-10d %-10d %-20f %-10d %-15d %-10f", i,
-                     tradeRoutes.get(i).getOfferCity().getNaam(), tradeRoutes.get(i).getGoods().getNaam(),
-                    tradeRoutes.get(i).getDemandCity().getNaam(),tradeRoutes.get(i).getBuy(), tradeRoutes.get(i).getProfit(), tradeRoutes.get(i).getPathCost(),
-                    tradeRoutes.get(i).getEfficiency(),
-                    handelsPositie.getKapitaal()/tradeRoutes.get(i).getBuy() > handelsPositie.getRuimte()
-                            ? handelsPositie.getRuimte() :handelsPositie.getKapitaal()/tradeRoutes.get(i).getBuy(),
-                    (int)maxprofit, maxprofit/tradeRoutes.get(i).getPathCost());
-            System.out.println("");
+            // Print the trade route data
+            System.out.printf("%-10d %-15s %-30s %-15s %-10d %-10d %-10d %-20f %-10d %-15d %-10f\n", i,
+                tradeRoutes.get(i).getOfferCity().getNaam(), tradeRoutes.get(i).getGoods().getNaam(),
+                tradeRoutes.get(i).getDemandCity().getNaam(), tradeRoutes.get(i).getBuy(), tradeRoutes.get(i).getProfit(), tradeRoutes.get(i).getPathCost(),
+                tradeRoutes.get(i).getEfficiency(),
+                tradePosition.getKapitaal() / tradeRoutes.get(i).getBuy() > tradePosition.getRuimte()
+                    ? tradePosition.getRuimte() : tradePosition.getKapitaal() / tradeRoutes.get(i).getBuy(),
+                (int) maxProfit, maxProfit / tradeRoutes.get(i).getPathCost());
         }
     }
 
-    public void printCurrentCityInformation(){
+    /**
+     * Print information about the current city.
+     */
+    public void printCurrentCityInformation() {
+        // Define the format to print in
+        final String format = "%-15s %-30s %-15d\n";
 
-        String format = "%-15s %-30s %-15d";
-        System.out.println(handelsPositie.getStad().getNaam());
+        // Print the name of the current city
+        System.out.println(tradePosition.getStad().getNaam());
 
-        for (int i = 0; i < aanbod.size(); i++) {
-            System.out.printf(format, aanbod.get(i).getHandelType(), aanbod.get(i).getHandelswaar(), aanbod.get(i).getPrijs());
-            System.out.println("");
-        }
+        // Print all selling goods
+        for(Handel entry : selling)
+            System.out.printf(format, entry.getHandelType(), entry.getHandelswaar(), entry.getPrijs());
 
-        for (int i = 0; i < vraag.size(); i++) {
-            System.out.printf(format, vraag.get(i).getHandelType(), vraag.get(i).getHandelswaar(), vraag.get(i).getPrijs());
-            System.out.println("");
-        }
+        // Print all buying goods
+        for(Handel entry : buying)
+            System.out.printf(format, entry.getHandelType(), entry.getHandelswaar(), entry.getPrijs());
     }
 
-
-    public ArrayList<Handel> getAanbod(Coordinaat c1, Wereld wereld){
-
-        ArrayList <Handel> temp = new ArrayList<>();
-
-        for (int i = 0; i < wereld.getMarkt().getAanbod().size(); i++) {
-            if(c1.equals(wereld.getMarkt().getAanbod().get(i).getStad().getCoordinaat())){
-                temp.add(wereld.getMarkt().getAanbod().get(i));
-            }
-        }
-        return temp;
-    }
-    
-    public ArrayList<Handel> getVraag(Coordinaat c1, Wereld wereld){
-        
-        ArrayList<Handel> temp = new ArrayList<>();
-
-        for (int i = 0; i < wereld.getMarkt().getVraag().size(); i++) {
-            if(c1.equals(wereld.getMarkt().getVraag().get(i).getStad().getCoordinaat())){
-                temp.add(wereld.getMarkt().getVraag().get(i));
-            }
-        }
-        return temp;
+    /**
+     * Get the offerings in the given city.
+     *
+     * @param city  City to get the offerings in.
+     * @param world World the city is in.
+     * @return List of offerings.
+     */
+    public ArrayList<Handel> getOfferingsAt(Stad city, Wereld world) {
+        return getOfferingsAt(city.getCoordinaat(), world);
     }
 
-    public ArrayList<Handel> getHandel(Coordinaat c1, Wereld wereld){
+    /**
+     * Get the offerings at the given coordinate.
+     *
+     * @param coordinate Coordinate to get the offerings for.
+     * @param world      World the coordinate is in.
+     * @return List of offerings.
+     */
+    public ArrayList<Handel> getOfferingsAt(Coordinaat coordinate, Wereld world) {
+        // Create a list to put the offerings in
+        final ArrayList<Handel> offerings = new ArrayList<>();
 
-        ArrayList<Handel> handels = new ArrayList<>();
+        // Loop through the market offerings and add them to the offerings list if the coordinate matches the given
+        for(int i = 0; i < world.getMarkt().getAanbod().size(); i++)
+            if(coordinate.equals(world.getMarkt().getAanbod().get(i).getStad().getCoordinaat()))
+                offerings.add(world.getMarkt().getAanbod().get(i));
 
-        for (int i = 0; i < wereld.getMarkt().getHandel().size() ; i++) {
-            if(c1.equals(wereld.getMarkt().getHandel().get(i).getStad().getCoordinaat())){
-                handels.add(wereld.getMarkt().getHandel().get(i));
-            }
-        }
-        return handels;
+        // Return the offerings
+        return offerings;
+    }
+
+    /**
+     * Get the requests in the given city.
+     *
+     * @param city  City to get the requests in.
+     * @param world World the city is in.
+     * @return List of requests.
+     */
+    public ArrayList<Handel> getRequestsAt(Stad city, Wereld world) {
+        return getRequestsAt(city.getCoordinaat(), world);
+    }
+
+    /**
+     * Get the requests at the given coordinate.
+     *
+     * @param coordinate Coordinate to get the requests for.
+     * @param world      World the coordinate is in.
+     * @return List of requests.
+     */
+    public ArrayList<Handel> getRequestsAt(Coordinaat coordinate, Wereld world) {
+        // Create a list to put the requests in
+        final ArrayList<Handel> requests = new ArrayList<>();
+
+        // Loop through the market requests and add them to the requests list if the coordinate matches the given
+        for(int i = 0; i < world.getMarkt().getVraag().size(); i++)
+            if(coordinate.equals(world.getMarkt().getVraag().get(i).getStad().getCoordinaat()))
+                requests.add(world.getMarkt().getVraag().get(i));
+
+        // Return the requests
+        return requests;
+    }
+
+    /**
+     * Get the goods in the given city.
+     *
+     * @param city  City to get the goods in.
+     * @param world World the city is in.
+     * @return List of goods.
+     */
+    public ArrayList<Handel> getGoodsAt(Stad city, Wereld world) {
+        return getGoodsAt(city.getCoordinaat(), world);
+    }
+
+    /**
+     * Get the goods at the given coordinate.
+     *
+     * @param coordinate Coordinate to get the goods for.
+     * @param world      World the coordinate is in.
+     * @return List of goods.
+     */
+    public ArrayList<Handel> getGoodsAt(Coordinaat coordinate, Wereld world) {
+        // Create a list to put the goods in
+        final ArrayList<Handel> goods = new ArrayList<>();
+
+        // Loop through the market goods and add them to the goods list if the coordinate matches the given
+        for(int i = 0; i < world.getMarkt().getHandel().size(); i++)
+            if(coordinate.equals(world.getMarkt().getHandel().get(i).getStad().getCoordinaat()))
+                goods.add(world.getMarkt().getHandel().get(i));
+
+        // Return the goods
+        return goods;
     }
 }

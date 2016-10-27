@@ -24,10 +24,10 @@ public class Path {
      * Constructor.
      *
      * @param start Starting coordinate.
-     * @param end Ending coordinate.
-     * @param path The actual path.
+     * @param end   Ending coordinate.
+     * @param path  The actual path.
      */
-    public Path(Coordinaat start, Coordinaat end, Pad path){
+    public Path(Coordinaat start, Coordinaat end, Pad path) {
         this.start = start;
         this.end = end;
         this.path = path;
@@ -38,7 +38,7 @@ public class Path {
      *
      * @return Starting coordinate.
      */
-    public Coordinaat getStart(){
+    public Coordinaat getStart() {
         return this.start;
     }
 
@@ -47,7 +47,7 @@ public class Path {
      *
      * @return Ending coordinate.
      */
-    public Coordinaat getEnd(){
+    public Coordinaat getEnd() {
         return this.end;
     }
 
@@ -55,8 +55,7 @@ public class Path {
      * Check whether this path is for the given two coordinates.
      *
      * @param start Start coordinate.
-     * @param end End coordinate.
-     *
+     * @param end   End coordinate.
      * @return True if this path is for the given coordinates, false if not.
      */
     public boolean isFor(Coordinaat start, Coordinaat end) {
@@ -77,7 +76,7 @@ public class Path {
      *
      * @return Length.
      */
-    public int getLength(){
+    public int getLength() {
         return this.path.getTotaleTijd();
     }
 

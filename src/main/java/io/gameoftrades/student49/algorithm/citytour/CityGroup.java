@@ -9,21 +9,21 @@ import java.util.ArrayList;
  */
 public class CityGroup {
 
-    private ArrayList <Stad> cities;
+    private ArrayList<Stad> cities;
 
     private int totalPathCost;
 
-    public CityGroup(ArrayList<Stad> cities, int totalPathCost){
+    public CityGroup(ArrayList<Stad> cities, int totalPathCost) {
         this.cities = cities;
         this.totalPathCost = totalPathCost;
     }
 
-    public int getTotalPathCost(){
+    public int getTotalPathCost() {
 
         return totalPathCost;
     }
 
-    public ArrayList<Stad> getCities(){
+    public ArrayList<Stad> getCities() {
 
         return this.cities;
     }

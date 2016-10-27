@@ -7,13 +7,13 @@ import io.gameoftrades.model.algoritme.StedenTourAlgoritme;
 import io.gameoftrades.model.kaart.Kaart;
 import io.gameoftrades.model.kaart.Pad;
 import io.gameoftrades.model.kaart.Stad;
-import io.gameoftrades.student49.Path;
+import io.gameoftrades.student49.CityPath;
 import io.gameoftrades.student49.algorithm.astar.FastestPathAlgorithm;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class StedenTourAlgoritmeImpl implements StedenTourAlgoritme, Debuggable {
+public class CityTourAlgorithm implements StedenTourAlgoritme, Debuggable {
 
     /**
      * Debugger instance.
@@ -36,9 +36,9 @@ public class StedenTourAlgoritmeImpl implements StedenTourAlgoritme, Debuggable 
     private List<Stad> fixedCities;
 
     /**
-     * List of paths.
+     * List of cityPaths.
      */
-    private ArrayList<Path> paths;
+    private ArrayList<CityPath> cityPaths;
 
     /**
      * List of city groups.
@@ -55,8 +55,8 @@ public class StedenTourAlgoritmeImpl implements StedenTourAlgoritme, Debuggable 
         // Set the map
         map = kaart;
 
-        // Instantiate the paths list and fast path algorithm
-        paths = new ArrayList<>();
+        // Instantiate the cityPaths list and fast path algorithm
+        cityPaths = new ArrayList<>();
         fastPathAlgorithm = new FastestPathAlgorithm();
 
         // Set the list of cities and fixed cities
@@ -76,15 +76,15 @@ public class StedenTourAlgoritmeImpl implements StedenTourAlgoritme, Debuggable 
         // Loop through the list of city groups, to find the lowest path cost
         for(int i = 0; i < cityGroupList.size(); i++) {
             // Store the best city group
-            if(lowestPathCost == -1 || cityGroupList.get(i).getTotalPathCost() < lowestPathCost){
+            if(lowestPathCost == -1 || cityGroupList.get(i).getTotalPathCost() < lowestPathCost) {
                 lowestPathCost = cityGroupList.get(i).getTotalPathCost();
                 index = i;
             }
         }
 
         // Show a debug message
-        System.out.println("The fastest route using the 'Nearest-Neighbour Algorithm' takes " + cityGroupList.get(index).getTotalPathCost() +" moves.");
-        System.out.println("Paths learned: " + paths.size() + ".");
+        System.out.println("The fastest route using the 'Nearest-Neighbour Algorithm' takes " + cityGroupList.get(index).getTotalPathCost() + " moves.");
+        System.out.println("Paths learned: " + cityPaths.size() + ".");
 
         // Visually debug the path
         debugger.debugSteden(map, this.cityGroupList.get(index).getCities());
@@ -117,13 +117,13 @@ public class StedenTourAlgoritmeImpl implements StedenTourAlgoritme, Debuggable 
                 int pathLength = 0;
 
                 // Loop through the list of cities
-                for (int i = 0; i < cities.size(); i++) {
+                for(int i = 0; i < cities.size(); i++) {
                     // Get the path length, checks if the path is already learned
-                    if(!paths.isEmpty())
+                    if(!cityPaths.isEmpty())
                         pathLength = getPathLength(fastestRoute, pathLength, i);
 
-                    // Get executed once, because the paths list is empty at the start
-                    // calculates the path-length from a certain city to another one.
+                        // Get executed once, because the cityPaths list is empty at the start
+                        // calculates the path-length from a certain city to another one.
                     else
                         pathLength = calculateFastestPath(fastestRoute.get(fastestRoute.size() - 1), cities.get(i));
 
@@ -157,32 +157,31 @@ public class StedenTourAlgoritmeImpl implements StedenTourAlgoritme, Debuggable 
      * TODO: Specify method description.
      *
      * @param fastestRoute List of cities that define the fastest route.
-     * @param pathLength Path length.
-     * @param i City index.
-     *
-     * @return Path length.
+     * @param pathLength   CityPath length.
+     * @param i            City index.
+     * @return CityPath length.
      */
     private int getPathLength(ArrayList<Stad> fastestRoute, int pathLength, int i) {
         // Define whether we succeed
         boolean success = false;
 
-        // Loop through the list of paths
-        for(Path path : paths) {
-            // Check if a path between 2 given cities is in the paths list (from start to end, and end to start), continue the loop if it isn't
-            if((!path.getStart().equals(fastestRoute.get(fastestRoute.size() - 1).getCoordinaat()) ||
-                !path.getEnd().equals(cities.get(i).getCoordinaat())) &&
-                (!path.getEnd().equals(fastestRoute.get(fastestRoute.size() - 1).getCoordinaat()) ||
-                    !path.getStart().equals(cities.get(i).getCoordinaat())))
+        // Loop through the list of cityPaths
+        for(CityPath cityPath : cityPaths) {
+            // Check if a cityPath between 2 given cities is in the cityPaths list (from start to end, and end to start), continue the loop if it isn't
+            if((!cityPath.getStart().equals(fastestRoute.get(fastestRoute.size() - 1).getCoordinaat()) ||
+                !cityPath.getEnd().equals(cities.get(i).getCoordinaat())) &&
+                (!cityPath.getEnd().equals(fastestRoute.get(fastestRoute.size() - 1).getCoordinaat()) ||
+                    !cityPath.getStart().equals(cities.get(i).getCoordinaat())))
                 continue;
 
-            // Redefine the path length
-            pathLength = path.getLength();
+            // Redefine the cityPath length
+            pathLength = cityPath.getLength();
 
             // Set the success flag
             success = true;
         }
 
-        // If the path is not in the path list, calculate it and put in in the paths list
+        // If the path is not in the path list, calculate it and put in in the cityPaths list
         if(!success)
             pathLength = calculateFastestPath(fastestRoute.get(fastestRoute.size() - 1), cities.get(i));
 
@@ -193,20 +192,19 @@ public class StedenTourAlgoritmeImpl implements StedenTourAlgoritme, Debuggable 
     /**
      * Calculate the fastest path between two cities.
      *
-     * @param first First city.
+     * @param first  First city.
      * @param second Second city.
-     *
      * @return Cost of fastest path.
      */
-    private int calculateFastestPath(Stad first, Stad second){
+    private int calculateFastestPath(Stad first, Stad second) {
         // Calculate the fastest path between the two given cities
-        final Pad pad = fastPathAlgorithm.bereken(this.map, first.getCoordinaat(), second.getCoordinaat());
+        final Pad path = fastPathAlgorithm.bereken(this.map, first.getCoordinaat(), second.getCoordinaat());
 
-        // add the path to the list of paths
-        paths.add(new Path(first, second, pad.getTotaleTijd()));
+        // Add the path to the list of cityPaths
+        cityPaths.add(new CityPath(first, second, path));
 
         // Return the total time for the calculated path
-        return pad.getTotaleTijd();
+        return path.getTotaleTijd();
     }
 
     /**
@@ -215,7 +213,7 @@ public class StedenTourAlgoritmeImpl implements StedenTourAlgoritme, Debuggable 
      * @return Algorithm name.
      */
     @Override
-    public String toString(){
+    public String toString() {
         return "Nearest Neighbour Algorithm";
     }
 
