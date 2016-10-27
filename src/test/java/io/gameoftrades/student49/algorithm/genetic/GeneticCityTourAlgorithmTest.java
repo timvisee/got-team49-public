@@ -12,13 +12,13 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.testng.AssertJUnit.assertNotNull;
+import static org.junit.Assert.assertNotNull;
 
 public class GeneticCityTourAlgorithmTest {
 
     private Handelaar handelaar;
 
-    @Before
+@Before
     public void init(){
         handelaar = new HandelaarImpl();}
 
