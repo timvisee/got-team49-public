@@ -15,17 +15,16 @@ import io.gameoftrades.student49.HandelaarImpl;
 import io.gameoftrades.student49.PadImpl;
 import io.gameoftrades.student49.algorithm.astar.FastestPathAlgorithm;
 
-public class Test1 {
+public class A_Star_Algorithm_Test {
 
-	// Bevat het resulterende pad de start en eind coördinaten?
-	
 	private Handelaar handelaar;
 	
 	@Before
 	public void init() {
 		handelaar = new HandelaarImpl();
 	}
-	
+
+	// Bevat het resulterende pad de start en eind coördinaten?
 	@Test
 	public void bevatStartEnEindCoordinaten() {
 		
