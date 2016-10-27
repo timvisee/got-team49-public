@@ -1,4 +1,4 @@
-package io.gameoftrades.student49.tests;
+package io.gameoftrades.student49.algorithm.genetic;
 
 
 import io.gameoftrades.model.Handelaar;
@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.testng.AssertJUnit.assertNotNull;
 
-public class GeneticCityTourAlgorithmTests {
+public class GeneticCityTourAlgorithmTest {
 
     private Handelaar handelaar;
 
