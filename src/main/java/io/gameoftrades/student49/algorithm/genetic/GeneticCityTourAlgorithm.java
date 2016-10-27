@@ -1,11 +1,13 @@
 package io.gameoftrades.student49.algorithm.genetic;
 
+import com.timvisee.voxeltex.util.swing.ProgressDialog;
 import io.gameoftrades.debug.Debuggable;
 import io.gameoftrades.debug.Debugger;
 import io.gameoftrades.model.algoritme.StedenTourAlgoritme;
 import io.gameoftrades.model.kaart.Kaart;
 import io.gameoftrades.model.kaart.Stad;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,10 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
 
     @Override
     public List<Stad> bereken(Kaart map, List<Stad> cities) {
+        // Create a progress dialog instance
+        // TODO: Attach progress dialog to proper window.
+        final ProgressDialog progress = new ProgressDialog(Frame.getFrames()[0], "Processing...", false, "Starting...", true);
+
         // Store the parameters
         this.cities = new ArrayList<>(cities);
 
@@ -37,8 +43,17 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
         // Store the current time, used for profiling
         final long time = System.currentTimeMillis();
 
+        // Setup the progress bar
+        progress.setProgressMax(MAX_TRIES + 1);
+        progress.setProgressValue(0);
+        progress.setShowProgress(true);
+
         // Run the algorithm a few times
         for(int i = 0; i < MAX_TRIES; i++) {
+            // Update the progress
+            progress.setProgressValue(i);
+            progress.setStatus("Simulating evolution " + (i + 1) + "...");
+
             // Define the population
             Population population = new Population(50, cities, true);
 
@@ -71,6 +86,10 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
             System.out.println("Try " + (i + 1) + ". Evolved through " + generationCount + " generations. Best solution: " + population.getFittest().getFitness());
         }
 
+        // Update the progress
+        progress.setProgressValue(MAX_TRIES);
+        progress.setStatus("Finding most efficient individual...");
+
         // Show profiler information
         System.out.println("Found best route, took " + (System.currentTimeMillis() - time) + " ms.");
 
@@ -79,6 +98,10 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
 
         // Find the fittest individual
         final Individual fittest = fittestPopulation.getFittest();
+
+        // Update the progress and dispose the dialog
+        progress.setProgressValue(progress.getProgressMax());
+        progress.dispose();
 
         // Debug the most efficient route
         System.out.println("The most efficient route is " + fittest.getFitness() + ".");
