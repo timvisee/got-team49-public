@@ -52,7 +52,7 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
         for(int i = 0; i < MAX_TRIES; i++) {
             // Update the progress
             progress.setProgressValue(i);
-            progress.setStatus("Simulating evolution " + (i + 1) + "...");
+            progress.setStatus("Simulating natural selection, evolution " + (i + 1) + "...");
 
             // Define the population
             Population population = new Population(50, cities, true);

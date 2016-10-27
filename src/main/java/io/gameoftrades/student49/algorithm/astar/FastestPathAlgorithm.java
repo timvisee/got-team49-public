@@ -60,7 +60,7 @@ public class FastestPathAlgorithm implements SnelstePadAlgoritme, Debuggable {
     private int totalCost = 0;
 
     @Override
-    public Pad bereken(Kaart kaart, Coordinaat start, Coordinaat eind) {
+    public synchronized Pad bereken(Kaart kaart, Coordinaat start, Coordinaat eind) {
         // Initialize the open, closed and route lists
         this.openList = new ArrayList<>();
         this.closedList = new ArrayList<>();
@@ -97,7 +97,7 @@ public class FastestPathAlgorithm implements SnelstePadAlgoritme, Debuggable {
      *
      * @param debug True to debug the path, false otherwise.
      */
-    public void runAlgorithm(boolean debug) {
+    public synchronized void runAlgorithm(boolean debug) {
         // Do not debug if no debugger instance is found
         if(debugger == null)
             debug = false;
