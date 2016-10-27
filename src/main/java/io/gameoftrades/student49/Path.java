@@ -1,36 +1,36 @@
 package io.gameoftrades.student49;
 
 import io.gameoftrades.model.kaart.Coordinaat;
-import io.gameoftrades.model.kaart.Stad;
+import io.gameoftrades.model.kaart.Pad;
 
-public class Path  {
-
-    /**
-     * Starting city.
-     */
-    private Stad start;
+public class Path {
 
     /**
-     * Ending city.
+     * Starting coordinate.
      */
-    private Stad end;
+    private Coordinaat start;
 
     /**
-     * Length.
+     * Ending coordinate.
      */
-    private int length;
+    private Coordinaat end;
+
+    /**
+     * The actual path.
+     */
+    private Pad path;
 
     /**
      * Constructor.
      *
-     * @param start Starting city.
-     * @param end Ending city.
-     * @param length Length.
+     * @param start Starting coordinate.
+     * @param end Ending coordinate.
+     * @param path The actual path.
      */
-    public Path(Stad start, Stad end, int length){
+    public Path(Coordinaat start, Coordinaat end, Pad path){
         this.start = start;
         this.end = end;
-        this.length = length;
+        this.path = path;
     }
 
     /**
@@ -39,7 +39,7 @@ public class Path  {
      * @return Starting coordinate.
      */
     public Coordinaat getStart(){
-        return this.start.getCoordinaat();
+        return this.start;
     }
 
     /**
@@ -48,25 +48,28 @@ public class Path  {
      * @return Ending coordinate.
      */
     public Coordinaat getEnd(){
-        return this.end.getCoordinaat();
-    }
-
-    /**
-     * Get the starting city.
-     *
-     * @return Starting city.
-     */
-    public Stad getStartCity(){
-        return this.start;
-    }
-
-    /**
-     * Get the ending city.
-     *
-     * @return Ending city.
-     */
-    public Stad getEndCity(){
         return this.end;
+    }
+
+    /**
+     * Check whether this path is for the given two coordinates.
+     *
+     * @param start Start coordinate.
+     * @param end End coordinate.
+     *
+     * @return True if this path is for the given coordinates, false if not.
+     */
+    public boolean isFor(Coordinaat start, Coordinaat end) {
+        return this.start.equals(start) && this.end.equals(end);
+    }
+
+    /**
+     * Get the path.
+     *
+     * @return Path.
+     */
+    public Pad getPath() {
+        return this.path;
     }
 
     /**
@@ -75,6 +78,15 @@ public class Path  {
      * @return Length.
      */
     public int getLength(){
-        return length;
+        return this.path.getTotaleTijd();
+    }
+
+    /**
+     * Create a reversed Path instance.
+     *
+     * @return Reversed path.
+     */
+    public Path reverse() {
+        return new Path(this.end, this.start, this.path.omgekeerd());
     }
 }
