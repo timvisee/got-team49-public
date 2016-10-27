@@ -73,6 +73,6 @@ public class CityPath extends Path {
 
     @Override
     public CityPath reverse() {
-        return new CityPath(this.start, this.end, getPath());
+        return new CityPath(this.end, this.start, getPath().omgekeerd());
     }
 }
