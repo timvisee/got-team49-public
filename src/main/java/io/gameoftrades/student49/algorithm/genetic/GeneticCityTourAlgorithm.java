@@ -30,9 +30,11 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
 
     @Override
     public List<Stad> bereken(Kaart map, List<Stad> cities) {
+        // Find the frame to attach the progress dialog to
+        Frame mainFrame = Frame.getFrames().length > 0 ? Frame.getFrames()[0] : null;
+
         // Create a progress dialog instance
-        // TODO: Attach progress dialog to proper window.
-        final ProgressDialog progress = new ProgressDialog(Frame.getFrames()[0], "Processing...", false, "Starting...", true);
+        final ProgressDialog progress = new ProgressDialog(mainFrame, "Processing...", false, "Starting...", true);
 
         // Store the parameters
         this.cities = new ArrayList<>(cities);
