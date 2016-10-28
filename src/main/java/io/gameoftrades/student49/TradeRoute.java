@@ -15,12 +15,12 @@ public class TradeRoute {
     /**
      * Buy amount.
      */
-    private double buy;
+    private int buy;
 
     /**
      * Sell amount.
      */
-    private double sell;
+    private int sell;
 
     /**
      * Trade goods.
@@ -41,7 +41,7 @@ public class TradeRoute {
      * @param sell       Sell amount.
      * @param currentPos Current position.
      */
-    public TradeRoute(CityPath cityPath, Handelswaar goods, double buy, double sell, Coordinaat currentPos) {
+    public TradeRoute(CityPath cityPath, Handelswaar goods, int buy, int sell, Coordinaat currentPos) {
         this.cityPath = cityPath;
         this.buy = buy;
         this.sell = sell;
@@ -104,12 +104,12 @@ public class TradeRoute {
     }
 
     /**
-     * Get the efficiency value.
+     * Get the efficiency value. This represents the possible profit per movement.
      *
      * @return Efficiency for 1 product.
      */
-    public double getEfficiency() {
-        return (this.sell - this.buy) / getPathCost();
+    public float getEfficiency() {
+        return (float) (this.sell - this.buy) / getPathCost();
     }
 
     /**
