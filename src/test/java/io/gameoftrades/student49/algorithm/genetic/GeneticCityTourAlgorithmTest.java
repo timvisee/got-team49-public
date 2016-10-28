@@ -12,6 +12,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class GeneticCityTourAlgorithmTest {
@@ -30,6 +31,7 @@ public class GeneticCityTourAlgorithmTest {
         StedenTourAlgoritme algorithm = handelaar.nieuwStedenTourAlgoritme();
 
         ArrayList<Stad> testList = new ArrayList<>(wereld.getSteden());
+
         testList.set(5, null);
 
         List<Stad> result = algorithm.bereken(wereld.getKaart(), testList);
@@ -38,13 +40,29 @@ public class GeneticCityTourAlgorithmTest {
     }
 
     @Test
-    public void StedenlijstMagGeenDuplicatenBevatten(){
+    public void stedenlijstMagGeenDuplicatenBevatten(){
 
         Wereld wereld = handelaar.nieuweWereldLader().laad("/kaarten/westeros-kaart.txt");
 
         StedenTourAlgoritme algorithm = handelaar.nieuwStedenTourAlgoritme();
 
-        List<Stad> result = algorithm.bereken(wereld.getKaart(), wereld.getSteden());
-        assertNotNull(result);
+        ArrayList<Stad> testList = new ArrayList<>(wereld.getSteden());
+        Stad test = testList.get(3);
+        testList.set(4, test);
+
+        List<Stad> result = algorithm.bereken(wereld.getKaart(), testList);
+    }
+
+    @Test
+    public void stedenlijstIsEvenGrootAlsIngeladenSteden(){
+
+        Wereld wereld = handelaar.nieuweWereldLader().laad("/kaarten/westeros-kaart.txt");
+        assertEquals(wereld.getSteden().size(), 21);
+
+        Wereld wereld2 = handelaar.nieuweWereldLader().laad("/kaarten/voorbeeld-kaart.txt");
+        assertEquals(wereld2.getSteden().size(), 4);
+
+        Wereld wereld3 = handelaar.nieuweWereldLader().laad("/kaarten/route-door-zee.txt");
+        assertEquals(wereld3.getSteden().size(), 2);
     }
 }
