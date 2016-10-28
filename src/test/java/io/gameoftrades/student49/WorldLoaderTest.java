@@ -106,7 +106,7 @@ public class WorldLoaderTest {
         lader.laad("/kaarten/testcases/verkeerd-gebied.txt");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void zouStadMetVerkeerdeCoordinatenNietMoetenLaden() {
         lader.laad("/kaarten/testcases/stad-verkeerde-coordinaten.txt");
     }
