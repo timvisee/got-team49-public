@@ -80,5 +80,6 @@ public class TradeRouteAlgorithmTest {
 
         // Make sure we've enough actions in the trade plan
         assertTrue(handelsplan.getActies().size() > 10);
+        assertTrue(handelsplan.getActies().size() <= 100);
     }
 }
