@@ -2,6 +2,8 @@ package io.gameoftrades.algorithm.astar;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,6 +12,7 @@ import io.gameoftrades.model.Wereld;
 import io.gameoftrades.model.algoritme.SnelstePadAlgoritme;
 import io.gameoftrades.model.kaart.Coordinaat;
 import io.gameoftrades.model.kaart.Kaart;
+import io.gameoftrades.model.kaart.Richting;
 import io.gameoftrades.model.lader.WereldLader;
 import io.gameoftrades.student49.HandelaarImpl;
 import io.gameoftrades.student49.PadImpl;
@@ -52,7 +55,34 @@ public class A_Star_Algorithm_Test {
 	// Bevat het resulterende pad geen dubbele coördinaten?
 	@Test
 	public void bevatGeenDubbeleCoordinaten() {
-		fail("Not yet implemented.");
+		
+		WereldLader lader = handelaar.nieuweWereldLader();
+		
+		Wereld wereld = lader.laad("/kaarten/westeros-kaart.txt");
+		
+		Kaart kaart 	 = wereld.getKaart();
+		Coordinaat start = wereld.getSteden().get(0).getCoordinaat();
+		Coordinaat eind  = wereld.getSteden().get(1).getCoordinaat();
+		
+		SnelstePadAlgoritme spa = new FastestPathAlgorithm();
+		PadImpl pad = (PadImpl) spa.bereken(kaart, start, eind);
+		
+		Richting[] directions = pad.getBewegingen();
+		
+		ArrayList<Coordinaat> list = new ArrayList<>();
+		list.add(start);
+		
+		Coordinaat current = start;
+		
+		for(Richting r : directions) {
+			
+			current = current.naar(r);
+			
+			if(list.contains(current))
+				fail("List already contains this coordinate. Cannot be double");
+			
+			list.add(current);
+		}
 	}
 	
 	// Liggen alle coördinaten in het resulterende pad naast elkaar?
