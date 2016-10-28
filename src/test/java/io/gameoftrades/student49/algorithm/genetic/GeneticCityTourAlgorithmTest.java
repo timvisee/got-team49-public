@@ -17,18 +17,19 @@ public class GeneticCityTourAlgorithmTest {
 
     private Handelaar handelaar;
 
-@Before
-    public void init(){
-        handelaar = new HandelaarImpl();}
+    @Before
+    public void init() {
+        handelaar = new HandelaarImpl();
+    }
 
     @Test
-    public void stedenlijstMagGeenNullWaardenBevatten(){
+    public void stedenlijstMagGeenNullWaardenBevatten() {
 
         Wereld wereld = handelaar.nieuweWereldLader().laad("/kaarten/westeros-kaart.txt");
 
         boolean isNull = false;
-        for (int i = 0; i < wereld.getSteden().size(); i++) {
-            if(wereld.getSteden().get(i) == null){
+        for(int i = 0; i < wereld.getSteden().size(); i++) {
+            if(wereld.getSteden().get(i) == null) {
                 isNull = true;
             }
         }
@@ -36,7 +37,7 @@ public class GeneticCityTourAlgorithmTest {
     }
 
     @Test
-    public void stedenlijstMagGeenDuplicatenBevatten(){
+    public void stedenlijstMagGeenDuplicatenBevatten() {
 
         Wereld wereld = handelaar.nieuweWereldLader().laad("/kaarten/westeros-kaart.txt");
 
@@ -53,7 +54,7 @@ public class GeneticCityTourAlgorithmTest {
     }
 
     @Test
-    public void stedenlijstIsEvenGrootAlsIngeladenSteden(){
+    public void stedenlijstIsEvenGrootAlsIngeladenSteden() {
 
         Wereld wereld = handelaar.nieuweWereldLader().laad("/kaarten/westeros-kaart.txt");
         assertEquals(wereld.getSteden().size(), 21);
