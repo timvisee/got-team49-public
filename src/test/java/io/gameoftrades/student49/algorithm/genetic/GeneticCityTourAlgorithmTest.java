@@ -1,6 +1,5 @@
 package io.gameoftrades.student49.algorithm.genetic;
 
-
 import io.gameoftrades.model.Handelaar;
 import io.gameoftrades.model.Wereld;
 import io.gameoftrades.model.kaart.Stad;
@@ -10,8 +9,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 public class GeneticCityTourAlgorithmTest {
 
@@ -24,38 +22,25 @@ public class GeneticCityTourAlgorithmTest {
 
     @Test
     public void stedenlijstMagGeenNullWaardenBevatten() {
-
         Wereld wereld = handelaar.nieuweWereldLader().laad("/kaarten/westeros-kaart.txt");
 
-        boolean isNull = false;
-        for(int i = 0; i < wereld.getSteden().size(); i++) {
-            if(wereld.getSteden().get(i) == null) {
-                isNull = true;
-            }
-        }
-        assertFalse(isNull);
+        for(int i = 0; i < wereld.getSteden().size(); i++)
+            assertNotNull(wereld.getSteden().get(i));
     }
 
     @Test
     public void stedenlijstMagGeenDuplicatenBevatten() {
-
         Wereld wereld = handelaar.nieuweWereldLader().laad("/kaarten/westeros-kaart.txt");
 
         ArrayList<Stad> cities = new ArrayList<>(wereld.getSteden());
 
-        boolean duplicate = false;
-        for(int i = 1; i < cities.size(); i++) {
+        for(int i = 1; i < cities.size(); i++)
             for(int j = i - 1; j >= 0; j--)
-                if(cities.get(i).equals(cities.get(j)))
-                    duplicate = true;
-        }
-
-        assertFalse(duplicate);
+                assertTrue(cities.get(i).equals(cities.get(j)));
     }
 
     @Test
     public void stedenlijstIsEvenGrootAlsIngeladenSteden() {
-
         Wereld wereld = handelaar.nieuweWereldLader().laad("/kaarten/westeros-kaart.txt");
         assertEquals(wereld.getSteden().size(), 21);
 
