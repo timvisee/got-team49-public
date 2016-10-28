@@ -36,7 +36,7 @@ public class GeneticCityTourAlgorithmTest {
 
         for(int i = 1; i < cities.size(); i++)
             for(int j = i - 1; j >= 0; j--)
-                assert(cities.get(i).getCoordinaat().equals(cities.get(j).getCoordinaat()));
+                assertFalse(cities.get(i).getCoordinaat().equals(cities.get(j).getCoordinaat()));
     }
 
     @Test
