@@ -1,4 +1,4 @@
-package io.gameoftrades.algorithm.astar;
+package io.gameoftrades.student49;
 
 import static org.junit.Assert.*;
 
