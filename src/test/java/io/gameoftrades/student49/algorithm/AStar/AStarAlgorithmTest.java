@@ -1,4 +1,4 @@
-package io.gameoftrades.student49;
+package io.gameoftrades.student49.algorithm.AStar;
 
 import io.gameoftrades.model.Handelaar;
 import io.gameoftrades.model.Wereld;
@@ -7,6 +7,8 @@ import io.gameoftrades.model.kaart.Coordinaat;
 import io.gameoftrades.model.kaart.Kaart;
 import io.gameoftrades.model.kaart.Richting;
 import io.gameoftrades.model.lader.WereldLader;
+import io.gameoftrades.student49.HandelaarImpl;
+import io.gameoftrades.student49.PadImpl;
 import io.gameoftrades.student49.algorithm.astar.FastestPathAlgorithm;
 import org.junit.Before;
 import org.junit.Test;
