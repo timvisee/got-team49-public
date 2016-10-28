@@ -95,6 +95,18 @@ public class A_Star_Algorithm_Test {
 	// Is het resulterende pad werkelijk het snelste pad vs het kortste pad?
 	@Test
 	public void isWerkelijkHetSnelstePad() {
-		fail("Not yet implemented.");
+		
+		WereldLader lader = handelaar.nieuweWereldLader();
+		
+		Wereld wereld = lader.laad("/kaarten/testcases/duidelijk-snelste-route.txt");
+		
+		Kaart kaart 	 = wereld.getKaart();
+		Coordinaat start = wereld.getSteden().get(0).getCoordinaat();
+		Coordinaat eind  = wereld.getSteden().get(1).getCoordinaat();
+		
+		SnelstePadAlgoritme spa = new FastestPathAlgorithm();
+		PadImpl pad = (PadImpl) spa.bereken(kaart, start, eind);
+		
+		assertEquals(4, pad.getTotaleTijd());
 	}
 }
