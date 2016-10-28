@@ -53,8 +53,9 @@ public class A_Star_Algorithm_Test {
 	}
 
 	// Bevat het resulterende pad geen dubbele coördinaten?
+	// Liggen alle coördinaten in het resulterende pad naast elkaar?
 	@Test
-	public void bevatGeenDubbeleCoordinaten() {
+	public void geenDubbeleCoordinatenEnGeenOvergeslagenTerrein() {
 		
 		WereldLader lader = handelaar.nieuweWereldLader();
 		
@@ -83,12 +84,6 @@ public class A_Star_Algorithm_Test {
 			
 			list.add(current);
 		}
-	}
-	
-	// Liggen alle coördinaten in het resulterende pad naast elkaar?
-	@Test
-	public void alleCoordinatenNaastElkaar() {
-		fail("Not yet implemented.");
 	}
 	
 	// Word er geen pad gevonden als twee steden worden gescheiden door zee?
