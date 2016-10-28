@@ -1,0 +1,10 @@
+3,5
+ZZZ
+ZSZ
+ZZZ
+ZSZ
+ZZZ
+2
+2,2,Stad1
+2,4,Stad2
+0
