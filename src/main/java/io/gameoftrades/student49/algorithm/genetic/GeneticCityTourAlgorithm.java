@@ -14,9 +14,19 @@ import java.util.List;
 public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable {
 
     /**
-     * Maximum amount of tries.
+     * Number of evolutions.
      */
-    private final static int MAX_TRIES = 20;
+    private final static int EVOLUTION_COUNT = 20;
+
+    /**
+     * Population size.
+     */
+    private static final int POPULATION_SIZE = 50;
+
+    /**
+     * Population tournament size.
+     */
+    private static final int POPULATION_TOURNAMENT_SIZE = 5;
 
     /**
      * List of cities to take in consideration.
@@ -46,26 +56,26 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
         final long time = System.currentTimeMillis();
 
         // Setup the progress bar
-        progress.setProgressMax(MAX_TRIES + 1);
+        progress.setProgressMax(EVOLUTION_COUNT + 1);
         progress.setProgressValue(0);
         progress.setShowProgress(true);
 
         // Run the algorithm a few times
-        for(int i = 0; i < MAX_TRIES; i++) {
+        for(int i = 0; i < EVOLUTION_COUNT; i++) {
             // Update the progress
             progress.setProgressValue(i);
             progress.setStatus("Simulating natural selection, evolution " + (i + 1) + "...");
 
             // Define the population
-            Population population = new Population(50, cities, true);
+            Population population = new Population(POPULATION_SIZE, cities, true);
 
             // Keep track of the fittest individual and generation count
             int sameFitness = 0;
             int fittest = -1;
             int generationCount = 0;
 
-            // Find a maximum of 50 that have the same fitness
-            while(sameFitness <= 50) {
+            // Find a maximum of the population size that have the same fitness
+            while(sameFitness <= POPULATION_SIZE) {
                 // Create a new generation
                 generationCount++;
                 population = evolvePopulation(population);
@@ -93,7 +103,7 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
         }
 
         // Update the progress
-        progress.setProgressValue(MAX_TRIES);
+        progress.setProgressValue(EVOLUTION_COUNT);
         progress.setStatus("Finding most efficient individual...");
 
         // Show profiler information
@@ -178,7 +188,7 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
      */
     private Individual tournament(Population population) {
         // Create a tournament population
-        final Population tournament = new Population(5, this.cities, false);
+        final Population tournament = new Population(POPULATION_TOURNAMENT_SIZE, this.cities, false);
 
         // Get the population size
         final int populationSize = population.getSize();
