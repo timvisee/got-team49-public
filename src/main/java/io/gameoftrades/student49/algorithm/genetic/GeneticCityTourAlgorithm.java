@@ -121,7 +121,8 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
 
         // Debug the most efficient route
         System.out.println("The most efficient route is " + fittest.getFitness() + ".");
-        debugger.debugSteden(map, fittest.getCities());
+        if(debugger != null)
+            debugger.debugSteden(map, fittest.getCities());
 
         // Return the list of cities that define the most efficient path
         return fittest.getCities();
