@@ -30,9 +30,11 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
 
     @Override
     public List<Stad> bereken(Kaart map, List<Stad> cities) {
+        // Find the frame to attach the progress dialog to
+        Frame mainFrame = Frame.getFrames().length > 0 ? Frame.getFrames()[0] : null;
+
         // Create a progress dialog instance
-        // TODO: Attach progress dialog to proper window.
-        final ProgressDialog progress = new ProgressDialog(Frame.getFrames()[0], "Processing...", false, "Starting...", true);
+        final ProgressDialog progress = new ProgressDialog(mainFrame, "Processing...", false, "Starting...", true);
 
         // Store the parameters
         this.cities = new ArrayList<>(cities);
@@ -67,6 +69,10 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
                 // Create a new generation
                 generationCount++;
                 population = evolvePopulation(population);
+
+//                for(int a = 0; a < population.getSize(); a++)
+//                    debugger.debugSteden(map, population.getIndividual(a).getCities());
+//                debugger.debugSteden(map, population.getFittest().getCities());
 
                 // Store the individual if fitter than the current
                 if(fittest == -1 || population.getFittest().getFitness() < fittest) {
@@ -199,7 +205,7 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
         // Loop through the list of cities, and randomly add a city to the evolved from the first or second individual
         boolean useFirst;
         for(int i = 0, length = cities.size(); i < length; i++)
-            getCityFrom(evolved, (useFirst = Math.random() <= 0.5) ? first : second, useFirst ? second : first, i);
+            useCityFrom(evolved, (useFirst = Math.random() <= 0.5) ? first : second, useFirst ? second : first, i);
 
         // Return the evolved individual
         return evolved;
@@ -214,7 +220,7 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
      * @param second  Second individual.
      * @param i       Index of the city.
      */
-    private void getCityFrom(Individual evolved, Individual first, Individual second, int i) {
+    private void useCityFrom(Individual evolved, Individual first, Individual second, int i) {
         // Add the city from first at the given index to the evolved individual
         if(!evolved.hasCity(first.getCity(i))) {
             evolved.addCity(first.getCity(i));
@@ -246,8 +252,8 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
                 final int random = (int) (Math.random() * ((individual.getCities().size() - 1)));
 
                 // Get both cities
-                final Stad first = individual.getCities().get(random);
-                final Stad second = individual.getCities().get(i);
+                final Stad first = individual.getCity(random);
+                final Stad second = individual.getCity(i);
 
                 // Store both cities flipped
                 individual.setCity(i, first);
@@ -257,8 +263,8 @@ public class GeneticCityTourAlgorithm implements StedenTourAlgoritme, Debuggable
             // Flip the current and followed city with a 7.5% chance
             if(Math.random() < 0.075) {
                 // Get both cities
-                final Stad first = individual.getCities().get(i);
-                final Stad second = individual.getCities().get(i + 1);
+                final Stad first = individual.getCity(i);
+                final Stad second = individual.getCity(i + 1);
 
                 // Store both cities flipped
                 individual.setCity(i, second);

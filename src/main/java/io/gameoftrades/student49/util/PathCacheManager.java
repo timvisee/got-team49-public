@@ -1,11 +1,9 @@
 package io.gameoftrades.student49.util;
 
 import io.gameoftrades.model.algoritme.SnelstePadAlgoritme;
-import io.gameoftrades.model.kaart.Coordinaat;
-import io.gameoftrades.model.kaart.Kaart;
-import io.gameoftrades.model.kaart.Pad;
-import io.gameoftrades.model.kaart.Stad;
+import io.gameoftrades.model.kaart.*;
 import io.gameoftrades.student49.CityPath;
+import io.gameoftrades.student49.PadImpl;
 import io.gameoftrades.student49.Path;
 import io.gameoftrades.student49.algorithm.astar.FastestPathAlgorithm;
 
@@ -15,6 +13,7 @@ import java.util.List;
 /**
  * CityPath checker class.
  */
+@SuppressWarnings("WeakerAccess")
 public class PathCacheManager {
 
     /**
@@ -99,6 +98,10 @@ public class PathCacheManager {
      * @param allowReversed True to allow reversed paths to be returned, false if not.
      */
     public static Path getPath(Coordinaat start, Coordinaat end, boolean allowReversed) {
+        // Return an empty path if both coordinates are equal
+        if(start.equals(end))
+            return new Path(start, end, new PadImpl(new Richting[]{}, 0));
+
         // Check whether any paths are known
         if(!paths.isEmpty()) {
             // Variable to store the reversed path if available
@@ -168,6 +171,10 @@ public class PathCacheManager {
      * @param allowReversed True to allow reversed paths to be returned, false if not.
      */
     public static CityPath getCityPath(Stad start, Stad end, boolean allowReversed) {
+        // Return an empty path if both coordinates are equal
+        if(start.equals(end))
+            return new CityPath(start, end, new PadImpl(new Richting[]{}, 0));
+
         // Check whether any paths are known
         if(!cityPaths.isEmpty()) {
             // Variable to store the reversed path if available
@@ -282,6 +289,11 @@ public class PathCacheManager {
      * @return Path cost.
      */
     public static int getPathCost(Coordinaat first, Coordinaat second) {
+        // Return zero if both coordinates are equal
+        if(first.equals(second))
+            return 0;
+
+        // Get the path, and return it's length
         return getPath(first, second, true).getLength();
     }
 
@@ -293,6 +305,11 @@ public class PathCacheManager {
      * @return Path cost.
      */
     public static int getCityPathCost(Stad first, Stad second) {
+        // Return zero if both cities are equal
+        if(first.equals(second))
+            return 0;
+
+        // Get the cost of the path between the coordinates of the cities
         return getPathCost(first.getCoordinaat(), second.getCoordinaat());
     }
 
