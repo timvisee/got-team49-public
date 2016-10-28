@@ -89,7 +89,19 @@ public class A_Star_Algorithm_Test {
 	// Word er geen pad gevonden als twee steden worden gescheiden door zee?
 	@Test
 	public void geenPadDoorZeeGevonden() {
-		fail("Not yet implemented");
+		
+		WereldLader lader = handelaar.nieuweWereldLader();
+		
+		Wereld wereld = lader.laad("/kaarten/testcases/route-door-zee.txt");
+		
+		Kaart kaart 	 = wereld.getKaart();
+		Coordinaat start = wereld.getSteden().get(0).getCoordinaat();
+		Coordinaat eind  = wereld.getSteden().get(1).getCoordinaat();
+		
+		SnelstePadAlgoritme spa = new FastestPathAlgorithm();
+		PadImpl pad = (PadImpl) spa.bereken(kaart, start, eind);
+		
+		assertNull(pad);
 	}
 	
 	// Is het resulterende pad werkelijk het snelste pad vs het kortste pad?
