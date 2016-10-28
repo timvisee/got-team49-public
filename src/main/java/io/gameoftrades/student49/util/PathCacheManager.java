@@ -97,7 +97,7 @@ public class PathCacheManager {
      * @param end           End coordinate.
      * @param allowReversed True to allow reversed paths to be returned, false if not.
      */
-    public static Path getPath(Coordinaat start, Coordinaat end, boolean allowReversed) {
+    public synchronized static Path getPath(Coordinaat start, Coordinaat end, boolean allowReversed) {
         // Return an empty path if both coordinates are equal
         if(start.equals(end))
             return new Path(start, end, new PadImpl(new Richting[]{}, 0));
@@ -155,7 +155,7 @@ public class PathCacheManager {
      * @param start Start coordinate.
      * @param end   End coordinate.
      */
-    public static Path getPath(Coordinaat start, Coordinaat end) {
+    public synchronized static Path getPath(Coordinaat start, Coordinaat end) {
         return getPath(start, end);
     }
 
@@ -170,7 +170,7 @@ public class PathCacheManager {
      * @param end           Ending city.
      * @param allowReversed True to allow reversed paths to be returned, false if not.
      */
-    public static CityPath getCityPath(Stad start, Stad end, boolean allowReversed) {
+    public synchronized static CityPath getCityPath(Stad start, Stad end, boolean allowReversed) {
         // Return an empty path if both coordinates are equal
         if(start.equals(end))
             return new CityPath(start, end, new PadImpl(new Richting[]{}, 0));
@@ -230,7 +230,7 @@ public class PathCacheManager {
      * @param start Starting city.
      * @param end   Ending city.
      */
-    public static CityPath getCityPath(Stad start, Stad end) {
+    public synchronized static CityPath getCityPath(Stad start, Stad end) {
         return getCityPath(start, end, false);
     }
 
@@ -250,7 +250,7 @@ public class PathCacheManager {
      * @param allowReversed True to allow reversed paths to be returned, false if not.
      * @throws RuntimeException Throws if no city was found for the given start and/or end coordinates.
      */
-    public static CityPath getCityPath(Coordinaat start, Coordinaat end, boolean allowReversed) {
+    public synchronized static CityPath getCityPath(Coordinaat start, Coordinaat end, boolean allowReversed) {
         // Get the cities at the given coordinates
         final Stad startCity = getCityAt(start);
         final Stad endCity = getCityAt(end);
@@ -277,7 +277,7 @@ public class PathCacheManager {
      * @param end   Coordinate of ending city.
      * @throws RuntimeException Throws if no city was found for the given start and/or end coordinates.
      */
-    public static CityPath getCityPath(Coordinaat start, Coordinaat end) {
+    public synchronized static CityPath getCityPath(Coordinaat start, Coordinaat end) {
         return getCityPath(start, end, false);
     }
 
@@ -288,7 +288,7 @@ public class PathCacheManager {
      * @param second Second coordinate.
      * @return Path cost.
      */
-    public static int getPathCost(Coordinaat first, Coordinaat second) {
+    public synchronized static int getPathCost(Coordinaat first, Coordinaat second) {
         // Return zero if both coordinates are equal
         if(first.equals(second))
             return 0;
@@ -304,7 +304,7 @@ public class PathCacheManager {
      * @param second Second city.
      * @return Path cost.
      */
-    public static int getCityPathCost(Stad first, Stad second) {
+    public synchronized static int getCityPathCost(Stad first, Stad second) {
         // Return zero if both cities are equal
         if(first.equals(second))
             return 0;
