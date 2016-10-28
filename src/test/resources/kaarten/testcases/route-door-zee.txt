@@ -1,8 +1,10 @@
-1,3
-S
-Z
-S
+3,5
+ZZZ
+ZSZ
+ZZZ
+ZSZ
+ZZZ
 2
-1,1,Stad1
-1,3,Stad2
+2,2,Stad1
+2,4,Stad2
 0
