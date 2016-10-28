@@ -61,7 +61,7 @@ public class GeneticCityTourAlgorithmTest {
         Wereld wereld2 = handelaar.nieuweWereldLader().laad("/kaarten/voorbeeld-kaart.txt");
         assertEquals(wereld2.getSteden().size(), 4);
 
-        Wereld wereld3 = handelaar.nieuweWereldLader().laad("/kaarten/route-door-zee.txt");
+        Wereld wereld3 = handelaar.nieuweWereldLader().laad("/kaarten/testcases/route-door-zee.txt");
         assertEquals(wereld3.getSteden().size(), 2);
     }
 }
