@@ -1,4 +1,4 @@
-package io.gameoftrades.student49.algorithm.astar;
+package io.gameoftrades.student49.algorithm.AStar;
 
 import io.gameoftrades.model.Handelaar;
 import io.gameoftrades.model.Wereld;
