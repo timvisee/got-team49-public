@@ -1,4 +1,4 @@
-package io.gameoftrades.student49.algorithm.astar;
+package io.gameoftrades.student49.algorithm.astarfix;
 
 import io.gameoftrades.debug.Debuggable;
 import io.gameoftrades.debug.Debugger;

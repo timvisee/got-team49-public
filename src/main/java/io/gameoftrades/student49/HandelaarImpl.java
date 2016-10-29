@@ -5,7 +5,7 @@ import io.gameoftrades.model.algoritme.HandelsplanAlgoritme;
 import io.gameoftrades.model.algoritme.SnelstePadAlgoritme;
 import io.gameoftrades.model.algoritme.StedenTourAlgoritme;
 import io.gameoftrades.model.lader.WereldLader;
-import io.gameoftrades.student49.algorithm.astar.FastestPathAlgorithm;
+import io.gameoftrades.student49.algorithm.astarfix.FastestPathAlgorithm;
 import io.gameoftrades.student49.algorithm.genetic.GeneticCityTourAlgorithm;
 import io.gameoftrades.student49.algorithm.traderoute.TradeRouteAlgorithm;
 import io.gameoftrades.student49.world.WorldLoader;

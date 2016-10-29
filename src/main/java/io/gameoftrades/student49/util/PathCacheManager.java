@@ -5,7 +5,7 @@ import io.gameoftrades.model.kaart.*;
 import io.gameoftrades.student49.CityPath;
 import io.gameoftrades.student49.PadImpl;
 import io.gameoftrades.student49.Path;
-import io.gameoftrades.student49.algorithm.astar.FastestPathAlgorithm;
+import io.gameoftrades.student49.algorithm.astarfix.FastestPathAlgorithm;
 
 import java.util.ArrayList;
 import java.util.List;
