@@ -1,4 +1,4 @@
-package io.gameoftrades.student49.algorithm.astarfix;
+package io.gameoftrades.student49.algorithm.astar;
 
 import io.gameoftrades.model.kaart.Coordinaat;
 import io.gameoftrades.model.kaart.Terrein;
