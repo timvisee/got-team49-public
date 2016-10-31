@@ -190,7 +190,7 @@ public class TradeRouteAlgorithm implements HandelsplanAlgoritme, Debuggable {
         progress.setStatus("Finding most efficient individual...");
 
         // Show profiler information
-        System.out.println("Found best route, took " + (System.currentTimeMillis() - time) + " ms.");
+        System.out.println("Determined optimal route, took " + (System.currentTimeMillis() - time) + " ms.");
 
         // Get the fittest population
         final TradePopulation fittestPopulation = getFittestPopulation(populationList);
@@ -231,6 +231,12 @@ public class TradeRouteAlgorithm implements HandelsplanAlgoritme, Debuggable {
             else
                 actions.add(new VerkoopActie(new Handel(city, HandelType.VRAAGT, tradeAction.getGoodType(), tradeAction.getPrice())));
         }
+
+        // Show the number of actions that are used for the determined path
+        if(fittest.getActionsLeft() == 0)
+            System.out.println("Number of actions in route: " + fittest.getActionCount() + " (all actions used)");
+        else
+            System.out.println("Number of actions in route: " + fittest.getActionCount() + " (" + fittest.getActionsLeft() + " unused actions left)");
 
         // Return a trade plan with the list of actions to perform
         return new Handelsplan(actions);

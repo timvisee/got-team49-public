@@ -120,15 +120,19 @@ class TradeIndividual {
                 continue;
             }
 
-            // Apply the actions cost
-            this.actionCount += cost;
-
             // Create and add the trade actions
             tradeActions.add(new TradeAction(tradeRoute.getOfferCity(), true, tradeRoute.getGoods(), tradeRoute.getBuy(), 0f));
             tradeActions.add(new TradeAction(tradeRoute.getDemandCity(), false, tradeRoute.getGoods(), tradeRoute.getSell(), tradeRoute.getEfficiency()));
 
-            // Decrease the amount
-            amount--;
+            // Apply the actions cost
+            this.actionCount += cost;
+
+            // Update the current city
+            currentCity = tradeRoute.getDemandCity();
+
+            // Decrease the amount to generate
+            if(amount > 0)
+                amount--;
         }
     }
 
@@ -210,7 +214,7 @@ class TradeIndividual {
                 final Stad targetCity = this.tradeActions.get(i).getCity();
 
                 // Determine the movement cost and add it to the action count
-                actionCount += PathCacheManager.getCityPathCost(previousCity, targetCity);
+                this.actionCount += PathCacheManager.getCityPathCost(previousCity, targetCity);
 
                 // Increase the action count by one for the trade action
                 this.actionCount += 1;
