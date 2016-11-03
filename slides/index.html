@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>got-team49 presentation</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="styleshepet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+                    <h1>Algorithms</h1>
+                    <br>
+                    <h3>Trading with Algorithms</h3>
+                    <br>
+                    <p>
+                        <small>Created by <a href="https://github.com/nathanbakhuijzen/">Nathan Bakhuijzen</a>, <a href="https://github.com/timvisee/">Tim Visée</a> & <a href="https://github.com/SimonHaasnoot">Simon Haasnoot</a></small>
+                    </p>
+                </section>
+
+				<section>
+                    <section>
+                        <h2>3 Logistical Problems</h2>
+                        <p>
+                            <br><i>Challenge:</i><br>
+                            Solve 3 logistical problems by developing an algorithm.
+                        </p>
+                    </section>
+
+                    <section>
+                        <h2>Shortest Path</h2>
+                        <p>
+                            Find the shortest path between two given <i>cities</i>.
+                        </p>
+                    </section>
+
+                    <section>
+                        <h2>Salesman Route</h2>
+                        <p>
+                            Find the optimal route for visiting <b>all</b> <i>cities</i> once.
+                        </p>
+                    </section>
+
+                    <section>
+                        <h2>Trade Route</h2>
+                        <p>
+                            Find the most profitable route between <i>cities</i> within a maximum given action window.
+                        </p>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Shortest Path</h2>
+                        <ul>
+                            <li>Terrain broken up in a grid</li>
+                            <li>Different <i>movement cost</i> for each tile</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>A*</h2>
+                        <ul>
+                            <li>Easy to use</li>
+                            <li>Highly efficient</li>
+                            <li>For grid-based terrains</li>
+                            <li>Widely used</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>How does it work?</h2>
+                        <img src="http://informatik.unibas.ch/uploads/pics/Weighted_A_star_with_eps_5.gif" />
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Salesman Route</h2>
+                        <ul>
+                            <li>Must start/end in one of the cities</li>
+                            <li>Must visit all cities once</li>
+                            <li>Take movement cost into account</li>
+                            <li>Must calculate in reasonable time frame</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Genetic Algorithm</h2>
+                        <ul>
+                            <li>Optimal results in minimum time</li>
+                            <li>Simple concept</li>
+                            <li>Always an answer, gets better over time<br><br></li>
+                            <li>Natural selection, following Darwin's theory</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>How does it work?</h2>
+                        <ul>
+                            <li>Create population</li>
+                            <li>Individuals try random routes<br><br></li>
+                            <li>Determine individual fitness</li>
+                            <li>New generation</li>
+                            <li>Crossover from fittest</li>
+                            <li>Mutation from fittest</li>
+                            <li>Fittest <i>survive</i>, others <i>die</i></li>
+                        </ul>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Trade Route</h2>
+                        <ul>
+                            <li>Find most profitable trade plan/route</li>
+                            <li>Start in specified city</li>
+                            <li>Within specified number of actions</li>
+                            <li>Must calculate in reasonable time frame</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Custom Algorithm</h2>
+                        <ul>
+                            <li>Optimal results in minimum time</li>
+                            <li>Always an answer, gets better over time<br><br></li>
+                            <li>Uses highly modified genetic algorithm</li>
+                            <li>Implemented machine learning</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>How does it work?</h2>
+                        <ul>
+                            <li>Population based like genetic algorithm</li>
+                            <li>Multiple trade tactics are considered</li>
+                            <li>Individuals learn optimal routes and trade tactics</li>
+                            <li>Learned routes are preferred by individuals</li>
+                            <li>Knowledge is taught to new generations</li>
+                        </ul>
+                    </section>
+                </section>
+
+                <section>
+                    <h2>Demo</h2>
+                </section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
