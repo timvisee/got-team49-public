@@ -7,7 +7,7 @@ With the goal to write an efficient algorithm, that takes minimum time to calcul
 
 This project/challenge was part of a study at The Hague University.
 
-Information about used algorithms, see: [Slides](doc/slides/index.html) _(Open in browser)_  
+Information about used algorithms, see: [Slides](https://timvisee.github.io/GameOfTrades-Project/doc/slides/index.html)  
 Information about project/challenge, see: [Project Readme](README-Project.md), [Challange](OPDRACHT.md) _(Dutch)_
 
 ## Challenge summary
